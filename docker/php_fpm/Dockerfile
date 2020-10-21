@@ -12,4 +12,4 @@ RUN apt-get update \
 COPY ./docker/php_fpm/php-ini-overrides.ini /etc/php/7.3/fpm/conf.d/99-overrides.ini
 COPY ./ /application
 
-RUN rm -rf /application/docker
+RUN rm -rf /application/docker && chgrp -R www-data storage bootstrap/cache && chmod -R ug+rwx storage bootstrap/cache
