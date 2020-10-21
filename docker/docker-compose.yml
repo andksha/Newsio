@@ -1,0 +1,48 @@
+version: '3.2'
+
+networks:
+  newsio:
+    driver: bridge
+
+services:
+
+  nginx_newsio:
+    container_name: nginx_newsio
+    build:
+      context: ../
+      dockerfile: docker/nginx/Dockerfile
+    volumes:
+      - ../docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - ${NGINX_PORT}:80
+    links:
+      - 'phpfpm_newsio'
+    networks:
+      - newsio
+
+  phpfpm_newsio:
+    container_name: phpfpm_newsio
+    build:
+      context: ../
+      dockerfile: docker/php_fpm/Dockerfile
+    working_dir: /application
+    restart: unless-stopped
+    volumes:
+      - ../:/application
+      - ../docker/php_fpm/php-ini-overrides.ini:/etc/php/7.3/fpm/conf.d/99-overrides.ini
+    networks:
+      - newsio
+
+  pgsql_newsio:
+    container_name: pgsql_newsio
+    image: postgres:11.1-alpine
+    environment:
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_DATABASE}
+#    volumes:
+#      - ../docker/postgresql/postgresql.conf:/var/lib/postgresql/data/postgresql.conf
+    ports:
+      - ${POSTGRES_PORT}:5432
+    networks:
+      - newsio
