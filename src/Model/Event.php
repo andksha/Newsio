@@ -2,15 +2,15 @@
 
 namespace Newsio\Model;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 class Event extends BaseModel
 {
+    use SoftDeletes;
+
     protected $table = 'events';
-    private string $title;
-    private string $tag;
-    private string $link;
     private bool $removed = false;
     private string $reason = '';
-    private int $category_id;
 
     protected $fillable = [
         'title', 'tag', 'link', 'category_id'

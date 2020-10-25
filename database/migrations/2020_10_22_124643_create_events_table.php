@@ -20,6 +20,7 @@ class CreateEventsTable extends Migration
             $table->string('link');
             $table->integer('category_id');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
