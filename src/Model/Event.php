@@ -10,15 +10,26 @@ class Event extends BaseModel
     private string $link;
     private bool $removed = false;
     private string $reason = '';
-    private int $category;
+    private int $category_id;
 
     protected $fillable = [
-        'title', 'tag', 'link', 'category'
+        'title', 'tag', 'link', 'category_id'
+    ];
+
+    protected $visible = [
+        'title', 'tag', 'link', 'category_id', 'updated_at'
     ];
 
     public function remove(string $reason)
     {
         $this->removed = true;
         $this->reason = $reason;
+    }
+
+    /** Relations */
+
+    public function category()
+    {
+        return $this->hasOne(Category::class, 'category_id');
     }
 }

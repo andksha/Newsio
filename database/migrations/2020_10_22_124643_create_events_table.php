@@ -18,7 +18,7 @@ class CreateEventsTable extends Migration
             $table->string('title');
             $table->string('tag');
             $table->string('link');
-            $table->integer('category');
+            $table->integer('category_id');
             $table->timestamps();
         });
     }
