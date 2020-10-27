@@ -25,10 +25,10 @@ services:
     build:
       context: ../
       dockerfile: docker/php_fpm/Dockerfile
-    working_dir: /application
+    working_dir: /var/www
     restart: unless-stopped
     volumes:
-      - ../:/application
+      - ../:/var/www
       - ../docker/php_fpm/php-ini-overrides.ini:/etc/php/7.3/fpm/conf.d/99-overrides.ini
     networks:
       - newsio

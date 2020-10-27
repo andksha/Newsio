@@ -1,5 +1,5 @@
 FROM phpdockerio/php74-fpm
-WORKDIR "/application"
+WORKDIR "/var/www"
 
 # Fix debconf warnings upon build
 ARG DEBIAN_FRONTEND=noninteractive
@@ -10,6 +10,6 @@ RUN apt-get update \
     && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
 
 COPY ./docker/php_fpm/php-ini-overrides.ini /etc/php/7.3/fpm/conf.d/99-overrides.ini
-COPY ./ /application
+COPY ./ /var/www
 
-RUN rm -rf /application/docker && chgrp -R www-data storage bootstrap/cache && chmod -R ug+rwx storage bootstrap/cache
+RUN rm -rf /var/www/docker && chgrp -R www-data storage bootstrap/cache && chmod -R ug+rwx storage bootstrap/cache

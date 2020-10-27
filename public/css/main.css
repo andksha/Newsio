@@ -7,12 +7,14 @@
 
 }
 
-
-/*access_log /var/log/nginx/application.access.log;*/
-
 /*# serve static files directly*/
 /*  location ~* \.(jpg|jpeg|gif|css|png|js|ico|html)$ {*/
 /*    access_log off;*/
 /*    expires max;*/
 /*    log_not_found off;*/
 /*}*/
+
+
+/*location ~ /\.ht {*/
+/*                deny all;*/
+/*            }*/
