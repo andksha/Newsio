@@ -3,45 +3,62 @@
 namespace Newsio\UseCase;
 
 use Newsio\Boundary\CategoryBoundary;
-use Newsio\Boundary\LinkBoundary;
-use Newsio\Boundary\TagBoundary;
+use Newsio\Boundary\LinksBoundary;
+use Newsio\Boundary\TagsBoundary;
 use Newsio\Boundary\TitleBoundary;
+use Newsio\Exception\AlreadyExistsException;
 use Newsio\Model\Event;
 
 class CreateEventUseCase
 {
+    private CreateTagsUseCase $createTagsUseCase;
+    private CreateLinksUseCase $createLinksUseCase;
+
+    public function __construct()
+    {
+        $this->createTagsUseCase = new CreateTagsUseCase();
+        $this->createLinksUseCase = new CreateLinksUseCase();
+    }
+
     /**
      * @param TitleBoundary $title
-     * @param TagBoundary $tag
-     * @param LinkBoundary $link
+     * @param TagsBoundary $tags
+     * @param LinksBoundary $links
      * @param CategoryBoundary $category
      * @return Event
+     * @throws \Newsio\Exception\AlreadyExistsException
      */
-    public function create(TitleBoundary $title, TagBoundary $tag, LinkBoundary $link, CategoryBoundary $category): Event
+    public function create(TitleBoundary $title, TagsBoundary $tags, LinksBoundary $links, CategoryBoundary $category): Event
     {
-        if (!$this->validateLink($link->getValue())) {
-            return;
-        }
+        $this->checkTitle($title);
+        $this->createLinksUseCase->checkLinks($links);
 
         $event = new Event();
         $event->fill([
-            'title'    => $title->getValue(),
-            'tag'      => $tag->getValue(),
-            'link'     => $link->getValue(),
-            'category' => $category->getValue(),
+            'title'       => $title->getValue(),
+            'tags'        => implode(' ', $tags->getValues()),
+            'links'       => implode(' ', $links->getValues()),
+            'category_id' => $category->getValue(),
         ]);
         $event->save();
+
+        $this->createTagsUseCase->createTags($tags)->createEventTags($event->id, $tags);
+        $this->createLinksUseCase->createLinks($event->id, $links);
 
         return $event;
     }
 
-    //TODO: validate link
-    private function validateLink(string $link): bool
+    /**
+     * @param TitleBoundary $title
+     * @return CreateEventUseCase
+     * @throws AlreadyExistsException
+     */
+    public function checkTitle(TitleBoundary $title): CreateEventUseCase
     {
-        if (!true) {
-            return false;
+        if (Event::query()->where('title', 'like', '%' . $title->getValue() . '%')->first()) {
+            throw new AlreadyExistsException('Event with title \'' . $title->getValue() . '\' already exists');
         }
 
-        return true;
+        return $this;
     }
 }
