@@ -8,10 +8,12 @@ services:
 
   nginx_newsio:
     container_name: nginx_newsio
+    working_dir: /application
     build:
       context: ../
       dockerfile: docker/nginx/Dockerfile
     volumes:
+      - ../:/application
       - ../docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
     ports:
       - ${NGINX_PORT}:80
@@ -25,27 +27,27 @@ services:
     build:
       context: ../
       dockerfile: docker/php_fpm/Dockerfile
-    working_dir: /var/www
+    working_dir: /application
     restart: unless-stopped
     volumes:
-      - ../:/var/www
+      - ../:/application
       - ../docker/php_fpm/php-ini-overrides.ini:/etc/php/7.3/fpm/conf.d/99-overrides.ini
     networks:
       - newsio
 
-#  apache_newsio:
-#    container_name: apache_newsio
-#    build:
-#      context: ../
-#      dockerfile: docker/apache2/Dockerfile
-#    volumes:
-#      - ../:/var/www/html
-#    ports:
-#      - ${APACHE_PORT}:80
-#    links:
-#      - 'pgsql_newsio'
-#    networks:
-#      - newsio
+  #  apache_newsio:
+  #    container_name: apache_newsio
+  #    build:
+  #      context: ../
+  #      dockerfile: docker/apache2/Dockerfile
+  #    volumes:
+  #      - ../:/var/www/html
+  #    ports:
+  #      - ${APACHE_PORT}:80
+  #    links:
+  #      - 'pgsql_newsio'
+  #    networks:
+  #      - newsio
 
   pgsql_newsio:
     container_name: pgsql_newsio
@@ -54,8 +56,8 @@ services:
       - POSTGRES_USER=${DB_USERNAME}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=${DB_DATABASE}
-#    volumes:
-#      - ../docker/postgresql/postgresql.conf:/var/lib/postgresql/data/postgresql.conf
+    #    volumes:
+    #      - ../docker/postgresql/postgresql.conf:/var/lib/postgresql/data/postgresql.conf
     ports:
       - ${POSTGRES_PORT}:5432
     networks:

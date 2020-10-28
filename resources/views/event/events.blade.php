@@ -1,17 +1,25 @@
 @extends('header')
 
 @section('content')
-    <a href="{{route('test')}}">test</a>
-    @foreach($events as $event)
-        <div class="row">
-            <div class="col-md-2"></div>
-            <div class="col-md-8">
-                <p class="event_title">
-                    {{$event->title}}
-                </p>
-                <p>{{$event->tags}}</p>
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+        @foreach($events as $event)
+            <div class="row">
+                <div class="col-md-12">
+                    <p class="event_title">
+                        {{$event->title}}
+                    </p>
+                    <p>{{$event->tags}}</p>
+                </div>
             </div>
-            <div class="col-md-2"></div>
+        @endforeach
         </div>
-    @endforeach
+        <div class="col-md-2">
+            <button class="add-event-button">+</button>
+        </div>
+    </div>
+
+    <script>
+    </script>
 @endsection
