@@ -3,26 +3,25 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Newsio\Boundary\CategoryBoundary;
 use Newsio\Boundary\LinksBoundary;
 use Newsio\Boundary\TagsBoundary;
 use Newsio\Boundary\TitleBoundary;
 use Newsio\Contract\ApplicationException;
+use Newsio\Model\Category;
 use Newsio\Model\Event;
 use Newsio\UseCase\CreateEventUseCase;
 
 class EventController
 {
-    public function events()
+    public function events($removed = '')
     {
-        $events = Event::query()->orderByDesc('updated_at')->paginate(15);
+        $events = $removed === 'removed'
+            ? Event::onlyTrashed()->orderByDesc('updated_at')->paginate(15)
+            : Event::query()->orderByDesc('updated_at')->paginate(15);
 
-        return view('event.events')->with(['events' => $events]);
-    }
-
-    public function createForm()
-    {
-        return view();
+        return view('event.events')->with(['events' => $events, 'categories' => Category::all()]);
     }
 
     public function create(Request $request)
@@ -37,9 +36,12 @@ class EventController
                 new CategoryBoundary($request->category)
             );
         } catch (ApplicationException $e) {
-            return view('error')->with(['message' => $e->getMessage(), 'additional_data' => $e->getAdditionalData()]);
+            return response()->json([
+                'error_message' => $e->getMessage(),
+                'error_data' => $e->getErrorData()
+            ], Response::HTTP_BAD_REQUEST);
         }
 
-        return view('event.events')->with(['event' => $event]);
+        return response()->json(['event' => $event]);
     }
 }
