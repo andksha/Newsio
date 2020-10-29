@@ -1,15 +1,34 @@
 
 html, body {
     background-color: #fff;
-    color: #636b6f;
     font-family: 'Nunito', sans-serif;
-    font-weight: 200;
+    font-weight: 300;
     height: 100vh;
     margin: 0;
 }
 
+.published-removed-events {
+    text-align: center;
+}
+
+#add-event-button {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    right: 30%;
+}
+
+.active {
+    border:1px solid #7abaff;
+}
+
+.removed {
+    font-size: 20px;
+    color: red;
+}
 
 .title {
+    color: #636b6f;
     font-size: 28px;
     text-align: center;
 }
@@ -24,25 +43,54 @@ html, body {
     text-transform: uppercase;
 }
 
-.content {
-    width: 95%;
-    padding: 0 5px;
-}
-
-.m-b-md {
-    margin-bottom: 30px;
-}
-
 .event_title {
+    cursor: pointer;
     font-size: 16px;
     text-align: left;
+    padding-bottom: 5px;
+    display: inline-block;
+    width: 70%;
 }
 
-.events {
-
+.published-removed-links {
+    display: inline-block;
+    float: right;
 }
 
-.add-event-button {
-    width: 30px;
-    height: 30px;
+.event {
+    padding: 10px 10px;
+    border-bottom: 1px solid black;
+}
+
+.event_links {
+    display: none;
+}
+
+.event_link {
+    display: block;
+}
+
+.removed-links {
+    display: none;
+}
+
+.event_tags {
+    display: block;
+}
+
+.event_tag {
+    display: inline-block;
+    left: 5px;
+    border:1px solid #7abaff;
+    padding: 2px 2px;
+    cursor: pointer;
+}
+
+#inputs {
+    display: none;
+    width: 100%;
+}
+
+.input_error {
+    border: 2px solid red;
 }

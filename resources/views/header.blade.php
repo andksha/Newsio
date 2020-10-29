@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf_token" content="{{ csrf_token() }}"/>
 
     <title>
         {{ config('app.name') }}
@@ -16,12 +17,13 @@
     <link href="{{ asset('css/main.css') }}" rel="stylesheet" type="text/css">
 </head>
 <body>
-<div class="content">
-    <div class="title m-b-md">
+<div class="container-fluid">
+    <div class="title">
         {{config('app.name')}}
     </div>
     @yield('content')
 </div>
+<script src="{{ asset('js/main.js') }}" type="module"></script>
 {{--<script src="{{ asset('js/bootstrap.js') }}"></script>--}}
 </body>
 </html>

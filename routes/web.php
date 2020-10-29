@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('events', "EventController@events")->name('events');
+Route::get('events/{removed?}', "EventController@events")->name('events');
 Route::post('event', "EventController@create")->name('create_event');
 Route::put('event', "Admin\EventController@edit")->name('edit_event');
 
