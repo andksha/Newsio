@@ -2,7 +2,6 @@
 
 namespace Newsio\Boundary;
 
-use Illuminate\Support\Facades\Validator;
 use Newsio\Exception\BoundaryException;
 
 class LinksBoundary
@@ -21,12 +20,12 @@ class LinksBoundary
         if (
             !is_array($links)
             || array_search('', $links, true) !== false
-            || !array_sum(array_map('is_string', $links)) == count($links)
+            || array_search(false, array_map('is_string', $links), true) !== false
         ) {
-            throw new BoundaryException('Link is invalid');
+            throw new BoundaryException('Links must be separated by single space', ['links' => 'Links are invalid']);
         }
 
-        $this->links = $links;
+        $this->links = array_unique($links);
     }
 
     public function getValues(): array

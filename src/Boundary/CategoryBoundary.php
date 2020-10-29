@@ -17,8 +17,8 @@ class CategoryBoundary
      */
     public function __construct($category)
     {
-        if (!is_int($category)) {
-            throw new BoundaryException('Category is invalid');
+        if (!is_int((int)$category)) {
+            throw new BoundaryException('Category is invalid', ['category' => 'Category is invalid']);
         }
 
         $this->category = $category;

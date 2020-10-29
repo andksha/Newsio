@@ -17,7 +17,7 @@ class AlreadyExistsException extends Exception implements ApplicationException
         parent::__construct($message, $code, $previous);
     }
 
-    public function getAdditionalData()
+    public function getErrorData()
     {
         return $this->existingModel;
     }

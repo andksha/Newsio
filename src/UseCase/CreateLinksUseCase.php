@@ -21,7 +21,9 @@ class CreateLinksUseCase
         }
 
         if ($link = $links->first()) {
-            throw new AlreadyExistsException('Link ' . $link->content . ' already exists', $link->event);
+            throw new AlreadyExistsException('Link ' . $link->content . ' already exists in this event', [
+                'event' => $link->event
+            ]);
         }
     }
 

@@ -18,7 +18,7 @@ class TitleBoundary
     public function __construct($title)
     {
         if (!is_string($title)) {
-            throw new BoundaryException('Title is invalid');
+            throw new BoundaryException('Title is invalid', ['title' => 'Title is invalid']);
         }
 
         $this->title = $title;
