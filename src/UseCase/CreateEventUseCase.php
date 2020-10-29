@@ -36,8 +36,6 @@ class CreateEventUseCase
         $event = new Event();
         $event->fill([
             'title'       => $title->getValue(),
-            'tags'        => implode(' ', $tags->getValues()),
-            'links'       => implode(' ', $links->getValues()),
             'category_id' => $category->getValue(),
         ]);
         $event->save();
@@ -55,8 +53,10 @@ class CreateEventUseCase
      */
     public function checkTitle(TitleBoundary $title): CreateEventUseCase
     {
-        if (Event::query()->where('title', 'like', '%' . $title->getValue() . '%')->first()) {
-            throw new AlreadyExistsException('Event with title \'' . $title->getValue() . '\' already exists');
+        if ($event = Event::query()->where('title', 'like', '%' . $title->getValue() . '%')->first()) {
+            throw new AlreadyExistsException('Event with title \'' . $title->getValue() . '\' already exists', [
+                'event' => $event
+            ]);
         }
 
         return $this;

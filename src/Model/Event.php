@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Exception;
+use JsonSerializable;
 
 /**
  * Newsio\Model\Event
@@ -31,15 +32,13 @@ use Exception;
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Event whereLinks($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereReason($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Event whereTags($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereUpdatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|Event withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Event withoutTrashed()
  */
-class Event extends BaseModel
+class Event extends BaseModel implements JsonSerializable
 {
     use SoftDeletes;
 
@@ -47,11 +46,11 @@ class Event extends BaseModel
     private string $reason = '';
 
     protected $fillable = [
-        'title', 'tags', 'links', 'category_id'
+        'title', 'category_id'
     ];
 
     protected $visible = [
-        'title', 'tags', 'links', 'reason', 'category_id', 'updated_at'
+        'id', 'title', 'tags', 'links', 'reason', 'category_id', 'updated_at'
     ];
 
     /**
@@ -81,6 +80,17 @@ class Event extends BaseModel
 
     public function category(): HasOne
     {
-        return $this->hasOne(Category::class, 'category_id');
+        return $this->hasOne(Category::class, 'id');
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'id'       => $this->id,
+            'title'    => $this->title,
+            'tags'     => $this->tags->pluck('name'),
+            'links'    => $this->links->pluck('content'),
+            'category' => $this->category
+        ];
     }
 }
