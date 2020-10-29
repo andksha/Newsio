@@ -17,7 +17,7 @@ class CategorySeeder extends Seeder
 
         for ($i = 0; $i<10;$i++) {
             $categories[] = [
-                'name' => Str::random(32),
+                'name' => Str::random(12),
             ];
         }
 
