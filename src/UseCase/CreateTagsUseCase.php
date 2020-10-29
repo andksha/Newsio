@@ -10,7 +10,12 @@ class CreateTagsUseCase
 {
     public function createTags(TagsBoundary $tagsBoundary): CreateTagsUseCase
     {
-        Tag::query()->insert(array_map(fn($value) => ['name' => $value], $tagsBoundary->getValues()));
+        $existingTags = Tag::query()->whereIn('name', $tagsBoundary->getValues())->get();
+        $tagsToInsert = array_filter($tagsBoundary->getValues(), function ($value) use ($existingTags) {
+            return !$existingTags->firstWhere('name', $value);
+        });
+
+        Tag::query()->insert(array_map(fn($value) => ['name' => $value], $tagsToInsert));
 
         return $this;
     }
