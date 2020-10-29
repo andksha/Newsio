@@ -1,7 +1,7 @@
 @extends('header')
 
 @section('content')
-    <div class="published-removed-links">
+    <div class="published-removed-events">
         <a href="{{ url('events') }}" @if (strpos(url()->current(), 'removed') === false)class="active"@endif>
             published
         </a>
@@ -51,14 +51,34 @@
                         <span class="removed">X {{ $event->reason }}</span>
                     @endif
                     <span class="event_title">
-                        {{ ucfirst($event->title) }} ({{ $event->links->count() }})
+                        {{ ucfirst($event->title) }}
                     </span>
-                    @foreach ($event->tags as $tag)
-                        <span class="event_tag">{{ $tag->name }}</span>
-                    @endforeach
-                    @foreach ($event->links as $link)
-                    <a href="{{ $link->content }}" class="event_link">{{ $link->content }}</a>
-                    @endforeach
+                    <span class="published-removed-links">
+                        <a class="show_published_links active">published ({{ $event->links->count() }})</a>
+                        |
+                        <a class="show_removed_links">removed ({{ $event->removedLinks->count() }})</a>
+                    </span>
+                    <div class="event_tags">
+                        @foreach ($event->tags as $tag)
+                            <span class="event_tag">{{ $tag->name }}</span>
+                        @endforeach
+                    </div>
+                    <div class="event_links">
+                        <div class="published-links">
+                            @foreach ($event->links as $link)
+                            <a href="{{ $link->content }}" class="event_link">{{ $link->content }}</a>
+                            @endforeach
+                        </div>
+                        <div class="removed-links">
+                            @foreach ($event->removedLinks as $removedLink)
+                                <span class="event_link">
+                                    <a href="{{ $removedLink->content }}">
+                                        {{ $removedLink->content }}
+                                    </a>: {{ $removedLink->reason }}
+                                </span>
+                            @endforeach
+                        </div>
+                    </div>
                 </div>
             </div>
         @endforeach

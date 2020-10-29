@@ -16,6 +16,7 @@ use JsonSerializable;
  * @property string $title
  * @property \Illuminate\Database\Eloquent\Collection|\Newsio\Model\Tag[] $tags
  * @property \Illuminate\Database\Eloquent\Collection|\Newsio\Model\Link[] $links
+ * @property \Illuminate\Database\Eloquent\Collection|\Newsio\Model\Link[] $removedLinks
  * @property int $category_id
  * @property string $reason
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -50,7 +51,7 @@ class Event extends BaseModel implements JsonSerializable
     ];
 
     protected $visible = [
-        'id', 'title', 'tags', 'links', 'reason', 'category_id', 'updated_at'
+        'id', 'title', 'tags', 'links', 'removed_links', 'reason', 'category_id', 'updated_at'
     ];
 
     /**
@@ -78,6 +79,11 @@ class Event extends BaseModel implements JsonSerializable
         return $this->hasMany(Link::class, 'event_id');
     }
 
+    public function removedLinks(): HasMany
+    {
+        return $this->hasMany(Link::class, 'event_id')->onlyTrashed();
+    }
+
     public function category(): HasOne
     {
         return $this->hasOne(Category::class, 'id');
@@ -86,11 +92,12 @@ class Event extends BaseModel implements JsonSerializable
     public function jsonSerialize()
     {
         return [
-            'id'       => $this->id,
-            'title'    => $this->title,
-            'tags'     => $this->tags->pluck('name'),
-            'links'    => $this->links->pluck('content'),
-            'category' => $this->category
+            'id'            => $this->id,
+            'title'         => $this->title,
+            'tags'          => $this->tags->pluck('name'),
+            'links'         => $this->links->pluck('content'),
+            'removed_links' => $this->removedLinks,
+            'category'      => $this->category
         ];
     }
 }

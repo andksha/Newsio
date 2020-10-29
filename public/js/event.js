@@ -2,6 +2,14 @@ import * as request from './request.js';
 
 let inputsDiv = document.getElementById('inputs');
 
+export function start() {
+  enableAddEventButton();
+  enableSubmitButton();
+
+  document.querySelectorAll('.event_title').forEach(title => enableTitle(title));
+  document.querySelectorAll('.event').forEach(event => enableLinksPublishedRemovedButtons(event));
+}
+
 function enableAddEventButton() {
   let addButton = document.getElementById('add-event-button');
 
@@ -46,12 +54,35 @@ function enableSubmitButton() {
   });
 }
 
+function enableTitle(title) {
+  title.addEventListener('click', function () {
+    let links = title.parentElement.querySelector('.event_links');
+    links.style.display = links.style.display === 'none' || !links.style.display ? 'block' : 'none';
+  });
+}
+
 function clearErrors() {
   let inputs = document.querySelectorAll('[id$=_input]');
 
   for (let i = 0; i < inputs.length; i++) {
     inputs[i].classList.remove('input_error');
   }
+}
+
+function enableLinksPublishedRemovedButtons(event) {
+  event.querySelector('.show_published_links').addEventListener('click', function () {
+    event.querySelector('.show_published_links').classList.add('active');
+    event.querySelector('.show_removed_links').classList.remove('active');
+    event.querySelector('.published-links').style.display = 'block';
+    event.querySelector('.removed-links').style.display = 'none';
+  });
+
+  event.querySelector('.show_removed_links').addEventListener('click', function () {
+    event.querySelector('.show_removed_links').classList.add('active');
+    event.querySelector('.show_published_links').classList.remove('active');
+    event.querySelector('.removed-links').style.display = 'block';
+    event.querySelector('.published-links').style.display = 'none';
+  });
 }
 
 function handleError(response) {
@@ -76,56 +107,64 @@ function displayEventError(event, message) {
   document.querySelector('.error_message').innerHTML = message + ": <a href=\"/event/" + event.id + "\">" + event.title + "</a>";
 }
 
-function enableTitle(title) {
-  title.addEventListener('click', function () {
-    title.parentElement.querySelectorAll('.event_link').forEach(function (link) {
-      link.style.display = link.style.display === 'none' || !link.style.display ? 'block' : 'none';
-    });
-  });
-}
-
 function handleEvent(event) {
   inputsDiv.style.display = 'none';
   clearErrors();
 
   let eventDiv = document.querySelector('.row.event').cloneNode();
-  let eventTable = document.createElement('div');
-  let eventTitle = document.createElement('span');
+  let div = document.createElement('div');
+  let table = div.cloneNode();
+  let title = document.createElement('span');
+  let tags = div.cloneNode();
+  let links = div.cloneNode();
+  let publishedLinks = div.cloneNode();
+  let removedLinks = div.cloneNode();
 
-  eventTitle.classList.add('event_title');
-  eventTitle.innerHTML = event.title.charAt(0).toUpperCase() + event.title.slice(1) + ' (' + event.links.length + ')';
+  let publishedRemovedLinks = document.createElement('span');
+  publishedRemovedLinks.classList.add('published-removed-links');
+  publishedRemovedLinks.innerHTML = "<a class=\"show_published_links active\">published (" + event.links.length + ")</a>" +
+    " | " +
+    "<a class=\"show_removed_links\">removed (0)</a>".trim();
 
-  eventTable.classList.add('col-md-12');
-  eventTable.append(eventTitle);
+  title.classList.add('event_title');
+  title.innerHTML = event.title.charAt(0).toUpperCase() + event.title.slice(1);
+  table.classList.add('col-md-12');
+  table.append(title);
+  table.append(publishedRemovedLinks);
+
+  tags.classList.add('event_tags');
+  links.classList.add('event_links');
+  publishedLinks.classList.add('published-links');
+  removedLinks.classList.add('removed-links');
+
+  links.append(publishedLinks);
+  links.append(removedLinks);
 
   for (const tag in event.tags) {
     if (event.tags.hasOwnProperty(tag)) {
       let eventTag = document.createElement('span');
       eventTag.classList.add('event_tag');
       eventTag.innerHTML = event.tags[tag];
-      eventTable.append(eventTag);
+      tags.append(eventTag);
+    }
+  }
+  table.append(tags);
+
+  for (const published_link in event.links) {
+    if (event.links.hasOwnProperty(published_link)) {
+      let link = document.createElement('a');
+      link.classList.add('event_link');
+      link.href = event.links[published_link];
+      link.innerHTML = event.links[published_link];
+      publishedLinks.append(link);
     }
   }
 
-  for (const link in event.links) {
-    if (event.links.hasOwnProperty(link)) {
-      let eventLink = document.createElement('a');
-      eventLink.classList.add('event_link');
-      eventLink.href = event.links[link];
-      eventLink.innerHTML = event.links[link];
-      eventTable.append(eventLink);
-    }
-  }
+  table.append(links);
 
-  enableTitle(eventTitle);
-  eventDiv.append(eventTable);
+  enableTitle(title);
+  eventDiv.append(table);
+  enableLinksPublishedRemovedButtons(eventDiv);
 
   document.querySelector('#inputs').after(eventDiv);
-}
-
-export function start() {
-  enableAddEventButton();
-  enableSubmitButton();
-
-  document.querySelectorAll('.event_title').forEach(title => enableTitle(title));
 }
