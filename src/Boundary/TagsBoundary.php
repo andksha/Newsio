@@ -17,8 +17,14 @@ class TagsBoundary
      */
     public function __construct($tags)
     {
-        if (!is_array($tags) || !array_sum(array_map('is_string', $tags)) == count($tags)) {
+        if (!is_array($tags)) {
             throw new BoundaryException('Invalid tags format', ['tags' => 'Tags are invalid']);
+        }
+
+        foreach ($tags as $key => $value) {
+            if (!is_string($value) || $value === '') {
+                throw new BoundaryException('Invalid tags format', ['tags' => 'Tags are invalid']);
+            }
         }
 
         $this->tags = array_unique($tags);
