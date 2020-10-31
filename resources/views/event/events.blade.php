@@ -66,7 +66,7 @@
                     <div class="event_links">
                         <div class="published-links">
                             @foreach ($event->links as $link)
-                            <a href="{{ $link->content }}" class="event_link">{{ $link->content }}</a>
+                            <a href="{{ $link->content }}" class="event_link" target="_blank">{{ $link->content }}</a>
                             @endforeach
                         </div>
                         <div class="removed-links">

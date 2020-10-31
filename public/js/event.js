@@ -155,6 +155,7 @@ function handleEvent(event) {
       let link = document.createElement('a');
       link.classList.add('event_link');
       link.href = event.links[published_link];
+      link.target = '_blank';
       link.innerHTML = event.links[published_link];
       publishedLinks.append(link);
     }
