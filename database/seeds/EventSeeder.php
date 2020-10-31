@@ -17,10 +17,11 @@ class EventSeeder extends Seeder
         $events = [];
         $categories = Category::all();
 
-        for ($i = 0; $i<10;$i++) {
+        for ($i = 0; $i<200;$i++) {
             $events[] = [
                 'title' => Str::random(32),
                 'category_id' => $categories->random()->id,
+                'deleted_at' => mt_rand(0, 100) > 70 ? \Carbon\Carbon::now() : null,
             ];
         }
 
