@@ -6,22 +6,33 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Newsio\Boundary\CategoryBoundary;
 use Newsio\Boundary\LinksBoundary;
+use Newsio\Boundary\NullableStringBoundary;
 use Newsio\Boundary\TagsBoundary;
 use Newsio\Boundary\TitleBoundary;
 use Newsio\Contract\ApplicationException;
+use Newsio\Exception\BoundaryException;
 use Newsio\Model\Category;
-use Newsio\Model\Event;
 use Newsio\UseCase\CreateEventUseCase;
+use Newsio\UseCase\GetEventsUseCase;
 
 class EventController
 {
-    public function events($removed = '')
+    public function events(Request $request, $removed = null)
     {
-        $events = $removed === 'removed'
-            ? Event::onlyTrashed()->orderByDesc('updated_at')->paginate(15)
-            : Event::query()->orderByDesc('updated_at')->paginate(15);
+        $uc = new GetEventsUseCase();
+        $categories = Category::all();
 
-        return view('event.events')->with(['events' => $events, 'categories' => Category::all()]);
+        try {
+            $events = $uc->getEvents(
+                new NullableStringBoundary($request->search),
+                new NullableStringBoundary($request->tag),
+                new NullableStringBoundary($removed)
+            );
+        } catch (BoundaryException $e) {
+            return redirect()->back()->with(['error' => $e->getMessage()]);
+        }
+
+        return view('event.events')->with(['events' => $events, 'categories' => $categories]);
     }
 
     public function create(Request $request)

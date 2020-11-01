@@ -16,7 +16,8 @@ class EventTagSeeder extends Seeder
     {
         $eventTags = [];
         $events = Event::all();
-        $tags = Tag::all();
+        $tags = Tag::query()->where('name', '!=', 'TEST')->get();
+        $testTag = Tag::query()->where('name', 'TEST')->first();
 
         for ($i = 0; $i<100;$i++) {
             $eventTags[] = [
@@ -24,6 +25,11 @@ class EventTagSeeder extends Seeder
                 'tag_id' => $tags->random()->id,
             ];
         }
+
+        $eventTags [] = [
+            'event_id' => $events->random()->id,
+            'tag_id' => $testTag->id,
+        ];
 
         DB::table('events_tags')->insert($eventTags);
     }

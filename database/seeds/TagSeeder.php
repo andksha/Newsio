@@ -6,6 +6,8 @@ use Illuminate\Support\Str;
 
 class TagSeeder extends Seeder
 {
+
+
     /**
      * Run the database seeds.
      *
@@ -15,12 +17,23 @@ class TagSeeder extends Seeder
     {
         $tags = [];
 
-        for ($i = 0; $i<100;$i++) {
+        for ($i = 0; $i<10;$i++) {
             $tags[] = [
                 'name' => Str::random(32),
             ];
         }
 
+        $tags = $this->fillTagsForGetEventsTest($tags);
+
         DB::table('tags')->insert($tags);
+    }
+
+    private function fillTagsForGetEventsTest(array $tags): array
+    {
+        $tags[] = [
+            'name' => 'TEST'
+        ];
+
+        return $tags;
     }
 }

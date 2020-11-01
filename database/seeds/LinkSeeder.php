@@ -24,6 +24,11 @@ class LinkSeeder extends Seeder
             ];
         }
 
+        $links[] = [
+            'content' => 'lsbjhsejtestsnvldfjnv',
+            'event_id' => $events->where('title', 'title3')->first()->id
+        ];
+
         DB::table('links')->insert($links);
     }
 }
