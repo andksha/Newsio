@@ -3,11 +3,18 @@ import * as request from './request.js';
 let inputsDiv = document.getElementById('inputs');
 
 export function start() {
+  enableSearch();
   enableAddEventButton();
   enableSubmitButton();
 
   document.querySelectorAll('.event_title').forEach(title => enableTitle(title));
   document.querySelectorAll('.event').forEach(event => enableLinksPublishedRemovedButtons(event));
+}
+
+function enableSearch() {
+  document.querySelector('.search-icon').addEventListener('click', function () {
+    window.location.href = location.protocol + '//' + location.host + location.pathname + '?search=' + document.getElementById('search-input').value;
+  });
 }
 
 function enableAddEventButton() {
@@ -142,7 +149,8 @@ function handleEvent(event) {
 
   for (const tag in event.tags) {
     if (event.tags.hasOwnProperty(tag)) {
-      let eventTag = document.createElement('span');
+      let eventTag = document.createElement('a');
+      eventTag.href = window.location.href + '?tag=' + event.tags[tag];
       eventTag.classList.add('event_tag');
       eventTag.innerHTML = event.tags[tag];
       tags.append(eventTag);

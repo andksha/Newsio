@@ -6,8 +6,18 @@ html, body {
     height: 100vh;
     margin: 0;
 }
-.published-removed-events {
+
+.control-panel {
     text-align: center;
+}
+
+#search-span {
+    position: absolute;
+    left: 18%;
+}
+
+.search-icon {
+  cursor: pointer;
 }
 
 #add-event-button {
