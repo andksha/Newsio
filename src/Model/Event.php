@@ -2,9 +2,9 @@
 
 namespace Newsio\Model;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Exception;
 use JsonSerializable;
@@ -84,9 +84,9 @@ class Event extends BaseModel implements JsonSerializable
         return $this->hasMany(Link::class, 'event_id')->onlyTrashed();
     }
 
-    public function category(): HasOne
+    public function category(): BelongsTo
     {
-        return $this->hasOne(Category::class, 'id');
+        return $this->belongsTo(Category::class, 'category_id');
     }
 
     public function jsonSerialize()
