@@ -16,7 +16,7 @@
         <a href="{{ url('events/removed') }}" @if (strpos(url()->current(), 'removed') !== false)class="active"@endif>
             removed
         </a>
-        <button id="add-event-button">+</button>
+        <button class="add-button" id="add-event-button">+</button>
     </div>
     <div class="row">
         <div class="col-md-2"></div>
@@ -72,9 +72,16 @@
                     </div>
                     <div class="event_links">
                         <div class="published-links">
-                            @foreach ($event->links as $link)
-                            <a href="{{ $link->content }}" class="event_link" target="_blank">{{ $link->content }}</a>
-                            @endforeach
+                            <button class="add-button add-link-button" id="{{ $event->id }}">+</button>
+                            <div class="links">
+                                @foreach ($event->links as $link)
+                                <a href="{{ $link->content }}" class="event_link" target="_blank">{{ $link->content }}</a>
+                                @endforeach
+                            </div>
+                            <div class="new-link-form">
+                                <textarea aria-label="new link" class="new-links-input"></textarea>
+                                <input type="submit" value="Submit" class="submit_links_button">
+                            </div>
                         </div>
                         <div class="removed-links">
                             @foreach ($event->removedLinks as $removedLink)

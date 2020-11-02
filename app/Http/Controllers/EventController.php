@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Newsio\Boundary\CategoryBoundary;
+use Newsio\Boundary\IdBoundary;
 use Newsio\Boundary\LinksBoundary;
 use Newsio\Boundary\NullableStringBoundary;
 use Newsio\Boundary\TagsBoundary;
@@ -12,6 +13,7 @@ use Newsio\Boundary\TitleBoundary;
 use Newsio\Contract\ApplicationException;
 use Newsio\Exception\BoundaryException;
 use Newsio\Model\Category;
+use Newsio\UseCase\AddLinksUseCase;
 use Newsio\UseCase\CreateEventUseCase;
 use Newsio\UseCase\GetEventsUseCase;
 
@@ -29,6 +31,7 @@ class EventController
                 new NullableStringBoundary($removed)
             );
         } catch (BoundaryException $e) {
+            // @TODO:fix too many redirects error
             return redirect()->back()->with(['error' => $e->getMessage()]);
         }
 
@@ -54,5 +57,22 @@ class EventController
         }
 
         return response()->json(['event' => $event]);
+    }
+
+
+    public function addLinks(Request $request)
+    {
+        $uc = new AddLinksUseCase();
+
+        try {
+            $newLinks = $uc->addLinks(new IdBoundary($request->event_id), new LinksBoundary($request->links));
+        } catch (ApplicationException $e) {
+            return response()->json([
+                'error_message' => $e->getMessage(),
+                'error_data' => $e->getErrorData()
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        return response()->json(['new_links' => $newLinks]);
     }
 }

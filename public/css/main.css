@@ -20,11 +20,20 @@ html, body {
   cursor: pointer;
 }
 
-#add-event-button {
-    position: absolute;
+.add-button {
     width: 30px;
     height: 30px;
+    text-align: center;
+}
+
+#add-event-button {
+    position: absolute;
     right: 30%;
+}
+
+.add-link-button {
+  position: absolute;
+  right: 19.5%;
 }
 
 .active {
@@ -40,16 +49,6 @@ html, body {
     color: #636b6f;
     font-size: 28px;
     text-align: center;
-}
-
-.links > a {
-    color: #636b6f;
-    padding: 0 25px;
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: .1rem;
-    text-decoration: none;
-    text-transform: uppercase;
 }
 
 .event_title {
@@ -80,6 +79,10 @@ html, body {
     display: block;
 }
 
+.new-link-form {
+    display: none;
+}
+
 .removed-links {
     display: none;
 }
@@ -97,6 +100,7 @@ html, body {
 }
 
 #inputs {
+    margin-top: 20px;
     display: none;
     width: 100%;
 }

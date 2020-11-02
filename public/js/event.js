@@ -8,7 +8,60 @@ export function start() {
   enableSubmitButton();
 
   document.querySelectorAll('.event_title').forEach(title => enableTitle(title));
-  document.querySelectorAll('.event').forEach(event => enableLinksPublishedRemovedButtons(event));
+  document.querySelectorAll('.event').forEach(event => enableEvent(event));
+}
+
+function enableEvent(event) {
+  enableLinksPublishedRemovedButtons(event);
+  enableAddLinkButton(event);
+  enableSubmitNewLinksButton(event);
+}
+
+function enableAddLinkButton(event) {
+  event.querySelector('.add-link-button').addEventListener('click', function () {
+    let display = event.querySelector('.new-link-form').style.display;
+    event.querySelector('.new-link-form').style.display = display === 'none' || !display ? 'inline-block' : 'none';
+  });
+}
+
+function enableSubmitNewLinksButton(event) {
+  let csrfToken = document.querySelector('meta[name=csrf_token]').content;
+
+  event.querySelector('.submit_links_button').addEventListener('click', function () {
+    let data = JSON.stringify({
+      event_id: event.querySelector('.add-link-button').id,
+      links: event.querySelector('.new-links-input').value.replace(/\s+/g, ' ').trim().split(/[\r?\n\s,]+/)
+    });
+
+    request.send('POST', 'links', data, csrfToken, true);
+    request.xmlRequest.onload = function () {
+      try {
+        console.log(request.xmlRequest.responseText);
+        let response = JSON.parse(request.xmlRequest.responseText);
+
+        if (typeof response.error_data != 'undefined') {
+          console.log(response.error_data);
+        } else if (typeof response.new_links != 'undefined') {
+          for (const new_link in response.new_links) {
+            if (response.new_links.hasOwnProperty(new_link)) {
+              let a = document.createElement('a');
+              a.href = response.new_links[new_link];
+              a.classList.add('event_link');
+              a.target = '_blank';
+              a.innerHTML = response.new_links[new_link];
+              event.querySelector('.links').append(a);
+              event.querySelector('.new-link-form').style.display = 'none';
+            }
+          }
+        }else {
+          alert('Server error. Try again.');
+        }
+      } catch (e) {
+        console.log(e);
+        alert(e);
+      }
+    }
+  });
 }
 
 function enableSearch() {

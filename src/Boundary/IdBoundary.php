@@ -15,7 +15,7 @@ class IdBoundary
      */
     public function __construct($value)
     {
-        if (!is_int($value)) {
+        if (!is_numeric($value) || !is_int((int) $value)) {
             throw new BoundaryException('Invalid id');
         }
 

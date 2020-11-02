@@ -3,6 +3,7 @@
 namespace Newsio\UseCase;
 
 use Newsio\Boundary\CategoryBoundary;
+use Newsio\Boundary\IdBoundary;
 use Newsio\Boundary\LinksBoundary;
 use Newsio\Boundary\TagsBoundary;
 use Newsio\Boundary\TitleBoundary;
@@ -27,6 +28,7 @@ class CreateEventUseCase
      * @param CategoryBoundary $category
      * @return Event
      * @throws \Newsio\Exception\AlreadyExistsException
+     * @throws \Newsio\Exception\BoundaryException
      */
     public function create(TitleBoundary $title, TagsBoundary $tags, LinksBoundary $links, CategoryBoundary $category): Event
     {
@@ -41,7 +43,7 @@ class CreateEventUseCase
         $event->save();
 
         $this->createTagsUseCase->createTags($tags)->createEventTags($event->id, $tags);
-        $this->createLinksUseCase->createLinks($event->id, $links);
+        $this->createLinksUseCase->createLinks(new IdBoundary($event->id), $links);
 
         return $event;
     }
