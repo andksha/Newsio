@@ -32,4 +32,10 @@ class TitleBoundaryTest extends BaseTestCase
         $this->expectException(BoundaryException::class);
         new TitleBoundary(null);
     }
+
+    public function test_Boundary_WithInvalidFormat_ThrowsBoundaryException()
+    {
+        $this->expectException(BoundaryException::class);
+        new TitleBoundary('title(test)');
+    }
 }

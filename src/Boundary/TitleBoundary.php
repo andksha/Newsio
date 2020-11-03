@@ -7,6 +7,7 @@ use Newsio\Exception\BoundaryException;
 class TitleBoundary
 {
     private string $title;
+    public static string $TITLE_REGEX = '/^[a-zA-Z0-9\-\s:]+$/';
 
     /**
      * LinkBoundary constructor.
@@ -17,7 +18,7 @@ class TitleBoundary
      */
     public function __construct($title)
     {
-        if (!is_string($title) || $title === '') {
+        if (!is_string($title) || $title === '' || !preg_match(self::$TITLE_REGEX, $title)) {
             throw new BoundaryException('Title is invalid', ['title' => 'Title is invalid']);
         }
 
