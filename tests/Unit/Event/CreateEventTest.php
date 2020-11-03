@@ -25,14 +25,14 @@ class CreateEventTest extends BaseTestCase
         $event = $this->uc->create(
             new TitleBoundary('test event'),
             new TagsBoundary(['test_tag', 'test_tag2']),
-            new LinksBoundary(['https://test.com', 'https://test2.com']),
+            new LinksBoundary(['https://www.radiosvoboda.org/event/ergerg%435%324r', 'https://biz.censor.net/event/ewfwef']),
             new CategoryBoundary(2)
         );
 
         $this->assertEquals([
             'test event',
             'test_tag2',
-            'https://test2.com',
+            'https://biz.censor.net/event/ewfwef',
             2
         ], [
             $event->title,
@@ -47,7 +47,7 @@ class CreateEventTest extends BaseTestCase
         $this->uc->create(
             new TitleBoundary('test event'),
             new TagsBoundary(['test_tag', 'test_tag2']),
-            new LinksBoundary(['https://test.com', 'https://test2.com']),
+            new LinksBoundary(['https://www.radiosvoboda.org/event/ergerg%435%324r', 'https://biz.censor.net/event/ewfwef']),
             new CategoryBoundary(2)
         );
 
@@ -55,7 +55,7 @@ class CreateEventTest extends BaseTestCase
             $this->uc->create(
                 new TitleBoundary('test event'),
                 new TagsBoundary(['test_tag', 'test_tag2']),
-                new LinksBoundary(['https://test.com', 'https://test2.com']),
+                new LinksBoundary(['https://www.radiosvoboda.org/event/ergerg%435%324r', 'https://biz.censor.net/event/ewfwef']),
                 new CategoryBoundary(2)
             );
         } catch (AlreadyExistsException $e) {
@@ -68,7 +68,7 @@ class CreateEventTest extends BaseTestCase
         $this->uc->create(
             new TitleBoundary('test event'),
             new TagsBoundary(['test_tag', 'test_tag2']),
-            new LinksBoundary(['https://test.com', 'https://test2.com']),
+            new LinksBoundary(['https://www.radiosvoboda.org/event/ergerg%435%324r', 'https://biz.censor.net/event/ewfwef']),
             new CategoryBoundary(2)
         );
 
@@ -76,11 +76,11 @@ class CreateEventTest extends BaseTestCase
             $this->uc->create(
                 new TitleBoundary('test event2'),
                 new TagsBoundary(['test_tag', 'test_tag2']),
-                new LinksBoundary(['https://test.com', 'https://test2.com']),
+                new LinksBoundary(['https://www.radiosvoboda.org/event/ergerg%435%324r', 'https://biz.censor.net/event/ewfwef']),
                 new CategoryBoundary(2)
             );
         } catch (AlreadyExistsException $e) {
-            $this->assertEquals($e->getMessage(), 'Link https://test.com already exists in this event');
+            $this->assertEquals($e->getMessage(), 'Link https://www.radiosvoboda.org/event/ergerg%435%324r already exists in this event');
         }
     }
 }

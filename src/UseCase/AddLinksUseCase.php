@@ -17,6 +17,7 @@ class AddLinksUseCase
      * @throws ModelNotFoundException
      * @throws \Newsio\Exception\AlreadyExistsException
      * @throws \Newsio\Exception\BoundaryException
+     * @throws \Newsio\Exception\InvalidWebsiteException
      */
     public function addLinks(IdBoundary $id, LinksBoundary $links)
     {

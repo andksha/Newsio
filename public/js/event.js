@@ -28,6 +28,7 @@ function enableSubmitNewLinksButton(event) {
   let csrfToken = document.querySelector('meta[name=csrf_token]').content;
 
   event.querySelector('.submit_links_button').addEventListener('click', function () {
+    event.querySelector('.new-links-errors').style.display = 'none';
     let data = JSON.stringify({
       event_id: event.querySelector('.add-link-button').id,
       links: event.querySelector('.new-links-input').value.replace(/\s+/g, ' ').trim().split(/[\r?\n\s,]+/)
@@ -45,7 +46,9 @@ function enableSubmitNewLinksButton(event) {
             message += ": <a href=\"/event/" + response.error_data.event.id + "\">" + response.error_data.event.title + "</a>"
           }
 
+          event.querySelector('.new-links-errors').style.display = 'block';
           event.querySelector('.new-links-errors').innerHTML = message;
+          event.querySelector('.new-links-errors').classList.add('input_error');
         } else if (typeof response.new_links != 'undefined') {
           for (const new_link in response.new_links) {
             if (response.new_links.hasOwnProperty(new_link)) {
