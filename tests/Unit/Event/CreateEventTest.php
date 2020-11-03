@@ -23,16 +23,16 @@ class CreateEventTest extends BaseTestCase
     public function test_CreateEvent_WithValidInput_CreatesEvent()
     {
         $event = $this->uc->create(
-            new TitleBoundary('test_event'),
+            new TitleBoundary('test event'),
             new TagsBoundary(['test_tag', 'test_tag2']),
-            new LinksBoundary(['test_link', 'test_link2']),
+            new LinksBoundary(['https://test.com', 'https://test2.com']),
             new CategoryBoundary(2)
         );
 
         $this->assertEquals([
-            'test_event',
+            'test event',
             'test_tag2',
-            'test_link2',
+            'https://test2.com',
             2
         ], [
             $event->title,
@@ -45,42 +45,42 @@ class CreateEventTest extends BaseTestCase
     public function test_CreateEvent_WithAlreadyExistingTitle_ThrowsAlreadyExistsException()
     {
         $this->uc->create(
-            new TitleBoundary('test_event'),
+            new TitleBoundary('test event'),
             new TagsBoundary(['test_tag', 'test_tag2']),
-            new LinksBoundary(['test_link', 'test_link2']),
+            new LinksBoundary(['https://test.com', 'https://test2.com']),
             new CategoryBoundary(2)
         );
 
         try {
             $this->uc->create(
-                new TitleBoundary('test_event'),
+                new TitleBoundary('test event'),
                 new TagsBoundary(['test_tag', 'test_tag2']),
-                new LinksBoundary(['test_link', 'test_link2']),
+                new LinksBoundary(['https://test.com', 'https://test2.com']),
                 new CategoryBoundary(2)
             );
         } catch (AlreadyExistsException $e) {
-            $this->assertEquals($e->getMessage(), 'Event with title \'test_event\' already exists');
+            $this->assertEquals($e->getMessage(), 'Event with title \'test event\' already exists');
         }
     }
 
     public function test_CreateEvent_WithAlreadyExistingLink_ThrowsAlreadyExistsException()
     {
         $this->uc->create(
-            new TitleBoundary('test_event'),
+            new TitleBoundary('test event'),
             new TagsBoundary(['test_tag', 'test_tag2']),
-            new LinksBoundary(['test_link', 'test_link2']),
+            new LinksBoundary(['https://test.com', 'https://test2.com']),
             new CategoryBoundary(2)
         );
 
         try {
             $this->uc->create(
-                new TitleBoundary('test_event2'),
+                new TitleBoundary('test event2'),
                 new TagsBoundary(['test_tag', 'test_tag2']),
-                new LinksBoundary(['test_link', 'test_link2']),
+                new LinksBoundary(['https://test.com', 'https://test2.com']),
                 new CategoryBoundary(2)
             );
         } catch (AlreadyExistsException $e) {
-            $this->assertEquals($e->getMessage(), 'Link test_link already exists in this event');
+            $this->assertEquals($e->getMessage(), 'Link https://test.com already exists in this event');
         }
     }
 }

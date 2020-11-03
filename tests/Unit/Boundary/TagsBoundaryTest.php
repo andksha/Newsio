@@ -22,21 +22,27 @@ class TagsBoundaryTest extends BaseTestCase
         $this->assertEquals([], $boundary->getValues());
     }
 
-    public function test_Boundary_WithInvalidFormat_ThrowsBoundaryException()
+    public function test_Boundary_WithNullTag_ThrowsBoundaryException()
     {
         $this->expectException(BoundaryException::class);
-        $boundary = new TagsBoundary(null);
+        new TagsBoundary(null);
     }
 
     public function test_Boundary_WithInvalidTags_ThrowsBoundaryException()
     {
         $this->expectException(BoundaryException::class);
-        $boundary = new TagsBoundary([null, 34, 'test']);
+        new TagsBoundary([null, 34, 'test']);
     }
 
     public function test_Boundary_WithEmptyTags_ThrowsBoundaryException()
     {
         $this->expectException(BoundaryException::class);
-        $boundary = new TagsBoundary(['']);
+        new TagsBoundary(['']);
+    }
+
+    public function test_Boundary_WithInvalidFormat_ThrowsBoundaryException()
+    {
+        $this->expectException(BoundaryException::class);
+        new TagsBoundary(['tag-(1^)']);
     }
 }

@@ -5,6 +5,7 @@ namespace Tests\Unit\Event;
 use Newsio\Boundary\IdBoundary;
 use Newsio\Boundary\LinksBoundary;
 use Newsio\Exception\ModelNotFoundException;
+use Newsio\Model\Event;
 use Newsio\Model\Link;
 use Newsio\UseCase\AddLinksUseCase;
 use Tests\BaseTestCase;
@@ -21,8 +22,9 @@ class AddLinksTest extends BaseTestCase
 
     public function test_AddLinks_WithValidIdAndLinks_AddsLinks()
     {
-        $this->uc->addLinks(new IdBoundary(2), new LinksBoundary(['testlink1', 'testlink2']));
-        $links = Link::query()->whereIn('content', ['testlink1', 'testlink2'])->count();
+        $event = Event::query()->first();
+        $this->uc->addLinks(new IdBoundary($event->id), new LinksBoundary(['https://test.com', 'https://test2.com']));
+        $links = Link::query()->whereIn('content', ['https://test.com', 'https://test2.com'])->count();
 
         $this->assertEquals($links, 2);
     }
@@ -30,6 +32,6 @@ class AddLinksTest extends BaseTestCase
     public function test_AddLinks_WithNonExistingEvent_ThrowsModelNotFoundException()
     {
         $this->expectException(ModelNotFoundException::class);
-        $this->uc->addLinks(new IdBoundary(1000), new LinksBoundary(['testlink1', 'testlink2']));
+        $this->uc->addLinks(new IdBoundary(1000), new LinksBoundary(['https://test.com', 'https://test2.com']));
     }
 }

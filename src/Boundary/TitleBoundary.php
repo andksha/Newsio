@@ -7,7 +7,7 @@ use Newsio\Exception\BoundaryException;
 class TitleBoundary
 {
     private string $title;
-    public static string $TITLE_REGEX = '/^[a-zA-Z0-9\-\s:]+$/';
+    public static string $TITLE_REGEX = '/^[-a-zA-Z0-9\s\:]{1,256}$/';
 
     /**
      * LinkBoundary constructor.
