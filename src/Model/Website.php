@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
  * @property string $reason
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static Builder|Website approved()
+ * @method static Builder|Website status($query)
  * @method static Builder|Website newModelQuery()
  * @method static Builder|Website newQuery()
  * @method static Builder|Website query()
@@ -34,8 +34,14 @@ class Website extends BaseModel
         'reason'
     ];
 
-    public function scopeApproved(Builder $query): Builder
+    public function scopeStatus(Builder $query, $status): Builder
     {
-        return $query->where('approved', true);
+        if ($status === 'pending') {
+            return $query->where('approved', null);
+        } elseif ($status === 'approved') {
+            return $query->where('approved', true);
+        } else {
+            return $query->where('approved', false);
+        }
     }
 }

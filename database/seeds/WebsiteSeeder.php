@@ -63,6 +63,16 @@ class WebsiteSeeder extends Seeder
                 'approved' => false,
                 'reason' => 'some reason some reason some reason some reason some reason some reason some reason some reason some reason ',
             ],
+            [
+                'domain' => 'https://test3.ua/',
+                'approved' => null,
+                'reason' => '',
+            ],
+            [
+                'domain' => 'https://test4.ua/',
+                'approved' => null,
+                'reason' => '',
+            ],
         ];
 
         DB::table('websites')->insert($websites);

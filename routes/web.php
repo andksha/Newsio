@@ -17,7 +17,7 @@ Route::get('events/{removed?}', "EventController@events")->name('events');
 Route::post('event', "EventController@create")->name('create_event');
 Route::post('links', "EventController@addLinks")->name('add_link');
 
-Route::get('websites', "WebsiteController@websites")->name('websites');
+Route::get('websites/{status}', "WebsiteController@websites")->name('websites');
 
 
 Route::put('event', "Admin\EventController@edit")->name('edit_event');

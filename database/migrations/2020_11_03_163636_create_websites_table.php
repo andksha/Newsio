@@ -16,7 +16,7 @@ class CreateWebsitesTable extends Migration
         Schema::create('websites', function (Blueprint $table) {
             $table->id();
             $table->string('domain');
-            $table->boolean('approved');
+            $table->boolean('approved')->nullable();
             $table->string('reason')->default('');
             $table->timestamps();
         });
