@@ -73,9 +73,10 @@
                     <div class="event_links">
                         <div class="published-links">
                             <button class="add-button add-link-button" id="{{ $event->id }}">+</button>
+                            <div class="new-links-errors"></div>
                             <div class="links">
                                 @foreach ($event->links as $link)
-                                <a href="{{ $link->content }}" class="event_link" target="_blank">{{ $link->content }}</a>
+                                    <a href="{{ $link->content }}" class="event_link" target="_blank">{{ $link->content }}</a>
                                 @endforeach
                             </div>
                             <div class="new-link-form">

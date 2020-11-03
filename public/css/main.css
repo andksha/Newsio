@@ -28,12 +28,12 @@ html, body {
 
 #add-event-button {
     position: absolute;
-    right: 30%;
+    right: 16.5%;
 }
 
 .add-link-button {
   position: absolute;
-  right: 19.5%;
+  right: -1.5%;
 }
 
 .active {
@@ -73,6 +73,17 @@ html, body {
 
 .event_links {
     display: none;
+}
+
+.links {
+    width: 65%;
+    display: inline-block;
+}
+
+.new-links-errors {
+    position: absolute;
+    right: 5%;
+    width: 30%;
 }
 
 .event_link {

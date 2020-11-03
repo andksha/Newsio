@@ -20,7 +20,7 @@ function enableEvent(event) {
 function enableAddLinkButton(event) {
   event.querySelector('.add-link-button').addEventListener('click', function () {
     let display = event.querySelector('.new-link-form').style.display;
-    event.querySelector('.new-link-form').style.display = display === 'none' || !display ? 'inline-block' : 'none';
+    event.querySelector('.new-link-form').style.display = display === 'none' || !display ? 'block' : 'none';
   });
 }
 
@@ -36,11 +36,16 @@ function enableSubmitNewLinksButton(event) {
     request.send('POST', 'links', data, csrfToken, true);
     request.xmlRequest.onload = function () {
       try {
-        console.log(request.xmlRequest.responseText);
         let response = JSON.parse(request.xmlRequest.responseText);
 
-        if (typeof response.error_data != 'undefined') {
-          console.log(response.error_data);
+        if (typeof response.error_message != 'undefined') {
+          let message = response.error_message;
+
+          if (typeof response.error_data.event != 'undefined') {
+            message += ": <a href=\"/event/" + response.error_data.event.id + "\">" + response.error_data.event.title + "</a>"
+          }
+
+          event.querySelector('.new-links-errors').innerHTML = message;
         } else if (typeof response.new_links != 'undefined') {
           for (const new_link in response.new_links) {
             if (response.new_links.hasOwnProperty(new_link)) {
@@ -177,7 +182,13 @@ function handleEvent(event) {
   let title = document.createElement('span');
   let tags = div.cloneNode();
   let links = div.cloneNode();
+  let linksDiv = div.cloneNode();
   let publishedLinks = div.cloneNode();
+  let addLinksButton = document.createElement('button');
+  let newLinksErrors = div.cloneNode();
+  let newLinksForm = div.cloneNode();
+  let newLinksTextarea = document.createElement('textarea');
+  let newLinksSubmit = document.createElement('input');
   let removedLinks = div.cloneNode();
 
   let publishedRemovedLinks = document.createElement('span');
@@ -194,9 +205,29 @@ function handleEvent(event) {
 
   tags.classList.add('event_tags');
   links.classList.add('event_links');
+  linksDiv.classList.add('links');
   publishedLinks.classList.add('published-links');
+
+  addLinksButton.classList.add('add-button');
+  addLinksButton.classList.add('add-link-button');
+  addLinksButton.id = event.id;
+  addLinksButton.innerHTML = '+';
+
+  newLinksErrors.classList.add('new-links-errors');
+  newLinksForm.classList.add('new-link-form');
+  newLinksTextarea.classList.add('new-links-input');
+  newLinksSubmit.classList.add('submit_links_button');
+  newLinksSubmit.type = 'submit';
+  newLinksSubmit.value = 'Submit';
+
   removedLinks.classList.add('removed-links');
 
+  publishedLinks.append(addLinksButton);
+  publishedLinks.append(newLinksErrors);
+  publishedLinks.append(linksDiv);
+  publishedLinks.append(newLinksForm);
+  newLinksForm.append(newLinksTextarea);
+  newLinksForm.append(newLinksSubmit);
   links.append(publishedLinks);
   links.append(removedLinks);
 
@@ -218,7 +249,7 @@ function handleEvent(event) {
       link.href = event.links[published_link];
       link.target = '_blank';
       link.innerHTML = event.links[published_link];
-      publishedLinks.append(link);
+      linksDiv.append(link);
     }
   }
 
@@ -226,7 +257,7 @@ function handleEvent(event) {
 
   enableTitle(title);
   eventDiv.append(table);
-  enableLinksPublishedRemovedButtons(eventDiv);
+  enableEvent(eventDiv);
 
   document.querySelector('#inputs').after(eventDiv);
 }
