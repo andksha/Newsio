@@ -7,8 +7,9 @@ html, body {
     margin: 0;
 }
 
-h4 {
+h4, h5 {
     text-align: center;
+    width: 100%;
 }
 
 .control-panel {
@@ -133,7 +134,7 @@ h4 {
 }
 
 .websites {
-    width: 70%;
+    width: 80%;
     margin: auto;
 }
 

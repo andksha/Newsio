@@ -2,7 +2,9 @@ import * as request from './request.js';
 
 let inputsDiv = document.getElementById('inputs');
 
-export function start() {
+start();
+
+function start() {
   enableSearch();
   enableAddEventButton();
   enableSubmitButton();

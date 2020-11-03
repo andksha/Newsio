@@ -27,7 +27,7 @@
     </div>
     @yield('content')
 </div>
-<script src="{{ asset('js/main.js') }}" type="module"></script>
+{{--<script src="{{ asset('js/main.js') }}" type="module"></script>--}}
 {{--<script src="{{ asset('js/bootstrap.js') }}"></script>--}}
 </body>
 </html>

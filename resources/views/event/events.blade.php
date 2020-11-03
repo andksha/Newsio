@@ -99,6 +99,5 @@
         @endforeach
         </div>
     </div>
-    <script>
-    </script>
+    <script src="{{ asset('js/event.js') }}" type="module"></script>
 @endsection
