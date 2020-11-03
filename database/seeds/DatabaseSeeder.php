@@ -16,6 +16,8 @@ class DatabaseSeeder extends Seeder
         $this->call(TagSeeder::class);
         $this->call(EventTagSeeder::class);
         $this->call(LinkSeeder::class);
+        $this->call(WebsiteSeeder::class);
+
         // $this->call(UserSeeder::class);
     }
 }
