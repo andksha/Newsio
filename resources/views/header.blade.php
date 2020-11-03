@@ -21,6 +21,10 @@
     <div class="title">
         {{config('app.name')}}
     </div>
+    <div class="header-links">
+        <a href="{{ url('/websites') }}" @if(strpos(url()->current(), 'websites'))class="active"@endif>Websites</a>
+        <a href="{{ url('/events') }}" @if(strpos(url()->current(), 'events'))class="active"@endif>Events</a>
+    </div>
     @yield('content')
 </div>
 <script src="{{ asset('js/main.js') }}" type="module"></script>

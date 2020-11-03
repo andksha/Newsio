@@ -7,6 +7,10 @@ html, body {
     margin: 0;
 }
 
+h4 {
+    text-align: center;
+}
+
 .control-panel {
     text-align: center;
 }
@@ -45,10 +49,18 @@ html, body {
     color: red;
 }
 
+.header-links {
+    color: #636b6f;
+    font-size: 20px;
+    position: relative;
+    display: inline-block;
+}
+
 .title {
     color: #636b6f;
     font-size: 28px;
     text-align: center;
+    display: inline-block;
 }
 
 .event_title {
@@ -118,4 +130,13 @@ html, body {
 
 .input_error {
     border: 2px solid red;
+}
+
+.websites {
+    width: 70%;
+    margin: auto;
+}
+
+.website {
+    display: block;
 }
