@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Newsio\Boundary\NullableStringBoundary;
+use Newsio\Boundary\DomainBoundary;
+use Newsio\Contract\ApplicationException;
 use Newsio\Exception\BoundaryException;
+use Newsio\UseCase\Website\ApplyWebsiteUseCase;
 use Newsio\UseCase\Website\GetWebsitesUseCase;
 
 class WebsiteController extends Controller
@@ -32,6 +36,17 @@ class WebsiteController extends Controller
 
     public function apply(Request $request)
     {
+        $uc = new ApplyWebsiteUseCase();
 
+        try {
+            $uc->apply(new DomainBoundary($request->domain));
+        } catch (ApplicationException $e) {
+            return response()->json([
+                'error_message' => $e->getMessage(),
+                'error_data' => $e->getErrorData()
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        return route('/websites/pending');
     }
 }

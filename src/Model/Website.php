@@ -29,6 +29,10 @@ class Website extends BaseModel
 {
     protected $table = 'websites';
 
+    protected $fillable = [
+        'domain'
+    ];
+
     protected $visible = [
         'domain',
         'approved',
