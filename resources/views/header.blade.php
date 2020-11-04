@@ -26,6 +26,14 @@
         <a href="{{ url('/websites/approved') }}" @if(strpos(url()->current(), 'websites'))class="active"@endif>Websites</a>
         @include('search')
     </div>
+    @if (session()->has('error_message'))
+        <div class="error-block input_error">
+            {{ session()->get('error_message') }}
+            @if (session()->has('error_data'))
+
+            @endif
+        </div>
+    @endif
     @yield('content')
 </div>
 </body>

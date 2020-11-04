@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Newsio\Boundary\NullableStringBoundary;
 use Newsio\Boundary\DomainBoundary;
 use Newsio\Contract\ApplicationException;
@@ -23,7 +22,10 @@ class WebsiteController extends Controller
             $total = $uc->getTotal();
         } catch (BoundaryException $e) {
             // @TODO:fix too many redirects error
-            return redirect()->back()->with(['error' => $e->getMessage()]);
+            return redirect()->back()->with([
+                'error_message' => $e->getMessage(),
+                'error_data' => $e->getErrorData()
+            ]);
         }
 
         return view('websites')->with([
@@ -41,12 +43,12 @@ class WebsiteController extends Controller
         try {
             $uc->apply(new DomainBoundary($request->domain));
         } catch (ApplicationException $e) {
-            return response()->json([
+            return redirect()->back()->with([
                 'error_message' => $e->getMessage(),
                 'error_data' => $e->getErrorData()
-            ], Response::HTTP_BAD_REQUEST);
+            ]);
         }
 
-        return route('/websites/pending');
+        return redirect()->route('websites', 'pending');
     }
 }

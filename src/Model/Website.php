@@ -39,6 +39,17 @@ class Website extends BaseModel
         'reason'
     ];
 
+    public function getStatus(): string
+    {
+        if ($this->approved === null) {
+            return 'pending';
+        } elseif ($this->approved === true) {
+            return 'approved';
+        } else {
+            return 'rejected';
+        }
+    }
+
     public function scopeStatus(Builder $query, $status): Builder
     {
         if ($status === 'pending') {

@@ -15,8 +15,8 @@ class ApplyWebsiteUseCase
      */
     public function apply(DomainBoundary $domain)
     {
-        if ($existingWebsite = Website::query()->where('domain', $domain->getValue())->first()) {
-            throw new AlreadyExistsException('Website ' . $domain->getValue() . 'already exists', [
+        if ($existingWebsite = Website::query()->where('domain', 'like', '%' . $domain->getValue() . '%')->first()) {
+            throw new AlreadyExistsException('Website ' . $domain->getValue() . ' is already ' . $existingWebsite->getStatus(), [
                 'website' => $existingWebsite
             ]);
         }

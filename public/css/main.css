@@ -25,6 +25,13 @@ h4, h5 {
   cursor: pointer;
 }
 
+.error-block {
+    display: block;
+    margin: auto;
+    width: 40%;
+    text-align: center;
+}
+
 .add-button {
     width: 30px;
     height: 30px;
