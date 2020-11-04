@@ -26,11 +26,12 @@
         <a href="{{ url('/websites/approved') }}" @if(strpos(url()->current(), 'websites'))class="active"@endif>Websites</a>
         @include('search')
     </div>
-    @if (session()->has('error_message'))
+    @if (session()->has('error_message') || isset($error_message))
         <div class="error-block input_error">
-            {{ session()->get('error_message') }}
-            @if (session()->has('error_data'))
-
+            @if (session()->get('error_message'))
+                {{ session()->get('error_message') }}
+            @elseif (isset($error_message))
+                {{ $error_message }}
             @endif
         </div>
     @endif

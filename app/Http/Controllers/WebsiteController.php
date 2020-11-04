@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Newsio\Boundary\NullableStringBoundary;
 use Newsio\Boundary\DomainBoundary;
 use Newsio\Contract\ApplicationException;
@@ -20,10 +21,12 @@ class WebsiteController extends Controller
         try {
             $websites = $uc->getWebsites($status, $this->perPage, new NullableStringBoundary($request->search));
             $total = $uc->getTotal();
-
         } catch (BoundaryException $e) {
-            // @TODO:fix too many redirects error
-            return redirect()->back()->with([
+            return view('websites')->with([
+                'websites' => new LengthAwarePaginator(collect(), 0, $this->perPage),
+                'pending' => 0,
+                'approved' => 0,
+                'rejected' => 0,
                 'error_message' => $e->getMessage(),
                 'error_data' => $e->getErrorData()
             ]);
