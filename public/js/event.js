@@ -108,7 +108,7 @@ function enableSubmitButton() {
       try {
         let response = JSON.parse(request.xmlRequest.responseText);
 
-        if (typeof response.error_data != 'undefined') {
+        if (typeof response.error_data != 'undefined' || typeof response.error_message != 'undefined') {
           handleError(response);
         } else if(typeof response.event != 'undefined') {
           handleEvent(response.event);
@@ -157,6 +157,7 @@ function enableLinksPublishedRemovedButtons(event) {
 function handleError(response) {
   let error_message = response.error_message;
   let error_data = response.error_data;
+  document.querySelector('.error_message').innerHTML = error_message;
 
   if (typeof error_data.event != 'undefined') {
     displayEventError(error_data.event, error_message)
