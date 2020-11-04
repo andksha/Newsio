@@ -45,4 +45,10 @@ class TagsBoundaryTest extends BaseTestCase
         $this->expectException(BoundaryException::class);
         new TagsBoundary(['tag-(1^)']);
     }
+
+    public function test_Boundary_WithTooManyTags_ThrowsBoundaryException()
+    {
+        $this->expectException(BoundaryException::class);
+        new TagsBoundary(['tag1', 'tag2', 'tag3', 'tag4', 'tag5', 'tag6']);
+    }
 }
