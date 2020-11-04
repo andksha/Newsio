@@ -10,9 +10,9 @@ class DomainBoundaryTest extends BaseTestCase
 {
     public function test_Boundary_WithValidDomain_ReturnsDomain()
     {
-        $domain = new DomainBoundary('https://test.com');
+        $domain = new DomainBoundary('https://specprom-kr.com.ua/');
 
-        $this->assertEquals('https://test.com', $domain->getValue());
+        $this->assertEquals('https://specprom-kr.com.ua/', $domain->getValue());
     }
 
     public function test_Boundary_WithInvalidProtocol_ThrowsBoundaryException()
