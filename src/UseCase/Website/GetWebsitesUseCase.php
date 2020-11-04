@@ -3,7 +3,6 @@
 namespace Newsio\UseCase\Website;
 
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Newsio\Boundary\NullableStringBoundary;
 use Newsio\Model\Website;
@@ -19,10 +18,16 @@ class GetWebsitesUseCase
             ->paginate($perPage);
     }
 
-    public function getTotal(): Collection
+    public function getTotal(): array
     {
-        return DB::table('websites')->select('approved', DB::raw('count(*) as total'))
+        $total = DB::table('websites')->select('approved', DB::raw('count(*) as total'))
             ->groupBy('approved')
             ->get();
+
+        return [
+            'pending' => $total->where('approved', '===', null)->first()->total,
+            'approved' => $total->where('approved', true)->first()->total,
+            'rejected' => $total->where('approved', '===', false)->first()->total
+        ];
     }
 }

@@ -20,6 +20,7 @@ class WebsiteController extends Controller
         try {
             $websites = $uc->getWebsites($status, $this->perPage, new NullableStringBoundary($request->search));
             $total = $uc->getTotal();
+
         } catch (BoundaryException $e) {
             // @TODO:fix too many redirects error
             return redirect()->back()->with([
@@ -30,9 +31,9 @@ class WebsiteController extends Controller
 
         return view('websites')->with([
             'websites' => $websites,
-            'pending' => $total[0] ? $total[0]->total : 0,
-            'approved' => $total[1] ? $total[1]->total : 0,
-            'rejected' => $total[2] ? $total[2]->total : 0
+            'pending' => $total['pending'],
+            'approved' => $total['approved'],
+            'rejected' => $total['rejected']
         ]);
     }
 
