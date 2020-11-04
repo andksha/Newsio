@@ -7,14 +7,19 @@
             <a href="{{ url('/websites/approved') }}" @if(strpos(url()->current(), 'approved'))class="active"@endif>Approved ({{ $approved }})</a>
             <a href="{{ url('/websites/rejected') }}" @if(strpos(url()->current(), 'rejected'))class="active"@endif>Rejected ({{ $rejected }})</a>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-10">
             @foreach ($websites as $website)
-                <a class="website" href="{{ $website->domain }}">{{ $website->domain }}</a>
-                @if ($website->approved === false)
-                    - {{ $website->reason }}
-                @endif
+                <span class="website">
+                    <a href="{{ $website->domain }}">
+                        {{ $website->domain }}
+                    </a>
+                    @if ($website->approved === false)
+                        - {{ $website->reason }}
+                    @endif
+                </span>
             @endforeach
             {{ $websites->links() }}
         </div>
     </div>
+    <script src="{{ asset('js/website.js') }}" type="module"></script>
 @endsection

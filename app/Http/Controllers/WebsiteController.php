@@ -3,26 +3,30 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Newsio\Model\Website;
+use Newsio\Boundary\NullableStringBoundary;
+use Newsio\Exception\BoundaryException;
+use Newsio\UseCase\Website\GetWebsitesUseCase;
 
 class WebsiteController extends Controller
 {
     public function websites(Request $request, $status = '')
     {
+        $uc = new GetWebsitesUseCase();
         $this->resolvePagination($request);
 
-        $websites = Website::query()->status($status)->paginate($this->perPage);
-        $total = DB::table('websites')->select('approved', DB::raw('count(*) as total'))
-            ->groupBy('approved')
-            ->get()
-            ->toArray();
+        try {
+            $websites = $uc->getWebsites($status, $this->perPage, new NullableStringBoundary($request->search));
+            $total = $uc->getTotal();
+        } catch (BoundaryException $e) {
+            // @TODO:fix too many redirects error
+            return redirect()->back()->with(['error' => $e->getMessage()]);
+        }
 
         return view('websites')->with([
             'websites' => $websites,
-            'pending' => $total[0]->total ?? 0,
-            'approved' => $total[1]->total ?? 0,
-            'rejected' => $total[2]->total ?? 0
+            'pending' => $total[0] ? $total[0]->total : 0,
+            'approved' => $total[1] ? $total[1]->total : 0,
+            'rejected' => $total[2] ? $total[2]->total : 0
         ]);
     }
 

@@ -11,6 +11,7 @@ function start() {
 
   document.querySelectorAll('.event_title').forEach(title => enableTitle(title));
   document.querySelectorAll('.event').forEach(event => enableEvent(event));
+  document.getElementById('search-input').placeholder = 'Search for events';
 }
 
 function enableEvent(event) {
@@ -75,9 +76,7 @@ function enableSubmitNewLinksButton(event) {
 }
 
 function enableSearch() {
-  document.querySelector('.search-icon').addEventListener('click', function () {
-    window.location.href = location.protocol + '//' + location.host + location.pathname + '?search=' + document.getElementById('search-input').value;
-  });
+
 }
 
 function enableAddEventButton() {
