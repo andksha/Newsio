@@ -10,9 +10,9 @@ class LinksBoundaryTest extends BaseTestCase
 {
     public function test_Boundary_WithValidTags_ReturnsUniqueTags()
     {
-        $boundary = new LinksBoundary(['https://test.com', 'https://test2.com', 'https://test2.com']);
+        $boundary = new LinksBoundary(['https://test.com/test', 'https://test2.com/test', 'https://test2.com/test']);
 
-        $this->assertEquals(['https://test.com', 'https://test2.com'], $boundary->getValues());
+        $this->assertEquals(['https://test.com/test', 'https://test2.com/test'], $boundary->getValues());
     }
 
     public function test_Boundary_WithEmptyArray_ReturnsEmptyArray()
