@@ -20,7 +20,7 @@ function start() {
 
   document.querySelectorAll('.event_title').forEach(title => enableTitle(title));
   document.querySelectorAll('.event').forEach(event => enableEvent(event));
-  document.getElementById('search-input').placeholder = 'Search for events';
+  document.getElementById('search-input').placeholder = 'Search events';
 }
 
 function enableEvent(event) {
