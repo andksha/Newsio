@@ -14,7 +14,6 @@ class TitleBoundary
      * @param $title
      * @throws BoundaryException
      *
-     * @TODO: better title checking
      */
     public function __construct($title)
     {

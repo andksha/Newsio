@@ -13,7 +13,6 @@ class CategoryBoundary
      * @param $category
      * @throws BoundaryException
      *
-     * @TODO: better tag checking
      */
     public function __construct($category)
     {

@@ -14,7 +14,6 @@ class TagsBoundary
      * @param $tags
      * @throws BoundaryException
      *
-     * @TODO: better tags checking
      */
     public function __construct($tags)
     {

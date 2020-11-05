@@ -15,7 +15,6 @@ class LinksBoundary
      * @param $links
      * @throws BoundaryException
      *
-     * @TODO: better link format checking
      */
     public function __construct($links)
     {

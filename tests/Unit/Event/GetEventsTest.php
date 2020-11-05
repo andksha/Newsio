@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Event;
 
+use Newsio\Boundary\NullableIntBoundary;
 use Newsio\Boundary\NullableStringBoundary;
 use Newsio\UseCase\GetEventsUseCase;
 use Tests\BaseTestCase;
@@ -21,7 +22,8 @@ class GetEventsTest extends BaseTestCase
         $events = $this->uc->getEvents(
             new NullableStringBoundary(null),
             new NullableStringBoundary(null),
-            new NullableStringBoundary(null)
+            new NullableStringBoundary(null),
+            new NullableIntBoundary(null),
         );
 
         foreach ($events->items() as $item) {
@@ -40,8 +42,9 @@ class GetEventsTest extends BaseTestCase
         $events = $this->uc->getEvents(
             new NullableStringBoundary($query),
             new NullableStringBoundary(null),
-            new NullableStringBoundary(null)
-        );
+            new NullableStringBoundary(null),
+            new NullableIntBoundary(null)
+            );
 
         $this->assertTrue($events->total() === 3);
     }
@@ -51,8 +54,9 @@ class GetEventsTest extends BaseTestCase
         $events = $this->uc->getEvents(
             new NullableStringBoundary(null),
             new NullableStringBoundary('test'),
-            new NullableStringBoundary(null)
-        );
+            new NullableStringBoundary(null),
+            new NullableIntBoundary(null),
+            );
 
         $this->assertTrue($events->total() === 1);
     }
@@ -62,8 +66,9 @@ class GetEventsTest extends BaseTestCase
         $events = $this->uc->getEvents(
             new NullableStringBoundary(null),
             new NullableStringBoundary(null),
-            new NullableStringBoundary('removed')
-        );
+            new NullableStringBoundary('removed'),
+            new NullableIntBoundary(null),
+            );
 
         foreach ($events->items() as $item) {
             if ($item['deleted_at'] === null) {
@@ -73,4 +78,7 @@ class GetEventsTest extends BaseTestCase
 
         $this->assertTrue(true);
     }
+
+    // @TODO: write test case for search by all parameters
+
 }

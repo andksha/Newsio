@@ -5,6 +5,15 @@ let inputsDiv = document.getElementById('inputs');
 start();
 
 function start() {
+  let url = new URL(window.location.href);
+  let category = url.searchParams.get('category');
+
+  if (category) {
+    document.querySelectorAll('.control-panel a').forEach(function (a) {
+      a.href = a.href + '?category=' + category;
+    });
+  }
+
   enableSearch();
   enableAddEventButton();
   enableSubmitButton();

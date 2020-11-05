@@ -29,6 +29,7 @@ class CreateEventUseCase
      * @return Event
      * @throws \Newsio\Exception\AlreadyExistsException
      * @throws \Newsio\Exception\BoundaryException
+     * @throws \Newsio\Exception\InvalidWebsiteException
      */
     public function create(TitleBoundary $title, TagsBoundary $tags, LinksBoundary $links, CategoryBoundary $category): Event
     {

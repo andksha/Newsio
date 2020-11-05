@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Newsio\Boundary\CategoryBoundary;
 use Newsio\Boundary\IdBoundary;
 use Newsio\Boundary\LinksBoundary;
+use Newsio\Boundary\NullableIntBoundary;
 use Newsio\Boundary\NullableStringBoundary;
 use Newsio\Boundary\TagsBoundary;
 use Newsio\Boundary\TitleBoundary;
@@ -17,7 +19,7 @@ use Newsio\UseCase\AddLinksUseCase;
 use Newsio\UseCase\CreateEventUseCase;
 use Newsio\UseCase\GetEventsUseCase;
 
-class EventController
+class EventController extends Controller
 {
     public function events(Request $request, $removed = null)
     {
@@ -28,11 +30,16 @@ class EventController
             $events = $uc->getEvents(
                 new NullableStringBoundary($request->search),
                 new NullableStringBoundary($request->tag),
-                new NullableStringBoundary($removed)
+                new NullableStringBoundary($removed),
+                new NullableIntBoundary($request->category)
             );
         } catch (BoundaryException $e) {
-            // @TODO:fix too many redirects error
-            return redirect()->back()->with(['error' => $e->getMessage()]);
+            return view('event.events')->with([
+                'events' => new LengthAwarePaginator(collect(), 0, $this->perPage),
+                'categories' => $categories,
+                'error_message' => $e->getMessage(),
+                'error_data' => $e->getErrorData()
+            ]);
         }
 
         return view('event.events')->with(['events' => $events, 'categories' => $categories]);
