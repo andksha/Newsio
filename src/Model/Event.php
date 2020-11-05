@@ -41,6 +41,7 @@ use JsonSerializable;
  */
 class Event extends BaseModel implements JsonSerializable
 {
+    // @TODO: fix soft deletes
     use SoftDeletes;
 
     protected $table = 'events';

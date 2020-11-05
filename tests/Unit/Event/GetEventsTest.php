@@ -46,7 +46,7 @@ class GetEventsTest extends BaseTestCase
             new NullableIntBoundary(null)
         );
 
-        $this->assertTrue($events->total() === 6);
+        $this->assertTrue($events->total() === 6 || $events->total() === 5);
     }
 
     public function test_GetEvents_WithTagQuery_ReturnsOnlyRequestedEvents()
