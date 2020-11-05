@@ -15,9 +15,11 @@ class EventTagSeeder extends Seeder
     public function run()
     {
         $eventTags = [];
+        $tags = Tag::query()->where('name', '!=', 'test')->get();
+        $testTag = Tag::query()->where('name', 'test')->first();
+        $testTag2 = Tag::query()->where('name', 'tag1')->first();
         $events = Event::all();
-        $tags = Tag::query()->where('name', '!=', 'TEST')->get();
-        $testTag = Tag::query()->where('name', 'TEST')->first();
+        $testEvent = $events->where('title', 'sdfgdstest')->first();
 
         for ($i = 0; $i<100;$i++) {
             $eventTags[] = [
@@ -26,9 +28,14 @@ class EventTagSeeder extends Seeder
             ];
         }
 
-        $eventTags [] = [
+        $eventTags[] = [
             'event_id' => $events->random()->id,
             'tag_id' => $testTag->id,
+        ];
+
+        $eventTags[] = [
+            'event_id' => $testEvent->id,
+            'tag_id' => $testTag2->id,
         ];
 
         DB::table('events_tags')->insert($eventTags);

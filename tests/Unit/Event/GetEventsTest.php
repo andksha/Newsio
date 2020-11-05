@@ -44,9 +44,9 @@ class GetEventsTest extends BaseTestCase
             new NullableStringBoundary(null),
             new NullableStringBoundary(null),
             new NullableIntBoundary(null)
-            );
+        );
 
-        $this->assertTrue($events->total() === 3);
+        $this->assertTrue($events->total() === 6);
     }
 
     public function test_GetEvents_WithTagQuery_ReturnsOnlyRequestedEvents()
@@ -56,7 +56,7 @@ class GetEventsTest extends BaseTestCase
             new NullableStringBoundary('test'),
             new NullableStringBoundary(null),
             new NullableIntBoundary(null),
-            );
+        );
 
         $this->assertTrue($events->total() === 1);
     }
@@ -79,6 +79,26 @@ class GetEventsTest extends BaseTestCase
         $this->assertTrue(true);
     }
 
-    // @TODO: write test case for search by all parameters
+    public function test_GetEvents_WithAllSearchParameters_ReturnsEvents()
+    {
+        $events = $this->uc->getEvents(
+            new NullableStringBoundary('fgdsa'),
+            new NullableStringBoundary('tag1'),
+            new NullableStringBoundary(null),
+            new NullableIntBoundary(null),
+        );
+
+        foreach ($events as $event) {
+            if (
+                $event->title !== 'sdfgdsasdv'
+                || $event->deleted_at !== null
+                || $event->tags->first()->name !== 'tag1'
+            ) {
+                $this->fail('Found incorrect event');
+            }
+        }
+
+        $this->assertTrue(true);
+    }
 
 }

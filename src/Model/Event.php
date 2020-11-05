@@ -51,7 +51,7 @@ class Event extends BaseModel implements JsonSerializable
     ];
 
     protected $visible = [
-        'id', 'title', 'tags', 'links', 'removed_links', 'reason', 'category_id', 'updated_at'
+        'id', 'title', 'tags', 'links', 'removed_links', 'reason', 'category_id', 'updated_at', 'deleted_at'
     ];
 
     /**

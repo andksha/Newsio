@@ -4,6 +4,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Newsio\Model\Category;
+use Newsio\Model\Event;
 
 class EventSeeder extends Seeder
 {
@@ -16,13 +17,14 @@ class EventSeeder extends Seeder
     public function run()
     {
         $events = [];
+
         $this->categories = Category::all();
 
-        for ($i = 0; $i<200;$i++) {
+        for ($i = 0; $i < 20; $i++) {
             $events[] = [
                 'title' => Str::random(32),
                 'category_id' => $this->categories->random()->id,
-                'deleted_at' => mt_rand(0, 100) > 70 ? \Carbon\Carbon::now() : null,
+                'deleted_at' => null,
             ];
         }
 
@@ -40,8 +42,33 @@ class EventSeeder extends Seeder
         ];
 
         $events[] = [
+            'title' => 'sdfgdstest',
+            'category_id' => 3,
+            'deleted_at' => null,
+        ];
+
+        $events[] = [
             'title' => 'title3',
             'category_id' => $this->categories->random()->id,
+            'deleted_at' => null,
+        ];
+
+        $events[] = [
+            'title' => 'title4',
+            'category_id' => 3,
+            'deleted_at' => null,
+        ];
+
+
+        $events[] = [
+            'title' => 'test5',
+            'category_id' => 3,
+            'deleted_at' => null,
+        ];
+
+        $events[] = [
+            'title' => 'test6',
+            'category_id' => 2,
             'deleted_at' => null,
         ];
 

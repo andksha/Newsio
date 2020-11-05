@@ -31,7 +31,11 @@ class TagSeeder extends Seeder
     private function fillTagsForGetEventsTest(array $tags): array
     {
         $tags[] = [
-            'name' => 'TEST'
+            'name' => 'test'
+        ];
+
+        $tags[] = [
+            'name' => 'tag1'
         ];
 
         return $tags;

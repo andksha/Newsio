@@ -23,7 +23,7 @@ class NullableIntBoundary
         }
     }
 
-    public function getValue(): ?string
+    public function getValue(): ?int
     {
         return $this->value;
     }

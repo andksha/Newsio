@@ -41,7 +41,7 @@ class GetEventsUseCase
 
         if ($tag->getValue()) {
             $events->whereHas('tags', function (Builder $query) use ($tag) {
-                $query->where('name', 'like', '%' . $tag->getValue());
+                $query->where('name', $tag->getValue());
             });
         }
 
