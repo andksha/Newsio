@@ -16,6 +16,12 @@ h4, h5 {
     text-align: center;
 }
 
+.category {
+    display: block;
+    cursor: pointer;
+    padding: 10px;
+}
+
 #search-span {
     font-size: 16px;
     left: 18%;
@@ -141,7 +147,6 @@ h4, h5 {
 }
 
 .websites {
-    width: 80%;
     margin: 20px auto;
 }
 

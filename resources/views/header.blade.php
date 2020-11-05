@@ -35,7 +35,21 @@
             @endif
         </div>
     @endif
-    @yield('content')
+    <div class="row">
+        <div class="col-md-2">
+            <span class="category" onclick="window.location.href =
+                    location.protocol + '//' + location.host + '/events'">
+                    All</span>
+            @foreach($categories as $category)
+                <span class="category" onclick="window.location.href =
+                        location.protocol + '//' + location.host + '/events' + '?category={{ $category->id }}'">
+                    {{ ucfirst($category->name) }}</span>
+            @endforeach
+        </div>
+        <div class="col-md-10">
+            @yield('content')
+        </div>
+    </div>
 </div>
 </body>
 </html>

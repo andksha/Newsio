@@ -20,6 +20,6 @@ Route::post('links', "EventController@addLinks")->name('add_link');
 Route::get('websites/{status?}', "WebsiteController@websites")->name('websites');
 Route::post('website', "WebsiteController@apply")->name('apply_website');
 
-Route::put('event', "Admin\EventController@edit")->name('edit_event');
+//Route::put('event', "Admin\EventController@edit")->name('edit_event');
 
 Route::get('test', "TestController@test")->name('test');

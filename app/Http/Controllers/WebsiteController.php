@@ -8,6 +8,7 @@ use Newsio\Boundary\NullableStringBoundary;
 use Newsio\Boundary\DomainBoundary;
 use Newsio\Contract\ApplicationException;
 use Newsio\Exception\BoundaryException;
+use Newsio\Model\Category;
 use Newsio\UseCase\Website\ApplyWebsiteUseCase;
 use Newsio\UseCase\Website\GetWebsitesUseCase;
 
@@ -16,6 +17,7 @@ class WebsiteController extends Controller
     public function websites(Request $request, $status = '')
     {
         $uc = new GetWebsitesUseCase();
+        $categories = Category::all();
         $this->resolvePagination($request);
 
         try {
@@ -24,9 +26,12 @@ class WebsiteController extends Controller
         } catch (BoundaryException $e) {
             return view('websites')->with([
                 'websites' => new LengthAwarePaginator(collect(), 0, $this->perPage),
-                'pending' => 0,
-                'approved' => 0,
-                'rejected' => 0,
+                'categories' => $categories,
+                'total' => [
+                    'pending' => 0,
+                    'approved' => 0,
+                    'rejected' => 0,
+                ],
                 'error_message' => $e->getMessage(),
                 'error_data' => $e->getErrorData()
             ]);
@@ -34,9 +39,8 @@ class WebsiteController extends Controller
 
         return view('websites')->with([
             'websites' => $websites,
-            'pending' => $total['pending'],
-            'approved' => $total['approved'],
-            'rejected' => $total['rejected']
+            'categories' => $categories,
+            'total' => $total
         ]);
     }
 

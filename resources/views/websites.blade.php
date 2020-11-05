@@ -12,9 +12,15 @@
         </div>
         <div class="col-md-9">
             <div class="header-links">
-                <a href="{{ url('/websites/pending') }}" @if(strpos(url()->current(), 'pending'))class="active"@endif>Pending ({{ $pending }})</a>
-                <a href="{{ url('/websites/approved') }}" @if(strpos(url()->current(), 'approved'))class="active"@endif>Approved ({{ $approved }})</a>
-                <a href="{{ url('/websites/rejected') }}" @if(strpos(url()->current(), 'rejected'))class="active"@endif>Rejected ({{ $rejected }})</a>
+                <a href="{{ url('/websites/pending') }}" @if(strpos(url()->current(), 'pending'))class="active"@endif>
+                    Pending ({{ $total['pending'] }})
+                </a>
+                <a href="{{ url('/websites/approved') }}" @if(strpos(url()->current(), 'approved'))class="active"@endif>
+                    Approved ({{ $total['approved'] }})
+                </a>
+                <a href="{{ url('/websites/rejected') }}" @if(strpos(url()->current(), 'rejected'))class="active"@endif>
+                    Rejected ({{ $total['rejected'] }})
+                </a>
             </div>
             <div class="col-md-10">
                 @foreach ($websites as $website)
