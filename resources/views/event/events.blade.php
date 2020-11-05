@@ -80,8 +80,8 @@
                             @foreach ($event->removedLinks as $removedLink)
                                 <span class="event_link">
                                     <a href="{{ $removedLink->content }}">
-                                        {{ $removedLink->content }}
-                                    </a>: {{ $removedLink->reason }}
+                                        {{ $removedLink->content }}:
+                                    </a> {{ $removedLink->reason }}
                                 </span>
                             @endforeach
                         </div>
@@ -90,6 +90,7 @@
             </div>
         @endforeach
         </div>
+        {{ $events->links() }}
     </div>
     <script src="{{ asset('js/event.js') }}" type="module"></script>
 @endsection

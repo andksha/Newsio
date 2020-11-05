@@ -26,7 +26,7 @@ class Controller extends BaseController
     protected function resolvePagination(Request $request)
     {
         $this->currentPage = (int)$request->input('page', 1);
-        $this->perPage = (int)$request->input('per_page', 2);
+        $this->perPage = (int)$request->input('per_page', 15);
 
         Paginator::currentPageResolver(function () {
             return $this->currentPage;
