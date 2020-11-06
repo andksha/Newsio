@@ -101,7 +101,7 @@
                                         {{ $removedLink->content }}:
                                     </a><span class="removed">{{ $removedLink->reason }}</span>
                                 </span>
-                                <button class="restore-link">Restore</button>
+                                <button class="restore-link" id="link-{{ $removedLink->id }}">Restore</button>
                             @endforeach
                         </div>
                     </div>

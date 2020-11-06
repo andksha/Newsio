@@ -2,6 +2,7 @@
 
 namespace Newsio\Model;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -56,10 +57,10 @@ class Event extends BaseModel implements JsonSerializable
     public function remove(string $reason): Event
     {
         $this->reason = $reason;
-        $this->save();
+        $this->deleted_at = Carbon::now();
         $this->links()->update(['reason' => 'Removed with event']);
         $this->links()->delete();
-        $this->delete();
+        $this->save();
 
         return $this;
     }

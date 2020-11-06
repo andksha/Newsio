@@ -2,6 +2,7 @@
 
 namespace Newsio\Model;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -36,14 +37,16 @@ class Link extends BaseModel
 
     protected $table = 'links';
 
-    protected $fillable = ['content'];
+    protected $fillable = ['content', 'reason'];
 
     protected $visible = ['content', 'reason'];
 
     public function remove(string $reason): Link
     {
         $this->reason = $reason;
-        $this->delete();
+        $this->deleted_at = Carbon::now();
+        $this->save();
+//        $this->delete();
 
         return $this;
     }

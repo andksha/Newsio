@@ -15,6 +15,7 @@ use Newsio\Contract\ApplicationException;
 use Newsio\UseCase\Admin\RemoveEventUseCase;
 use Newsio\UseCase\Admin\RemoveLinkUseCase;
 use Newsio\UseCase\Admin\RestoreEventUseCase;
+use Newsio\UseCase\Admin\RestoreLinkUseCase;
 use Newsio\UseCase\EditEventUseCase;
 
 class EventController extends Controller
@@ -85,6 +86,22 @@ class EventController extends Controller
 
         try {
             $link = $uc->remove(new IdBoundary($request->link_id), new StringBoundary($request->reason));
+        } catch (ApplicationException $e) {
+            return response()->json([
+                'error_message' => $e->getMessage(),
+                'error_data' => $e->getErrorData()
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        return response()->json(['link' => $link]);
+    }
+
+    public function restoreLink(Request $request)
+    {
+        $uc = new RestoreLinkUseCase();
+
+        try {
+            $link = $uc->restore(new IdBoundary($request->link_id));
         } catch (ApplicationException $e) {
             return response()->json([
                 'error_message' => $e->getMessage(),

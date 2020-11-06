@@ -6,6 +6,7 @@ function start() {
   enableRemoveInput();
   enableRestoreEventButton();
   enableRemoveLinkInput();
+  enableRestoreLinkButton();
 }
 
 function enableRemoveInput() {
@@ -36,6 +37,7 @@ function enableRemoveInput() {
             window.location.reload();
           } else if (typeof response.error_message != 'undefined') {
             alert(response.error_message);
+            console.log(response.error_message);
           } else {
             console.log(response);
           }
@@ -65,6 +67,7 @@ function enableRestoreEventButton() {
             window.location.reload();
           } else if (typeof response.error_message != 'undefined') {
             alert(response.error_message);
+            console.log(response.error_message);
           } else {
             console.log(response);
           }
@@ -104,6 +107,37 @@ function enableRemoveLinkInput() {
             window.location.reload();
           } else if (typeof response.error_message != 'undefined') {
             alert(response.error_message);
+            console.log(response.error_message);
+          } else {
+            console.log(response);
+          }
+        } catch (e) {
+          console.log(e);
+        }
+      }
+    });
+  });
+}
+
+function enableRestoreLinkButton() {
+  let csrfToken = document.querySelector('meta[name=csrf_token]').content;
+
+  document.querySelectorAll('.restore-link').forEach(function (b) {
+    b.addEventListener('click', function () {
+      let data = JSON.stringify({
+        link_id: b.id.replace('link-', '')
+      });
+
+      request.send('PUT', 'admin/link', data, csrfToken, true);
+      request.xmlRequest.onload = function () {
+        try {
+          let response = JSON.parse(request.xmlRequest.responseText);
+
+          if (typeof response.link != 'undefined') {
+            window.location.reload();
+          } else if (typeof response.error_message != 'undefined') {
+            alert(response.error_message);
+            console.log(response.error_message);
           } else {
             console.log(response);
           }
