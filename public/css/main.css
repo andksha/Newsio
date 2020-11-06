@@ -59,8 +59,25 @@ h4, h5 {
 }
 
 .removed {
+    display: block;
     font-size: 20px;
     color: red;
+}
+
+.remove_block {
+    display: none;
+}
+
+.remove_event {
+    cursor: pointer;
+    font-size: 20px;
+    color: red;
+}
+
+.confirm_removing_event {
+    font-size: 20px;
+    color: green;
+    cursor: pointer;
 }
 
 .header-links {
@@ -83,7 +100,7 @@ h4, h5 {
     text-align: left;
     padding-bottom: 5px;
     display: inline-block;
-    width: 70%;
+    width: 50%;
 }
 
 .published-removed-links {

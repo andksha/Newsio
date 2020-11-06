@@ -52,6 +52,14 @@
                     <span class="event_title">
                         {{ ucfirst($event->title) }}
                     </span>
+                    {{-- @TODO: check if admin   --}}
+                    @if (!$event->reason)
+                        <span class="remove_event">X</span>
+                        <div class="remove_block">
+                            <input class="remove-input" aria-label="reason" id="{{ $event->id }}">
+                            <span class="confirm_removing_event">V</span>
+                        </div>
+                    @endif
                     <span class="published-removed-links">
                         <a class="show_published_links active">published ({{ $event->links->count() }})</a>
                         |
@@ -81,7 +89,7 @@
                                 <span class="event_link">
                                     <a href="{{ $removedLink->content }}">
                                         {{ $removedLink->content }}:
-                                    </a> {{ $removedLink->reason }}
+                                    </a><span class="removed">{{ $removedLink->reason }}</span>
                                 </span>
                             @endforeach
                         </div>
@@ -92,5 +100,8 @@
         </div>
         {{ $events->links() }}
     </div>
+
+{{-- @TODO: check if admin   --}}
+    <script src="{{ asset('js/admin_event.js') }}" type="module"></script>
     <script src="{{ asset('js/event.js') }}" type="module"></script>
 @endsection

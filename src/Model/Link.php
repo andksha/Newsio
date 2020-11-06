@@ -29,7 +29,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|Link whereUpdatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|Link withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Link withoutTrashed()
- * @mixin \Eloquent
  */
 class Link extends BaseModel
 {

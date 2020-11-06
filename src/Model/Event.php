@@ -45,7 +45,6 @@ class Event extends BaseModel implements JsonSerializable
     use SoftDeletes;
 
     protected $table = 'events';
-    private string $reason = '';
 
     protected $fillable = [
         'title', 'category_id'
@@ -63,6 +62,9 @@ class Event extends BaseModel implements JsonSerializable
     public function remove(string $reason): Event
     {
         $this->reason = $reason;
+        $this->save();
+        $this->links()->update(['reason' => 'Removed with event']);
+        $this->links()->delete();
         $this->delete();
 
         return $this;
@@ -98,7 +100,8 @@ class Event extends BaseModel implements JsonSerializable
             'tags'          => $this->tags->pluck('name'),
             'links'         => $this->links->pluck('content'),
             'removed_links' => $this->removedLinks,
-            'category'      => $this->category
+            'category'      => $this->category,
+            'deleted_at'    => $this->deleted_at
         ];
     }
 }
