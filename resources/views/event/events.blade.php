@@ -56,7 +56,7 @@
                     @if (!$event->reason)
                         <span class="remove_event">X</span>
                         <div class="remove_block">
-                            <input class="remove-input" aria-label="reason" id="{{ $event->id }}">
+                            <input class="remove-input" aria-label="reason" id="event-{{ $event->id }}">
                             <span class="confirm_removing_event">V</span>
                         </div>
                     @endif
@@ -77,6 +77,14 @@
                             <div class="links">
                                 @foreach ($event->links as $link)
                                     <a href="{{ $link->content }}" class="event_link" target="_blank">{{ $link->content }}</a>
+                                    {{-- @TODO: check if admin   --}}
+                                    @if (!$link->reason)
+                                        <span class="remove_link">X</span>
+                                        <div class="remove_link_block">
+                                            <input class="remove-link-input" aria-label="reason" id="link-{{ $link->id }}">
+                                            <span class="confirm_removing_link">V</span>
+                                        </div>
+                                    @endif
                                 @endforeach
                             </div>
                             <div class="new-link-form">
@@ -98,8 +106,8 @@
             </div>
         @endforeach
         </div>
-        {{ $events->links() }}
     </div>
+    {{ $events->links() }}
 
 {{-- @TODO: check if admin   --}}
     <script src="{{ asset('js/admin_event.js') }}" type="module"></script>

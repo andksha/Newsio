@@ -54,11 +54,6 @@ class Event extends BaseModel implements JsonSerializable
         'id', 'title', 'tags', 'links', 'removed_links', 'reason', 'category_id', 'updated_at', 'deleted_at'
     ];
 
-    /**
-     * @param string $reason
-     * @return Event
-     * @throws Exception
-     */
     public function remove(string $reason): Event
     {
         $this->reason = $reason;

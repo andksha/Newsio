@@ -40,6 +40,14 @@ class Link extends BaseModel
 
     protected $visible = ['content', 'reason'];
 
+    public function remove(string $reason): Link
+    {
+        $this->reason = $reason;
+        $this->delete();
+
+        return $this;
+    }
+
     public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class, 'event_id');

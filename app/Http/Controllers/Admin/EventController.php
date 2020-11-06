@@ -13,6 +13,7 @@ use Newsio\Boundary\TagsBoundary;
 use Newsio\Boundary\TitleBoundary;
 use Newsio\Contract\ApplicationException;
 use Newsio\UseCase\Admin\RemoveEventUseCase;
+use Newsio\UseCase\Admin\RemoveLinkUseCase;
 use Newsio\UseCase\EditEventUseCase;
 
 class EventController extends Controller
@@ -55,5 +56,26 @@ class EventController extends Controller
         }
 
         return response()->json(['event' => $event]);
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
+     */
+    public function removeLink(Request $request)
+    {
+        $uc = new RemoveLinkUseCase();
+
+        try {
+            $link = $uc->remove(new IdBoundary($request->link_id), new StringBoundary($request->reason));
+        } catch (ApplicationException $e) {
+            return response()->json([
+                'error_message' => $e->getMessage(),
+                'error_data' => $e->getErrorData()
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        return response()->json(['link' => $link]);
     }
 }
