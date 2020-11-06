@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Exception;
 use JsonSerializable;
 
 /**
@@ -61,6 +60,17 @@ class Event extends BaseModel implements JsonSerializable
         $this->links()->update(['reason' => 'Removed with event']);
         $this->links()->delete();
         $this->delete();
+
+        return $this;
+    }
+
+    public function restore()
+    {
+        $this->reason = '';
+        $this->deleted_at = null;
+        $this->links()->update(['reason' => '']);
+        $this->links()->restore();
+        $this->save();
 
         return $this;
     }

@@ -42,7 +42,7 @@ function enableSubmitNewLinksButton(event) {
   event.querySelector('.submit_links_button').addEventListener('click', function () {
     event.querySelector('.new-links-errors').style.display = 'none';
     let data = JSON.stringify({
-      event_id: event.querySelector('.add-link-button').id,
+      event_id: event.id,
       links: event.querySelector('.new-links-input').value.replace(/\s+/g, ' ').trim().split(/[\r?\n\s,]+/)
     });
 
@@ -211,6 +211,8 @@ function handleEvent(event) {
     " | " +
     "<a class=\"show_removed_links\">removed (0)</a>".trim();
 
+  eventDiv.id = event.id;
+
   title.classList.add('event_title');
   title.innerHTML = event.title.charAt(0).toUpperCase() + event.title.slice(1);
   table.classList.add('col-md-12');
@@ -224,7 +226,6 @@ function handleEvent(event) {
 
   addLinksButton.classList.add('add-button');
   addLinksButton.classList.add('add-link-button');
-  addLinksButton.id = event.id;
   addLinksButton.innerHTML = '+';
 
   newLinksErrors.classList.add('new-links-errors');

@@ -4,6 +4,7 @@ start();
 
 function start() {
   enableRemoveInput();
+  enableRestoreEventButton();
   enableRemoveLinkInput();
 }
 
@@ -21,12 +22,41 @@ function enableRemoveInput() {
   document.querySelectorAll('.confirm_removing_event').forEach( function (v) {
     v.addEventListener('click', function () {
       let data = JSON.stringify({
-        event_id: v.parentElement.querySelector('.remove-input').id.replace('event-', ''),
+        event_id: v.closest('.event').id,
         reason: v.parentElement.querySelector('.remove-input').value
       });
 
       request.send('DELETE', 'admin/event', data, csrfToken, true);
 
+      request.xmlRequest.onload = function () {
+        try {
+          let response = JSON.parse(request.xmlRequest.responseText);
+
+          if (typeof response.event != 'undefined') {
+            window.location.reload();
+          } else if (typeof response.error_message != 'undefined') {
+            alert(response.error_message);
+          } else {
+            console.log(response);
+          }
+        } catch (e) {
+          console.log(e);
+        }
+      }
+    });
+  });
+}
+
+function enableRestoreEventButton() {
+  let csrfToken = document.querySelector('meta[name=csrf_token]').content;
+
+  document.querySelectorAll('.restore-event').forEach(function (b) {
+    b.addEventListener('click', function () {
+      let data = JSON.stringify({
+        event_id: b.closest('.event').id
+      });
+
+      request.send('PUT', 'admin/event', data, csrfToken, true);
       request.xmlRequest.onload = function () {
         try {
           let response = JSON.parse(request.xmlRequest.responseText);

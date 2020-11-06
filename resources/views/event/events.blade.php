@@ -44,7 +44,7 @@
                 <div class="col-md-4 error_message"></div>
             </div>
         @foreach($events as $event)
-            <div class="row event">
+            <div class="row event" id="{{ $event->id }}">
                 <div class="col-md-12 event_table">
                     @if ($event->reason)
                         <span class="removed">X {{ $event->reason }}</span>
@@ -56,9 +56,11 @@
                     @if (!$event->reason)
                         <span class="remove_event">X</span>
                         <div class="remove_block">
-                            <input class="remove-input" aria-label="reason" id="event-{{ $event->id }}">
+                            <input class="remove-input" aria-label="reason">
                             <span class="confirm_removing_event">V</span>
                         </div>
+                    @else
+                        <button class="restore-event">Restore</button>
                     @endif
                     <span class="published-removed-links">
                         <a class="show_published_links active">published ({{ $event->links->count() }})</a>
@@ -72,7 +74,7 @@
                     </div>
                     <div class="event_links">
                         <div class="published-links">
-                            <button class="add-button add-link-button" id="{{ $event->id }}">+</button>
+                            <button class="add-button add-link-button">+</button>
                             <div class="new-links-errors"></div>
                             <div class="links">
                                 @foreach ($event->links as $link)
@@ -99,6 +101,7 @@
                                         {{ $removedLink->content }}:
                                     </a><span class="removed">{{ $removedLink->reason }}</span>
                                 </span>
+                                <button class="restore-link">Restore</button>
                             @endforeach
                         </div>
                     </div>
