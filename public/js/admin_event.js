@@ -133,7 +133,7 @@ function enableRestoreLinkButton() {
         try {
           let response = JSON.parse(request.xmlRequest.responseText);
 
-          if (typeof response.link != 'undefined') {
+          if (response.hasOwnProperty('link')) {
             window.location.reload();
           } else if (typeof response.error_message != 'undefined') {
             alert(response.error_message);

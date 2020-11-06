@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use JsonSerializable;
+use Newsio\Exception\InvalidOperationException;
 
 /**
  * Newsio\Model\Event
@@ -41,7 +42,6 @@ use JsonSerializable;
  */
 class Event extends BaseModel implements JsonSerializable
 {
-    // @TODO: fix soft deletes
     use SoftDeletes;
 
     protected $table = 'events';
@@ -65,12 +65,18 @@ class Event extends BaseModel implements JsonSerializable
         return $this;
     }
 
+    /**
+     * @return $this
+     * @throws InvalidOperationException
+     */
     public function restore()
     {
+        if (!$this->links->where('deleted_at', null)->where('reason', '')->first()) {
+            throw new InvalidOperationException('Event can\'t be restored without approved links');
+        }
+
         $this->reason = '';
         $this->deleted_at = null;
-        $this->links()->update(['reason' => '']);
-        $this->links()->restore();
         $this->save();
 
         return $this;

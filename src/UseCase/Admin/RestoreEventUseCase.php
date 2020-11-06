@@ -12,6 +12,7 @@ class RestoreEventUseCase
      * @param IdBoundary $id
      * @return \Illuminate\Database\Query\Builder|mixed|Event
      * @throws ModelNotFoundException
+     * @throws \Newsio\Exception\InvalidOperationException
      */
     public function restore(IdBoundary $id)
     {

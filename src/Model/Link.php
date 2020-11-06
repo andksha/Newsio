@@ -46,7 +46,25 @@ class Link extends BaseModel
         $this->reason = $reason;
         $this->deleted_at = Carbon::now();
         $this->save();
-//        $this->delete();
+
+        if (!$this->query()->where('event_id', $this->event_id)
+            ->where('reason', '')
+            ->where('deleted_at', null)
+            ->first()
+        ) {
+            $this->event->reason = $reason;
+            $this->event->deleted_at = $this->deleted_at;
+            $this->event->save();
+        }
+
+        return $this;
+    }
+
+    public function restore()
+    {
+        $this->reason = '';
+        $this->deleted_at = null;
+        $this->save();
 
         return $this;
     }
