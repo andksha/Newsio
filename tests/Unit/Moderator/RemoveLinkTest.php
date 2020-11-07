@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Admin;
+namespace Tests\Unit\Moderator;
 
 use Illuminate\Support\Str;
 use Newsio\Boundary\IdBoundary;
