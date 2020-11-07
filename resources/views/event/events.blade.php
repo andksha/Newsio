@@ -84,7 +84,7 @@
                                         <span class="remove_link">X</span>
                                         <div class="remove_link_block">
                                             <input class="remove-link-input" aria-label="reason" id="link-{{ $link->id }}">
-                                            <span class="confirm_removing_link">V</span>
+                                            <span class="confirm_removing">V</span>
                                         </div>
                                     @endif
                                 @endforeach

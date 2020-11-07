@@ -6,7 +6,7 @@ let csrfToken = document.querySelector('meta[name=csrf_token]').content;
 
 function start() {
   enableApproveButton();
-  enableRejectButton();
+  enableRejectInput();
 }
 
 function enableApproveButton() {
@@ -24,7 +24,7 @@ function enableApproveButton() {
           if (response.hasOwnProperty('error_message')) {
             document.querySelector('.response-error').innerHTML = response.error_message;
             document.querySelector('.response-error').style.display = 'block';
-          } else if (response.hasOwnProperty('success') && response.success === true) {
+          } else if (response.hasOwnProperty('website')) {
             window.location.reload();
           } else {
             console.log(response);
@@ -38,6 +38,40 @@ function enableApproveButton() {
   });
 }
 
-function enableRejectButton() {
+function enableRejectInput() {
+  document.querySelectorAll('.reject').forEach(function (b) {
+    b.addEventListener('click', function () {
+      let display = b.parentElement.querySelector('.remove_block').style.display;
+      b.parentElement.querySelector('.remove_block').style.display = display === 'none' || !display ? 'inline-block' : 'none';
+    });
+  });
 
+  document.querySelectorAll('.confirm_removing').forEach(function (s) {
+    s.addEventListener('click', function () {
+      let data = JSON.stringify({
+        website_id: s.closest('.website').id,
+        reason: s.parentElement.querySelector('.reject-input').value
+      });
+
+      request.send('DELETE', 'admin/website', data, csrfToken, true);
+      request.xmlRequest.onload = function () {
+        try {
+          let response = JSON.parse(request.xmlRequest.responseText);
+
+          if (response.hasOwnProperty('error_message')) {
+            document.querySelector('.response-error').innerHTML = response.error_message;
+            document.querySelector('.response-error').style.display = 'block';
+          } else if (response.hasOwnProperty('website')) {
+            window.location.reload();
+          } else {
+            console.log(response);
+          }
+        } catch (e) {
+          console.log(e);
+          console.log(request.xmlRequest.responseText);
+          alert(e);
+        }
+      }
+    });
+  });
 }

@@ -90,7 +90,7 @@ function enableRemoveLinkInput() {
     });
   });
 
-  document.querySelectorAll('.confirm_removing_link').forEach( function (v) {
+  document.querySelectorAll('.confirm_removing').forEach( function (v) {
     v.addEventListener('click', function () {
       let data = JSON.stringify({
         link_id: v.parentElement.querySelector('.remove-link-input').id.replace('link-', ''),

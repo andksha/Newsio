@@ -35,6 +35,10 @@
                         @if ($website->getStatus() === 'pending')
                             <button class="website-status-button approve">Approve</button>
                             <button class="website-status-button reject">Reject</button>
+                            <div class="remove_block">
+                                <input aria-label="reject" class="reject-input"/>
+                                <span class="confirm_removing">V</span>
+                            </div>
                         @endif
                     </span>
                 @endforeach
