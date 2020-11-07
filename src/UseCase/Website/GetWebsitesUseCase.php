@@ -25,9 +25,9 @@ class GetWebsitesUseCase
             ->get();
 
         return [
-            'pending' => $total->where('approved', '=', null)->first()->total,
-            'approved' => $total->where('approved', '=', '1')->first()->total,
-            'rejected' => $total->where('approved', '=', '0')->first()->total
+            'pending' => $total->where('approved', '===', null)->first()->total ?? 0,
+            'approved' => $total->where('approved', '=', '1')->first()->total ?? 0,
+            'rejected' => $total->where('approved', '=', '0')->first()->total ?? 0
         ];
     }
 }

@@ -24,12 +24,17 @@
             </div>
             <div class="col-md-10">
                 @foreach ($websites as $website)
-                    <span class="website">
+                    <span class="website" id="{{ $website->id }}">
                         <a href="{{ $website->domain }}">
                             {{ $website->domain }}
                         </a>
                         @if ($website->approved === false)
                             - {{ $website->reason }}
+                        @endif
+                        {{-- @TODO: check if admin--}}
+                        @if ($website->getStatus() === 'pending')
+                            <button class="website-status-button approve">Approve</button>
+                            <button class="website-status-button reject">Reject</button>
                         @endif
                     </span>
                 @endforeach
@@ -37,5 +42,7 @@
             </div>
         </div>
     </div>
+    {{-- @TODO: check if admin   --}}
+    <script src="{{ asset('js/admin_website.js') }}" type="module"></script>
     <script src="{{ asset('js/website.js') }}" type="module"></script>
 @endsection

@@ -28,7 +28,8 @@ Route::group(['namespace' => 'Moderator', 'prefix' => 'moderator'], function () 
 });
 
 Route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function () {
-    Route::put('event', 'EventController@restoreEvent')->name('restore_event');
+    Route::put('website', 'WebsiteController@approve')->name('approve_website');
+    Route::delete('website', 'WebsiteController@reject')->name('reject_website');
 });
 
 Route::get('test', 'TestController@test')->name('test');

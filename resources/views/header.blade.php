@@ -35,6 +35,7 @@
             @endif
         </div>
     @endif
+    <div class="response-error"></div>
     <div class="row">
         <div class="col-md-2">
             <span class="category" onclick="window.location.href =
