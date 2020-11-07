@@ -15,7 +15,7 @@ class RemoveLinkUseCase
      * @return mixed
      * @throws ModelNotFoundException
      */
-    public function remove(IdBoundary $id, StringBoundary $reason)
+    public function remove(IdBoundary $id, StringBoundary $reason): Link
     {
         if (!$link = Link::query()->find($id->getValue())) {
             throw new ModelNotFoundException('Event');
