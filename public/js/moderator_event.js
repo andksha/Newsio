@@ -27,7 +27,7 @@ function enableRemoveInput() {
         reason: v.parentElement.querySelector('.remove-input').value
       });
 
-      request.send('DELETE', 'admin/event', data, csrfToken, true);
+      request.send('DELETE', 'moderator/event', data, csrfToken, true);
 
       request.xmlRequest.onload = function () {
         try {
@@ -58,7 +58,7 @@ function enableRestoreEventButton() {
         event_id: b.closest('.event').id
       });
 
-      request.send('PUT', 'admin/event', data, csrfToken, true);
+      request.send('PUT', 'moderator/event', data, csrfToken, true);
       request.xmlRequest.onload = function () {
         try {
           let response = JSON.parse(request.xmlRequest.responseText);
@@ -97,7 +97,7 @@ function enableRemoveLinkInput() {
         reason: v.parentElement.querySelector('.remove-link-input').value
       });
 
-      request.send('DELETE', 'admin/link', data, csrfToken, true);
+      request.send('DELETE', 'moderator/link', data, csrfToken, true);
 
       request.xmlRequest.onload = function () {
         try {
@@ -128,7 +128,7 @@ function enableRestoreLinkButton() {
         link_id: b.id.replace('link-', '')
       });
 
-      request.send('PUT', 'admin/link', data, csrfToken, true);
+      request.send('PUT', 'moderator/link', data, csrfToken, true);
       request.xmlRequest.onload = function () {
         try {
           let response = JSON.parse(request.xmlRequest.responseText);

@@ -8,7 +8,7 @@ use Newsio\Boundary\StringBoundary;
 use Newsio\Exception\ModelNotFoundException;
 use Newsio\Model\Event;
 use Newsio\Model\Link;
-use Newsio\UseCase\Admin\RemoveLinkUseCase;
+use Newsio\UseCase\Moderator\RemoveLinkUseCase;
 use Tests\BaseTestCase;
 
 class RemoveLinkTest extends BaseTestCase

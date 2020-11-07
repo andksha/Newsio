@@ -4,12 +4,11 @@ namespace Tests\Unit\Admin;
 
 use Illuminate\Support\Str;
 use Newsio\Boundary\IdBoundary;
-use Newsio\Boundary\StringBoundary;
 use Newsio\Exception\InvalidOperationException;
 use Newsio\Exception\ModelNotFoundException;
 use Newsio\Model\Event;
 use Newsio\Model\Link;
-use Newsio\UseCase\Admin\RestoreEventUseCase;
+use Newsio\UseCase\Moderator\RestoreEventUseCase;
 use Tests\BaseTestCase;
 
 class RestoreEventTest extends BaseTestCase

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Moderator;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -12,10 +12,10 @@ use Newsio\Boundary\StringBoundary;
 use Newsio\Boundary\TagsBoundary;
 use Newsio\Boundary\TitleBoundary;
 use Newsio\Contract\ApplicationException;
-use Newsio\UseCase\Admin\RemoveEventUseCase;
-use Newsio\UseCase\Admin\RemoveLinkUseCase;
-use Newsio\UseCase\Admin\RestoreEventUseCase;
-use Newsio\UseCase\Admin\RestoreLinkUseCase;
+use Newsio\UseCase\Moderator\RemoveEventUseCase;
+use Newsio\UseCase\Moderator\RemoveLinkUseCase;
+use Newsio\UseCase\Moderator\RestoreEventUseCase;
+use Newsio\UseCase\Moderator\RestoreLinkUseCase;
 use Newsio\UseCase\EditEventUseCase;
 
 class EventController extends Controller

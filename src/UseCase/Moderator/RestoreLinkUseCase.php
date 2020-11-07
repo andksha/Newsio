@@ -1,6 +1,6 @@
 <?php
 
-namespace Newsio\UseCase\Admin;
+namespace Newsio\UseCase\Moderator;
 
 use Newsio\Boundary\IdBoundary;
 use Newsio\Exception\ModelNotFoundException;

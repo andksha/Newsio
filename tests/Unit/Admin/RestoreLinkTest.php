@@ -6,7 +6,7 @@ use Illuminate\Support\Str;
 use Newsio\Boundary\IdBoundary;
 use Newsio\Exception\ModelNotFoundException;
 use Newsio\Model\Link;
-use Newsio\UseCase\Admin\RestoreLinkUseCase;
+use Newsio\UseCase\Moderator\RestoreLinkUseCase;
 use Tests\BaseTestCase;
 
 class RestoreLinkTest extends BaseTestCase

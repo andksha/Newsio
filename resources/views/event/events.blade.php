@@ -52,7 +52,7 @@
                     <span class="event_title">
                         {{ ucfirst($event->title) }}
                     </span>
-                    {{-- @TODO: check if admin   --}}
+                    {{-- @TODO: check if moderator   --}}
                     @if (!$event->reason)
                         <span class="remove_event">X</span>
                         <div class="remove_block">
@@ -79,7 +79,7 @@
                             <div class="links">
                                 @foreach ($event->links as $link)
                                     <a href="{{ $link->content }}" class="event_link" target="_blank">{{ $link->content }}</a>
-                                    {{-- @TODO: check if admin   --}}
+                                    {{-- @TODO: check if moderator   --}}
                                     @if (!$link->reason)
                                         <span class="remove_link">X</span>
                                         <div class="remove_link_block">
@@ -112,7 +112,7 @@
     </div>
     {{ $events->links() }}
 
-{{-- @TODO: check if admin   --}}
-    <script src="{{ asset('js/admin_event.js') }}" type="module"></script>
+{{-- @TODO: check if moderator   --}}
+    <script src="{{ asset('js/moderator_event.js') }}" type="module"></script>
     <script src="{{ asset('js/event.js') }}" type="module"></script>
 @endsection
