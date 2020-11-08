@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Newsio\Boundary\Auth\EmailBoundary;
 use Newsio\Boundary\Auth\PasswordBoundary;
+use Newsio\Boundary\StringBoundary;
 use Newsio\Contract\ApplicationException;
+use Newsio\UseCase\Auth\ConfirmEmailUseCase;
 use Newsio\UseCase\Auth\RegisterUseCase;
 
 class RegisterController extends Controller
@@ -30,5 +32,18 @@ class RegisterController extends Controller
         return response()->json([
             'user' => $user
         ]);
+    }
+
+    public function confirm(Request $request)
+    {
+        $uc = new ConfirmEmailUseCase();
+
+        try {
+            $uc->confirm(new StringBoundary($request->token));
+        } catch (ApplicationException $e) {
+            return redirect()->route('events')->with(['error_message' => $e->getMessage()]);
+        }
+
+        return redirect()->route('events');
     }
 }

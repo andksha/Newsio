@@ -52,7 +52,7 @@ class Handler extends ExceptionHandler
     public function render($request, Throwable $exception)
     {
         if ($exception instanceof Exception) {
-            abort(404);
+            return response()->json(['error_message' => 'Server error']);
         }
 
         return parent::render($request, $exception);

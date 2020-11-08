@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['namespace' => 'Auth'], function () {
     Route::post('register', 'RegisterController@register');
+    Route::get('confirmation', 'RegisterController@confirm');
 });
 
 Route::get('events/{removed?}', 'EventController@events')->name('events');

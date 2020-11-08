@@ -15,7 +15,7 @@ class RegisteredMail extends Mailable
 
     public function __construct(EmailConfirmation $emailConfirmation)
     {
-        $this->subject = __('email_subjects.forgot_password');
+        $this->subject = 'Registration';
         $this->emailConfirmation = $emailConfirmation;
     }
 
