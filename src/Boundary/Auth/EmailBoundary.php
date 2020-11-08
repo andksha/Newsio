@@ -2,6 +2,7 @@
 
 namespace Newsio\Boundary\Auth;
 
+use App\Model\User;
 use Newsio\Exception\BoundaryException;
 
 class EmailBoundary
@@ -15,7 +16,7 @@ class EmailBoundary
      */
     public function __construct($email)
     {
-        if (!is_string($email) || filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        if (!is_string($email) || !preg_match(User::EMAIL_REGEX, $email)) {
             throw new BoundaryException('Invalid email');
         }
 

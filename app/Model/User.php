@@ -21,5 +21,6 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public const EMAIL_REGEX = '/^[-0-9a-zA-Z.+_]+@[-0-9a-zA-Z.+_]+.[a-zA-Z]{2,4}$/';
     public const PASSWORD_REGEX = '/^[a-zA-Z0-9-_^&%$#@!&*()\[\]\{\}]{8,32}$/';
 }
