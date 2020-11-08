@@ -7,7 +7,7 @@ use Newsio\Exception\BoundaryException;
 class TagsBoundary
 {
     private array $tags;
-    public static string $TAG_REGEX = '/^[-a-zA-Z0-9_%#]{0,15}$/';
+    public const TAG_REGEX = '/^[-a-zA-Z0-9_%#]{0,15}$/';
 
     /**
      * LinkBoundary constructor.
@@ -26,7 +26,7 @@ class TagsBoundary
         }
 
         foreach ($tags as $key => $value) {
-            if (!is_string($value) || $value === '' || !preg_match(self::$TAG_REGEX, $value)) {
+            if (!is_string($value) || $value === '' || !preg_match(self::TAG_REGEX, $value)) {
                 throw new BoundaryException('Invalid tags format', ['tags' => 'Tags are invalid']);
             }
         }

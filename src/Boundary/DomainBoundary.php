@@ -7,7 +7,7 @@ use Newsio\Exception\BoundaryException;
 class DomainBoundary
 {
     private string $domain;
-    public static string $DOMAIN_REGEX = '/^https:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\/?$/';
+    public const DOMAIN_REGEX = '/^https:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\/?$/';
 
     /**
      * WebsiteBoundary constructor.
@@ -16,7 +16,7 @@ class DomainBoundary
      */
     public function __construct($domain)
     {
-        if (!is_string($domain) || $domain === '' || !preg_match(self::$DOMAIN_REGEX, $domain)) {
+        if (!is_string($domain) || $domain === '' || !preg_match(self::DOMAIN_REGEX, $domain)) {
             throw new BoundaryException('Invalid domain format', ['domain' => 'Website is invalid']);
         }
 
