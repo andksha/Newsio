@@ -12,6 +12,8 @@ function start() {
 function enableApproveButton() {
   document.querySelectorAll('.approve').forEach(function (b) {
     b.addEventListener('click', function () {
+      document.querySelector('.response-error').style.display = 'none';
+
       let data = JSON.stringify({
         website_id: b.closest('.website').id
       });
@@ -48,6 +50,8 @@ function enableRejectInput() {
 
   document.querySelectorAll('.confirm_removing').forEach(function (s) {
     s.addEventListener('click', function () {
+      document.querySelector('.response-error').style.display = 'none';
+
       let data = JSON.stringify({
         website_id: s.closest('.website').id,
         reason: s.parentElement.querySelector('.reject-input').value

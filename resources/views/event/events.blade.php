@@ -11,8 +11,8 @@
         </a>
         <button class="add-button" id="add-event-button">+</button>
     </div>
-    <div class="row">
-        <div class="col-md-10" id="events">
+    <div class="row" style="position: relative;z-index: 1;">
+        <div class="col-md-12" id="events">
             <div class="row" id="inputs">
                 <div class="col-md-6">
                     <div>

@@ -23,19 +23,19 @@ class RegisterUseCase
     public function register(EmailBoundary $email, PasswordBoundary $password, PasswordBoundary $passwordRepeat)
     {
         if ($user = User::query()->where('email', $email->getValue())->first()) {
-            throw new AlreadyExistsException('User');
+            throw new AlreadyExistsException('User already exists');
         }
 
         if ($password->getValue() !== $passwordRepeat->getValue()) {
             throw new InvalidOperationException('Passwords do not match');
         }
 
-        $user = User::query()->create([
+        if ($user = User::query()->create([
             'email' => $email->getValue(),
             'password' => Hash::make($password->getValue())
-        ]);
-
-        RegisteredEvent::dispatch($user->email);
+        ])) {
+            RegisteredEvent::dispatch($user->email);
+        }
 
         return $user;
     }

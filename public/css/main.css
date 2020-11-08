@@ -16,6 +16,23 @@ h4, h5 {
     text-align: center;
 }
 
+.auth-block {
+    position: fixed;
+    display: inline-block;
+    float: right;
+    right: 5%;
+}
+
+#register-block {
+    position: absolute;
+    display: none;
+}
+
+#register-block > input {
+    display: block;
+    width: 150px;
+}
+
 .category {
     display: block;
     cursor: pointer;
@@ -53,7 +70,7 @@ h4, h5 {
 
 #add-event-button {
     position: absolute;
-    right: 16.5%;
+    right: 0;
 }
 
 .add-link-button {

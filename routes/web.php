@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::group(['namespace' => 'Auth'], function () {
+    Route::post('register', 'RegisterController@register');
+});
+
 Route::get('events/{removed?}', 'EventController@events')->name('events');
 Route::post('event', 'EventController@create')->name('create_event');
 Route::post('links', 'EventController@addLinks')->name('add_link');

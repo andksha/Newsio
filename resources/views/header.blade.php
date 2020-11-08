@@ -35,6 +35,18 @@
             @endif
         </div>
     @endif
+    <div class="auth-block">
+        @if (!auth()->user())
+            <button id="register">Register</button>
+            <button id="login">Login</button>
+            <div id="register-block">
+                <input aria-label="email" id="email" placeholder="Email">
+                <input aria-label="password" type="password" id="password" placeholder="Password">
+                <input aria-label="password_confirmation" type="password" id="password_confirmation" placeholder="Password confirmation">
+                <input aria-label="submit" id="submit-registration" type="submit" value="Submit">
+            </div>
+        @endif
+    </div>
     <div class="response-error input_error"></div>
     <div class="row">
         <div class="col-md-2">
@@ -47,10 +59,11 @@
                     {{ ucfirst($category->name) }}</span>
             @endforeach
         </div>
-        <div class="col-md-10">
+        <div class="col-md-8">
             @yield('content')
         </div>
     </div>
 </div>
+<script src="{{ asset('js/main.js') }}" type="module"></script>
 </body>
 </html>
