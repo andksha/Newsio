@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Mail;
 use Newsio\Boundary\Auth\EmailBoundary;
 use Newsio\Boundary\Auth\PasswordBoundary;
 use Newsio\Exception\BoundaryException;
+use Newsio\Exception\InvalidOperationException;
 use Newsio\UseCase\Auth\RegisterUseCase;
 use Tests\BaseTestCase;
 
@@ -27,13 +28,13 @@ class RegisterTest extends BaseTestCase
     {
         Mail::fake();
         $user = $this->uc->register(
-            new EmailBoundary('test@test.tаа'),
+            new EmailBoundary('test@test.taa'),
             new PasswordBoundary('12345678'),
             new PasswordBoundary('12345678')
         );
 
         Mail::assertQueued(RegisteredMail::class);
-        $this->assertEquals('test@test.tаа', $user->email);
+        $this->assertEquals('test@test.taa', $user->email);
     }
 
     /**
@@ -67,7 +68,7 @@ class RegisterTest extends BaseTestCase
      */
     public function test_Register_WithInvalidPasswordConfirmation_ThrowsBoundaryException()
     {
-        $this->expectException(BoundaryException::class);
+        $this->expectException(InvalidOperationException::class);
         $this->uc->register(
             new EmailBoundary('test@test.taa'),
             new PasswordBoundary('12345678'),

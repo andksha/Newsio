@@ -10,6 +10,7 @@ use Newsio\Boundary\StringBoundary;
 use Newsio\Contract\ApplicationException;
 use Newsio\UseCase\Auth\ConfirmEmailUseCase;
 use Newsio\UseCase\Auth\RegisterUseCase;
+use Newsio\UseCase\Auth\ResendConfirmationEmailUseCase;
 
 class RegisterController extends Controller
 {
@@ -45,5 +46,23 @@ class RegisterController extends Controller
         }
 
         return redirect()->route('events');
+    }
+
+    public function resendConfirmationEmail(Request $request)
+    {
+        $uc = new ResendConfirmationEmailUseCase();
+
+        try {
+            $uc->resend(new EmailBoundary($request->email));
+        } catch (ApplicationException $e) {
+            return response()->json([
+                'error_message' => $e->getMessage(),
+                'error_data' => $e->getErrorData()
+            ]);
+        }
+
+        return response()->json([
+            'success' => true
+        ]);
     }
 }
