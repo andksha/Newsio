@@ -14,9 +14,8 @@ use Newsio\UseCase\Website\GetWebsitesUseCase;
 
 class WebsiteController extends Controller
 {
-    public function websites(Request $request, $status = '')
+    public function websites(Request $request, GetWebsitesUseCase $uc, $status = '')
     {
-        $uc = new GetWebsitesUseCase();
         $categories = Category::all();
         $this->resolvePagination($request);
 

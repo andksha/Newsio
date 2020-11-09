@@ -24,6 +24,9 @@
     <div class="header-links">
         <a href="{{ url('/events') }}" @if(strpos(url()->current(), 'events'))class="active"@endif>Events</a>
         <a href="{{ url('/websites/approved') }}" @if(strpos(url()->current(), 'websites'))class="active"@endif>Websites</a>
+        @if (auth()->guard('admin')->user())
+            <a href="{{ url('/admin/login') }}" @if(strpos(url()->current(), 'admin/login'))class="active"@endif>Moderators</a>
+        @endif
         @include('search')
     </div>
     @if (session()->has('error_message') || isset($error_message))

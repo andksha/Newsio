@@ -12,12 +12,13 @@ class LoginUseCase
     /**
      * @param EmailBoundary $email
      * @param PasswordBoundary $password
+     * @param string $guard
      * @return mixed
      * @throws InvalidDataException
      */
-    public function login(EmailBoundary $email, PasswordBoundary $password)
+    public function login(EmailBoundary $email, PasswordBoundary $password, string $guard = 'web')
     {
-        if (!Auth::attempt([
+        if (!Auth::guard($guard)->attempt([
             'email' => $email->getValue(),
             'password' => $password->getValue()
         ])) {
