@@ -21,7 +21,7 @@ class LoginUseCase
             'email' => $email->getValue(),
             'password' => $password->getValue()
         ])) {
-            throw new InvalidDataException($password->getValue());
+            throw new InvalidDataException('Invalid credentials');
         }
 
         return true;

@@ -19,6 +19,9 @@ Route::group(['namespace' => 'Auth'], function () {
     Route::post('login', 'LoginController@login');
     Route::get('logout', 'LoginController@logout');
     Route::get('repeat-confirmation', 'RegisterController@resendConfirmationEmail')->middleware('auth');
+    Route::post('password', 'ResetPasswordController@sendResetPasswordEmail');
+    Route::get('password', 'ResetPasswordController@getPasswordResetForm');
+    Route::post('password/reset', 'ResetPasswordController@resetPassword');
 });
 
 Route::group(['middleware' => 'auth'], function () {

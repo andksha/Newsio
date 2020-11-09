@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
 
 /**
  * App\Model\User
@@ -52,6 +53,12 @@ class User extends Authenticatable
     public function verify()
     {
         $this->email_verified_at = Carbon::now();
+        $this->save();
+    }
+
+    public function changePassword(string $password)
+    {
+        $this->password = Hash::make($password);
         $this->save();
     }
 }

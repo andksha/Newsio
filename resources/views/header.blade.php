@@ -50,6 +50,11 @@
                 <input aria-label="password" type="password" id="login-password" placeholder="Password">
                 <input aria-label="submit" id="submit-login" type="submit" value="Submit">
             </div>
+            <span id="reset-password">Forgot password?</span>
+            <div id="reset-password-block">
+                <input aria-label="email" id="reset-email" placeholder="Email">
+                <input aria-label="submit" id="submit-reset" type="submit" value="Submit">
+            </div>
         @else
             <span>{{ auth()->user()->email }}</span>
             <a href="{{ url('logout') }}">Logout</a>

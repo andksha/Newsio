@@ -57,6 +57,7 @@ class Handler extends ExceptionHandler
         }
 
         if ($exception instanceof Exception) {
+            // @TODO: show 500 error
             return response()->json(['error_message' => $exception->getMessage()]);
         }
 

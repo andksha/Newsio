@@ -33,6 +33,11 @@ h4, h5 {
     display: none;
 }
 
+#reset-password-block {
+    position: absolute;
+    display: none;
+}
+
 #register-block > input {
     display: block;
     width: 150px;
@@ -41,6 +46,16 @@ h4, h5 {
 #login-block > input {
     display: block;
     width: 150px;
+}
+
+#reset-password-block > input {
+    display: block;
+    width: 150px;
+}
+
+#reset-password {
+    display: block;
+    cursor: pointer;
 }
 
 .category {

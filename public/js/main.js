@@ -7,6 +7,7 @@ let csrfToken = document.querySelector('meta[name=csrf_token]').content;
 function start() {
   enableRegister();
   enableLogin();
+  enableResetPassword();
 }
 
 function enableRegister() {
@@ -18,6 +19,8 @@ function enableRegister() {
 
   registerButton.addEventListener('click', function () {
     document.getElementById('login-block').style.display = 'none';
+    document.getElementById('reset-password-block').style.display = 'none';
+
     let registerBlock = document.getElementById('register-block');
 
     registerBlock.style.display = registerBlock.style.display === 'none' || !registerBlock.style.display ? 'block' : 'none';
@@ -61,6 +64,8 @@ function enableLogin() {
 
   loginButton.addEventListener('click', function () {
     document.getElementById('register-block').style.display = 'none';
+    document.getElementById('reset-password-block').style.display = 'none';
+
     let loginBlock = document.getElementById('login-block');
 
     loginBlock.style.display = loginBlock.style.display === 'none' || !loginBlock.style.display ? 'block' : 'none';
@@ -83,6 +88,48 @@ function enableLogin() {
           document.querySelector('.response-error').style.display = 'block';
         } else if (response.hasOwnProperty('success') || typeof response.success != 'undefined') {
           window.location.reload();
+        } else {
+          console.log(response);
+        }
+      } catch (e) {
+        console.log(e);
+        alert(e);
+      }
+    }
+  });
+}
+
+function enableResetPassword() {
+  let resetPassword = document.getElementById('reset-password');
+
+  if (!resetPassword) {
+    return;
+  }
+
+  resetPassword.addEventListener('click', function () {
+    document.getElementById('register-block').style.display = 'none';
+    document.getElementById('login-block').style.display = 'none';
+    let resetPasswordBlock = document.getElementById('reset-password-block');
+
+    resetPasswordBlock.style.display = resetPasswordBlock.style.display === 'none' || !resetPasswordBlock.style.display ? 'block' : 'none';
+  });
+
+  document.getElementById('submit-reset').addEventListener('click', function () {
+    document.querySelector('.response-error').style.display = 'none';
+    let data = JSON.stringify({
+      email: document.getElementById('reset-email').value,
+    });
+
+    request.send('POST', 'password', data, csrfToken, true);
+    request.xmlRequest.onload = function () {
+      try {
+        let response = JSON.parse(request.xmlRequest.responseText);
+
+        if (response.hasOwnProperty('error_message') || typeof response.error_message != 'undefined') {
+          document.querySelector('.response-error').innerHTML = response.error_message;
+          document.querySelector('.response-error').style.display = 'block';
+        } else if (response.hasOwnProperty('success') || typeof response.success != 'undefined') {
+          alert('Password reset link successfully sent.')
         } else {
           console.log(response);
         }
