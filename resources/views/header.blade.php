@@ -35,16 +35,27 @@
             @endif
         </div>
     @endif
-    <div class="auth-block">
+    <div id="auth-block">
         @if (!auth()->user())
             <button id="register">Register</button>
             <button id="login">Login</button>
             <div id="register-block">
-                <input aria-label="email" id="email" placeholder="Email">
-                <input aria-label="password" type="password" id="password" placeholder="Password">
-                <input aria-label="password_confirmation" type="password" id="password_confirmation" placeholder="Password confirmation">
+                <input aria-label="email" id="register-email" placeholder="Email">
+                <input aria-label="password" type="password" id="register-password" placeholder="Password">
+                <input aria-label="password_confirmation" type="password" id="register-password_confirmation" placeholder="Password confirmation">
                 <input aria-label="submit" id="submit-registration" type="submit" value="Submit">
             </div>
+            <div id="login-block">
+                <input aria-label="email" id="login-email" placeholder="Email">
+                <input aria-label="password" type="password" id="login-password" placeholder="Password">
+                <input aria-label="submit" id="submit-login" type="submit" value="Submit">
+            </div>
+        @else
+            <span>{{ auth()->user()->email }}</span>
+            <a href="{{ url('logout') }}">Logout</a>
+            @if (!auth()->user()->email_verified_at)
+                <a href="{{ url('repeat-confirmation') }}">Resend confirmation email</a>
+            @endif
         @endif
     </div>
     <div class="response-error input_error"></div>

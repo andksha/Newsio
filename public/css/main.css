@@ -16,7 +16,7 @@ h4, h5 {
     text-align: center;
 }
 
-.auth-block {
+#auth-block {
     position: fixed;
     display: inline-block;
     float: right;
@@ -28,7 +28,17 @@ h4, h5 {
     display: none;
 }
 
+#login-block {
+    position: absolute;
+    display: none;
+}
+
 #register-block > input {
+    display: block;
+    width: 150px;
+}
+
+#login-block > input {
     display: block;
     width: 150px;
 }

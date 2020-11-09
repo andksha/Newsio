@@ -16,6 +16,13 @@ use Illuminate\Support\Facades\Route;
 Route::group(['namespace' => 'Auth'], function () {
     Route::post('register', 'RegisterController@register');
     Route::get('confirmation', 'RegisterController@confirm');
+    Route::post('login', 'LoginController@login');
+    Route::get('logout', 'LoginController@logout');
+    Route::get('repeat-confirmation', 'RegisterController@resendConfirmationEmail')->middleware('auth');
+});
+
+Route::group(['middleware' => 'auth'], function () {
+    Route::post('website', 'WebsiteController@apply')->name('apply_website');
 });
 
 Route::get('events/{removed?}', 'EventController@events')->name('events');
@@ -23,7 +30,6 @@ Route::post('event', 'EventController@create')->name('create_event');
 Route::post('links', 'EventController@addLinks')->name('add_link');
 
 Route::get('websites/{status}', 'WebsiteController@websites')->name('websites');
-Route::post('website', 'WebsiteController@apply')->name('apply_website');
 
 Route::group(['namespace' => 'Moderator', 'prefix' => 'moderator'], function () {
     Route::delete('event', 'EventController@removeEvent')->name('remove_event');

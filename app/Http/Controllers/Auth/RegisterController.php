@@ -48,21 +48,20 @@ class RegisterController extends Controller
         return redirect()->route('events');
     }
 
-    public function resendConfirmationEmail(Request $request)
+    public function resendConfirmationEmail()
     {
         $uc = new ResendConfirmationEmailUseCase();
+        $user = auth()->user();
 
         try {
-            $uc->resend(new EmailBoundary($request->email));
+            $uc->resend(new EmailBoundary($user->email));
         } catch (ApplicationException $e) {
-            return response()->json([
+            return redirect()->back()->with([
                 'error_message' => $e->getMessage(),
                 'error_data' => $e->getErrorData()
             ]);
         }
 
-        return response()->json([
-            'success' => true
-        ]);
+        return redirect()->back();
     }
 }

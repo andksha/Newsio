@@ -9,7 +9,9 @@
         <a href="{{ url('events/removed') }}" @if (strpos(url()->current(), 'removed') !== false)class="active"@endif>
             removed
         </a>
-        <button class="add-button" id="add-event-button">+</button>
+        @if (auth()->user())
+            <button class="add-button" id="add-event-button">+</button>
+        @endif
     </div>
     <div class="row" style="position: relative;z-index: 1;">
         <div class="col-md-12" id="events">
@@ -74,7 +76,9 @@
                     </div>
                     <div class="event_links">
                         <div class="published-links">
-                            <button class="add-button add-link-button">+</button>
+                            @if (auth()->user())
+                                <button class="add-button add-link-button">+</button>
+                            @endif
                             <div class="new-links-errors"></div>
                             <div class="links">
                                 @foreach ($event->links as $link)

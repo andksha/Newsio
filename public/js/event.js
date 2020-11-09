@@ -30,7 +30,13 @@ function enableEvent(event) {
 }
 
 function enableAddLinkButton(event) {
-  event.querySelector('.add-link-button').addEventListener('click', function () {
+  let addLinkButton = event.querySelector('.add-link-button');
+
+  if (!addLinkButton) {
+    return;
+  }
+
+  addLinkButton.addEventListener('click', function () {
     let display = event.querySelector('.new-link-form').style.display;
     event.querySelector('.new-link-form').style.display = display === 'none' || !display ? 'block' : 'none';
   });
@@ -90,6 +96,10 @@ function enableSearch() {
 
 function enableAddEventButton() {
   let addButton = document.getElementById('add-event-button');
+
+  if (!addButton) {
+    return;
+  }
 
   addButton.addEventListener('click', function () {
     inputsDiv.style.display = inputsDiv.style.display === 'none' || !inputsDiv.style.display ? 'flex' : 'none';

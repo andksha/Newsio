@@ -3,12 +3,14 @@
 @section('content')
     <div class="row websites">
         <div class="col-md-3">
-            Apply website
-            <form method="POST" action="{{ url('website') }}">
-                @csrf
-                <input aria-label="domain" id="domain" name="domain">
-                <input type="submit" value="Submit" id="submit_domain_button">
-            </form>
+            @if (auth()->user())
+                Apply website
+                <form method="POST" action="{{ url('website') }}">
+                    @csrf
+                    <input aria-label="domain" id="domain" name="domain">
+                    <input type="submit" value="Submit" id="submit_domain_button">
+                </form>
+            @endif
         </div>
         <div class="col-md-9">
             <div class="header-links">

@@ -15,7 +15,7 @@ class CreateEmailConfirmationsTable extends Migration
     {
         Schema::create('email_confirmations', function (Blueprint $table) {
             $table->id();
-            $table->string('email', 50)->unique()->index();
+            $table->string('email', 50)->index();
             $table->string('token', 255);
             $table->timestamps();
         });
