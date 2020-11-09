@@ -25,7 +25,7 @@ class ForgotPasswordUseCase
 
         $passwordReset = PasswordReset::query()->create([
             'email' => $user->email,
-            'token' => Str::random()
+            'token' => Str::random(32)
         ]);
 
         Mail::to($user->email)->queue(new ResetPasswordMail($passwordReset));

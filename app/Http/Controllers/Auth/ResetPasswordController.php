@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Newsio\Boundary\Auth\EmailBoundary;
+use Newsio\Boundary\Auth\PasswordBoundary;
 use Newsio\Boundary\StringBoundary;
 use Newsio\Contract\ApplicationException;
 use Newsio\Model\Category;
@@ -45,8 +46,8 @@ class ResetPasswordController extends Controller
 
         try {
             $uc->resetPassword(
-                new StringBoundary($request->password),
-                new StringBoundary($request->password_confirmation),
+                new PasswordBoundary($request->password),
+                new PasswordBoundary($request->password_confirmation),
                 new StringBoundary($request->token)
             );
         } catch (ApplicationException $e) {

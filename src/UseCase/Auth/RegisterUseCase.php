@@ -16,7 +16,7 @@ class RegisterUseCase
      * @param EmailBoundary $email
      * @param PasswordBoundary $password
      * @param PasswordBoundary $passwordRepeat
-     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|object|null
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|object|null|User
      * @throws AlreadyExistsException
      * @throws InvalidOperationException
      */

@@ -5,6 +5,7 @@ namespace Newsio\UseCase\Auth;
 use App\Model\PasswordReset;
 use App\Model\User;
 use Carbon\Carbon;
+use Newsio\Boundary\Auth\PasswordBoundary;
 use Newsio\Boundary\StringBoundary;
 use Newsio\Exception\InvalidOperationException;
 use Newsio\Exception\ModelNotFoundException;
@@ -12,14 +13,14 @@ use Newsio\Exception\ModelNotFoundException;
 class ResetPasswordUseCase
 {
     /**
-     * @param StringBoundary $password
-     * @param StringBoundary $passwordConfirmation
+     * @param PasswordBoundary $password
+     * @param PasswordBoundary $passwordConfirmation
      * @param StringBoundary $token
      * @return bool
      * @throws InvalidOperationException
      * @throws ModelNotFoundException
      */
-    public function resetPassword(StringBoundary $password, StringBoundary $passwordConfirmation, StringBoundary $token)
+    public function resetPassword(PasswordBoundary $password, PasswordBoundary $passwordConfirmation, StringBoundary $token)
     {
         if (!$passwordReset = PasswordReset::query()->where('token', $token->getValue())
             ->where('created_at', '>', Carbon::now()->subDay())->first()

@@ -22,7 +22,8 @@ class RegisterController extends Controller
             $user = $uc->register(
                 new EmailBoundary($request->email),
                 new PasswordBoundary($request->password),
-                new PasswordBoundary($request->password_confirmation));
+                new PasswordBoundary($request->password_confirmation)
+            );
         } catch (ApplicationException $e) {
             return response()->json([
                 'error_message' => $e->getMessage(),
