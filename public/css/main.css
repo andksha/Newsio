@@ -241,3 +241,9 @@ h4, h5 {
     font-size: 14px;
     width: 80px;
 }
+
+.moderators {
+    display: block;
+    margin: auto;
+    width: 40%;
+}

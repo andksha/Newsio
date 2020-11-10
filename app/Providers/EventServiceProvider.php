@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Event\ModeratorCreatedEvent;
 use App\Event\RegisteredEvent;
+use App\Listener\ModeratorCreatedListener;
 use App\Listener\RegisteredListener;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
@@ -16,6 +18,9 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         RegisteredEvent::class => [
             RegisteredListener::class
+        ],
+        ModeratorCreatedEvent::class => [
+            ModeratorCreatedListener::class
         ],
     ];
 

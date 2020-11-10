@@ -25,7 +25,7 @@
         <a href="{{ url('/events') }}" @if(strpos(url()->current(), 'events'))class="active"@endif>Events</a>
         <a href="{{ url('/websites/approved') }}" @if(strpos(url()->current(), 'websites'))class="active"@endif>Websites</a>
         @if (auth()->guard('admin')->user())
-            <a href="{{ url('/admin/login') }}" @if(strpos(url()->current(), 'admin/login'))class="active"@endif>Moderators</a>
+            <a href="{{ url('/admin/moderators') }}" @if(strpos(url()->current(), 'admin/moderators'))class="active"@endif>Moderators</a>
         @endif
         @include('search')
     </div>
