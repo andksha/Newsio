@@ -46,6 +46,11 @@ return [
             'provider' => 'admins'
         ],
 
+        'moderator' => [
+            'driver' => 'session',
+            'provider' => 'moderators'
+        ],
+
         'api' => [
             'driver' => 'token',
             'provider' => 'users',
@@ -80,6 +85,11 @@ return [
             'driver' => 'eloquent',
             'model' => App\Model\Admin::class,
         ],
+
+        'moderators' => [
+            'driver' => 'eloquent',
+            'model' => App\Model\Moderator::class,
+        ],
     ],
 
     /*
@@ -106,6 +116,12 @@ return [
         ],
         'admins' => [
             'provider' => 'admins',
+            'table' => 'password_resets',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        'moderators' => [
+            'provider' => 'moderators',
             'table' => 'password_resets',
             'expire' => 60,
             'throttle' => 60,
