@@ -7,11 +7,12 @@ Route::post('confirmation', 'AuthController@confirmModerator')->name('confirm_mo
 
 Route::get('login', 'AuthController@loginForm')->name('moderator_login_form');
 Route::post('login', 'AuthController@login')->name('moderator_login');
-Route::get('logout', 'AuthController@logout')->name('moderator_logout');
 
-//Route::group(['middleware' => 'auth:moderator'], function () {
+Route::group(['middleware' => 'auth:moderator'], function () {
     Route::delete('event', 'EventController@removeEvent')->name('remove_event');
     Route::put('event', 'EventController@restoreEvent')->name('restore_event');
     Route::delete('link', 'EventController@removeLink')->name('remove_link');
     Route::put('link', 'EventController@restoreLink')->name('restore_link');
-//});
+
+    Route::get('logout', 'AuthController@logout')->name('moderator_logout');
+});
