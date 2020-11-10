@@ -34,16 +34,4 @@ Route::post('links', 'EventController@addLinks')->name('add_link');
 
 Route::get('websites/{status}', 'WebsiteController@websites')->name('websites');
 
-Route::group(['namespace' => 'Moderator', 'prefix' => 'moderator'], function () {
-    Route::delete('event', 'EventController@removeEvent')->name('remove_event');
-    Route::put('event', 'EventController@restoreEvent')->name('restore_event');
-    Route::delete('link', 'EventController@removeLink')->name('remove_link');
-    Route::put('link', 'EventController@restoreLink')->name('restore_link');
-});
-
-Route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function () {
-    Route::put('website', 'WebsiteController@approve')->name('approve_website');
-    Route::delete('website', 'WebsiteController@reject')->name('reject_website');
-});
-
 Route::get('test', 'TestController@test')->name('test');

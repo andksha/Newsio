@@ -33,8 +33,7 @@
                         @if ($website->approved === false)
                             - {{ $website->reason }}
                         @endif
-                        {{-- @TODO: check if admin--}}
-                        @if ($website->getStatus() === 'pending')
+                        @if ($website->getStatus() === 'pending' && auth()->guard('admin')->user())
                             <button class="website-status-button approve">Approve</button>
                             <button class="website-status-button reject">Reject</button>
                             <div class="remove_block">
@@ -48,7 +47,8 @@
             </div>
         </div>
     </div>
-    {{-- @TODO: check if admin   --}}
-    <script src="{{ asset('js/admin_website.js') }}" type="module"></script>
+    @if(auth()->guard('admin')->user())
+        <script src="{{ asset('js/admin_website.js') }}" type="module"></script>
+    @endif
     <script src="{{ asset('js/website.js') }}" type="module"></script>
 @endsection
