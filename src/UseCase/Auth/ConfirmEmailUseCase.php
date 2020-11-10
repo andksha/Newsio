@@ -24,7 +24,7 @@ class ConfirmEmailUseCase
             throw new ModelNotFoundException('User');
         }
 
-        $user->verify();
+        $user->verify()->save();
         $emailConfirmation->delete();
 
         return $user;

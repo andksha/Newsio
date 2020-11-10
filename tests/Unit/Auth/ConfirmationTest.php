@@ -57,8 +57,9 @@ class ConfirmationTest extends BaseTestCase
     {
         $this->registerUser();
         $user = $this->uc->confirm(new StringBoundary($this->emailConfirmation->token));
+        $this->user->refresh();
 
-        $this->assertTrue($user->email === $this->user->email && $user->email_verified_at !== null);
+        $this->assertTrue($user->email === $this->user->email && $this->user->email_verified_at !== null );
     }
 
     public function test_ConfirmEmail_WithInvalidToken_ThrowsModelNotFoundException()

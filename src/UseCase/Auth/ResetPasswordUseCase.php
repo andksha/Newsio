@@ -36,7 +36,7 @@ class ResetPasswordUseCase
             throw new ModelNotFoundException('User');
         }
 
-        $user->changePassword($password->getValue());
+        $user->changePassword($password->getValue())->save();
         $passwordReset->delete();
 
         return true;

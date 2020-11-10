@@ -53,12 +53,14 @@ class User extends Authenticatable
     public function verify()
     {
         $this->email_verified_at = Carbon::now();
-        $this->save();
+
+        return $this;
     }
 
     public function changePassword(string $password)
     {
         $this->password = Hash::make($password);
-        $this->save();
+
+        return $this;
     }
 }
