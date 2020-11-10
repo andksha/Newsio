@@ -54,15 +54,16 @@
                     <span class="event_title">
                         {{ ucfirst($event->title) }}
                     </span>
-                    {{-- @TODO: check if moderator   --}}
-                    @if (!$event->reason)
-                        <span class="remove_event">X</span>
-                        <div class="remove_block">
-                            <input class="remove-input" aria-label="reason">
-                            <span class="confirm_removing_event">V</span>
-                        </div>
-                    @else
-                        <button class="restore-event">Restore</button>
+                    @if (auth()->guard('moderator')->user())
+                        @if (!$event->reason)
+                            <span class="remove_event">X</span>
+                            <div class="remove_block">
+                                <input class="remove-input" aria-label="reason">
+                                <span class="confirm_removing_event">V</span>
+                            </div>
+                        @else
+                            <button class="restore-event">Restore</button>
+                        @endif
                     @endif
                     <span class="published-removed-links">
                         <a class="show_published_links active">published ({{ $event->links->count() }})</a>
@@ -83,8 +84,7 @@
                             <div class="links">
                                 @foreach ($event->links as $link)
                                     <a href="{{ $link->content }}" class="event_link" target="_blank">{{ $link->content }}</a>
-                                    {{-- @TODO: check if moderator   --}}
-                                    @if (!$link->reason)
+                                    @if (!$link->reason && auth()->guard('moderator')->user())
                                         <span class="remove_link">X</span>
                                         <div class="remove_link_block">
                                             <input class="remove-link-input" aria-label="reason" id="link-{{ $link->id }}">
@@ -105,7 +105,9 @@
                                         {{ $removedLink->content }}:
                                     </a><span class="removed">{{ $removedLink->reason }}</span>
                                 </span>
-                                <button class="restore-link" id="link-{{ $removedLink->id }}">Restore</button>
+                                @if (auth()->guard('moderator')->user())
+                                    <button class="restore-link" id="link-{{ $removedLink->id }}">Restore</button>
+                                @endif
                             @endforeach
                         </div>
                     </div>
@@ -116,7 +118,8 @@
     </div>
     {{ $events->links() }}
 
-{{-- @TODO: check if moderator   --}}
-    <script src="{{ asset('js/moderator_event.js') }}" type="module"></script>
+    @if (auth()->guard('moderator')->user())
+        <script src="{{ asset('js/moderator_event.js') }}" type="module"></script>
+    @endif
     <script src="{{ asset('js/event.js') }}" type="module"></script>
 @endsection

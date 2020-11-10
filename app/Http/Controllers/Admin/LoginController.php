@@ -34,6 +34,6 @@ class LoginController
     {
         Auth::guard('admin')->logout();
 
-        return redirect()->back();
+        return redirect()->route('events');
     }
 }

@@ -39,7 +39,7 @@
         </div>
     @endif
     <div id="auth-block">
-        @if (!auth()->user())
+        @if (!auth()->user() && !auth()->guard('moderator')->user())
             <button id="register">Register</button>
             <button id="login">Login</button>
             <div id="register-block">
@@ -58,6 +58,9 @@
                 <input aria-label="email" id="reset-email" placeholder="Email">
                 <input aria-label="submit" id="submit-reset" type="submit" value="Submit">
             </div>
+        @elseif (auth()->guard('moderator')->user())
+            <span>{{ auth()->guard('moderator')->user()->email }}</span>
+            <a href="{{ url('moderator/logout') }}">Logout</a>
         @else
             <span>{{ auth()->user()->email }}</span>
             <a href="{{ url('logout') }}">Logout</a>
@@ -72,11 +75,13 @@
             <span class="category" onclick="window.location.href =
                     location.protocol + '//' + location.host + '/events'">
                     All</span>
-            @foreach($categories as $category)
-                <span class="category" onclick="window.location.href =
-                        location.protocol + '//' + location.host + '/events' + '?category={{ $category->id }}'">
-                    {{ ucfirst($category->name) }}</span>
-            @endforeach
+            @if (isset($categories))
+                @foreach($categories as $category)
+                    <span class="category" onclick="window.location.href =
+                            location.protocol + '//' + location.host + '/events' + '?category={{ $category->id }}'">
+                        {{ ucfirst($category->name) }}</span>
+                @endforeach
+            @endif
         </div>
         <div class="col-md-8">
             @yield('content')
