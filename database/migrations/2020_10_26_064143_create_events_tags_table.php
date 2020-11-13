@@ -17,6 +17,7 @@ class CreateEventsTagsTable extends Migration
             $table->id();
             $table->integer('event_id');
             $table->integer('tag_id');
+            $table->timestamps();
         });
     }
 
