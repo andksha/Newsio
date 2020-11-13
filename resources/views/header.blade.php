@@ -62,7 +62,7 @@
             <span>{{ auth()->guard('moderator')->user()->email }}</span>
             <a href="{{ url('moderator/logout') }}">Logout</a>
         @else
-            <span>{{ auth()->user()->email }}</span>
+            <a href="{{ url('/profile') }}">{{ auth()->user()->email }}</a>
             <a href="{{ url('logout') }}">Logout</a>
             @if (!auth()->user()->email_verified_at)
                 <a href="{{ url('repeat-confirmation') }}">Resend confirmation email</a>
@@ -71,41 +71,14 @@
     </div>
     <div class="response-error input_error"></div>
     <div class="row">
-        <div class="col-md-2">
-            <span class="category" onclick="window.location.href =
-                    location.protocol + '//' + location.host + '/events'">
-                    All
-            </span>
-            @if (isset($categories))
-                @foreach($categories as $category)
-                    <span class="category" onclick="window.location.href =
-                            location.protocol + '//' + location.host + '/events' + '?category={{ $category->id }}'">
-                        {{ ucfirst($category->name) }}</span>
-                @endforeach
-            @endif
+        <div class="col-md-2 left-sidebar">
+            @yield('left-sidebar')
         </div>
         <div class="col-md-8">
             @yield('content')
         </div>
-        <div class="col-md-2 tags">
-            @if (isset($tags))
-                <a class="tag-filter" id="day">Day</a>
-                <a class="tag-filter" id="week">Week</a>
-                <a class="tag-filter" id="month">Month</a>
-                <a class="tag-filter" id="year">Year</a>
-                <h4>Popular tags</h4>
-                <div class="popular-tags">
-                    @foreach($tags['popular'] as $popularTag)
-                        <a href="{{ url(url()->current() . '?tag=' . $popularTag->tag->name) }}" class="event_tag">{{ $popularTag->tag->name }}</a>
-                    @endforeach
-                </div>
-                <h4>Rare tags</h4>
-                <div class="rare-tags">
-                    @foreach($tags['rare'] as $rareTag)
-                        <a href="{{ url(url()->current() . '?tag=' . $rareTag->tag->name) }}" class="event_tag">{{ $rareTag->tag->name }}</a>
-                    @endforeach
-                </div>
-            @endif
+        <div class="col-md-2 right-sidebar">
+            @yield('right-sidebar')
         </div>
     </div>
 </div>
