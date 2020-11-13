@@ -44,13 +44,13 @@
             <button id="login">Login</button>
             <div id="register-block">
                 <input aria-label="email" id="register-email" placeholder="Email">
-                <input aria-label="password" type="password" id="register-password" placeholder="Password">
-                <input aria-label="password_confirmation" type="password" id="register-password_confirmation" placeholder="Password confirmation">
+                <input aria-label="password" type="password" id="register-password" placeholder="Password" autocomplete="new-password">
+                <input aria-label="password_confirmation" type="password" id="register-password_confirmation" placeholder="Password confirmation" autocomplete="new-password">
                 <input aria-label="submit" id="submit-registration" type="submit" value="Submit">
             </div>
             <div id="login-block">
-                <input aria-label="email" id="login-email" placeholder="Email">
-                <input aria-label="password" type="password" id="login-password" placeholder="Password">
+                <input aria-label="email" id="login-email" placeholder="Email" autocomplete="username">
+                <input aria-label="password" type="password" id="login-password" placeholder="Password" autocomplete="current-password">
                 <input aria-label="submit" id="submit-login" type="submit" value="Submit">
             </div>
             <span id="reset-password">Forgot password?</span>
