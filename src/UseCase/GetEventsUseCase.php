@@ -4,48 +4,39 @@ namespace Newsio\UseCase;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
-use Newsio\Boundary\NullableIntBoundary;
-use Newsio\Boundary\NullableStringBoundary;
+use Newsio\Boundary\UseCase\GetEventsBoundary;
 use Newsio\Model\Event;
 
 class GetEventsUseCase
 {
     /**
-     * @param NullableStringBoundary $search
-     * @param NullableStringBoundary $tag
-     * @param NullableStringBoundary $removed
-     * @param NullableIntBoundary $category
+     * @param GetEventsBoundary $boundary
      * @return LengthAwarePaginator
      */
-    public function getEvents(
-        NullableStringBoundary $search,
-        NullableStringBoundary $tag,
-        NullableStringBoundary $removed,
-        NullableIntBoundary $category
-    ): LengthAwarePaginator
+    public function getEvents(GetEventsBoundary $boundary): LengthAwarePaginator
     {
         $events = Event::query();
 
-        if ($category->getValue()) {
-            $events->where('category_id', $category->getValue());
+        if ($boundary->getCategory()) {
+            $events->where('category_id', $boundary->getCategory());
         }
 
-        if ($search->getValue()) {
-            $events->orWhere('title', 'like', '%' . $search->getValue() . '%')
-                ->orWhereHas('tags', function (Builder $query) use ($search) {
-                    $query->where('name', 'like', '%' . $search->getValue() . '%');
-                })->orWhereHas('links', function (Builder $query) use ($search) {
-                    $query->where('content', 'like', '%' . $search->getValue() . '%');
+        if ($boundary->getSearch()) {
+            $events->orWhere('title', 'like', '%' . $boundary->getSearch() . '%')
+                ->orWhereHas('tags', function (Builder $query) use ($boundary) {
+                    $query->where('name', 'like', '%' . $boundary->getSearch() . '%');
+                })->orWhereHas('links', function (Builder $query) use ($boundary) {
+                    $query->where('content', 'like', '%' . $boundary->getSearch() . '%');
                 });
         }
 
-        if ($tag->getValue()) {
-            $events->whereHas('tags', function (Builder $query) use ($tag) {
-                $query->where('name', $tag->getValue());
+        if ($boundary->getTag()) {
+            $events->whereHas('tags', function (Builder $query) use ($boundary) {
+                $query->where('name', $boundary->getTag());
             });
         }
 
-        $events = $removed->getValue() === 'removed'
+        $events = $boundary->getRemoved() === 'removed'
             ? $events->onlyTrashed()->orderByDesc('updated_at')->paginate(15)
             : $events->orderByDesc('updated_at')->paginate(15);
 

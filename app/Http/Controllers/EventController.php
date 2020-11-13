@@ -8,11 +8,10 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Newsio\Boundary\CategoryBoundary;
 use Newsio\Boundary\IdBoundary;
 use Newsio\Boundary\LinksBoundary;
-use Newsio\Boundary\NullableIntBoundary;
-use Newsio\Boundary\NullableStringBoundary;
 use Newsio\Boundary\TagPeriodBoundary;
 use Newsio\Boundary\TagsBoundary;
 use Newsio\Boundary\TitleBoundary;
+use Newsio\Boundary\UseCase\GetEventsBoundary;
 use Newsio\Contract\ApplicationException;
 use Newsio\Exception\BoundaryException;
 use Newsio\Model\Category;
@@ -30,12 +29,13 @@ class EventController extends Controller
         try {
             $tags = $tagsUseCase->getPopularAndRareTags(new TagPeriodBoundary('week'));
 
-            $events = $eventsUseCase->getEvents(
-                new NullableStringBoundary($request->search),
-                new NullableStringBoundary($request->tag),
-                new NullableStringBoundary($removed),
-                new NullableIntBoundary($request->category)
-            );
+            $events = $eventsUseCase->getEvents(new GetEventsBoundary(
+                $request->search,
+                $request->tag,
+                $removed,
+                $request->category,
+                auth()->id()
+            ));
         } catch (BoundaryException $e) {
             return view('event.events')->with([
                 'events' => new LengthAwarePaginator(collect(), 0, $this->perPage),
