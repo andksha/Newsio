@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Boundary;
+namespace Tests\Unit\Boundary\Primitive;
 
 use Newsio\Boundary\NullableStringBoundary;
 use Newsio\Exception\BoundaryException;
@@ -22,15 +22,18 @@ class NullableStringBoundaryTest extends BaseTestCase
         $this->assertEquals($boundary->getValue(), null);
     }
 
+    /**
+     * @throws BoundaryException
+     */
     public function test_Boundary_WithArrayParameter_ThrowsException()
     {
         $this->expectException(BoundaryException::class);
-        $boundary = new NullableStringBoundary([]);
+        new NullableStringBoundary([]);
     }
 
     public function test_Boundary_WithEmptyStringParameter_ThrowsException()
     {
         $this->expectException(BoundaryException::class);
-        $boundary = new NullableStringBoundary('');
+        new NullableStringBoundary('');
     }
 }

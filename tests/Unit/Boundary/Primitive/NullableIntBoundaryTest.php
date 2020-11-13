@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Boundary;
+namespace Tests\Unit\Boundary\Primitive;
 
 use Newsio\Boundary\NullableIntBoundary;
 use Newsio\Exception\BoundaryException;
@@ -26,6 +26,9 @@ class NullableIntBoundaryTest extends BaseTestCase
         new NullableIntBoundary('3svdsfvr');
     }
 
+    /**
+     * @throws BoundaryException
+     */
     public function test_Boundary_WithArrayParameter_ThrowsBoundaryException()
     {
         $this->expectException(BoundaryException::class);

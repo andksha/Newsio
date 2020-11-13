@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Boundary;
+namespace Tests\Unit\Boundary\Primitive;
 
 use Newsio\Boundary\StringBoundary;
 use Newsio\Exception\BoundaryException;
@@ -20,6 +20,9 @@ class StringBoundaryTest extends BaseTestCase
         new StringBoundary('');
     }
 
+    /**
+     * @throws BoundaryException
+     */
     public function test_Boundary_WithArrayParameter_ThrowsBoundaryException()
     {
         $this->expectException(BoundaryException::class);
