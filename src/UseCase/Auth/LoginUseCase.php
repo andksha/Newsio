@@ -18,6 +18,8 @@ class LoginUseCase
      */
     public function login(EmailBoundary $email, PasswordBoundary $password, string $guard = 'web')
     {
+        $this->logAllUsersOut();
+
         if (!Auth::guard($guard)->attempt([
             'email' => $email->getValue(),
             'password' => $password->getValue()
@@ -26,5 +28,12 @@ class LoginUseCase
         }
 
         return true;
+    }
+
+    private function logAllUsersOut()
+    {
+        Auth::guard('web')->logout();
+        Auth::guard('moderator')->logout();
+        Auth::guard('admin')->logout();
     }
 }
