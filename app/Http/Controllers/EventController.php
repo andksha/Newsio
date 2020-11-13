@@ -15,6 +15,7 @@ use Newsio\Boundary\TitleBoundary;
 use Newsio\Contract\ApplicationException;
 use Newsio\Exception\BoundaryException;
 use Newsio\Model\Category;
+use Newsio\Model\EventTag;
 use Newsio\UseCase\AddLinksUseCase;
 use Newsio\UseCase\CreateEventUseCase;
 use Newsio\UseCase\GetEventsUseCase;
@@ -25,6 +26,7 @@ class EventController extends Controller
     {
         $uc = new GetEventsUseCase();
         $categories = Category::all();
+        $tags = EventTag::getPopularAndRareTags();
 
         try {
             $events = $uc->getEvents(
@@ -42,7 +44,11 @@ class EventController extends Controller
             ]);
         }
 
-        return view('event.events')->with(['events' => $events, 'categories' => $categories]);
+        return view('event.events')->with([
+            'events' => $events,
+            'categories' => $categories,
+            'tags' => $tags
+        ]);
     }
 
     public function create(Request $request)

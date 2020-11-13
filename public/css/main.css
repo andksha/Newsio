@@ -16,11 +16,20 @@ h4, h5 {
     text-align: center;
 }
 
+.tags {
+    margin-top: 10px;
+}
+
+.tag-filter {
+    cursor: pointer;
+}
+
 #auth-block {
     position: fixed;
     display: inline-block;
     float: right;
     right: 5%;
+    z-index: 999;
 }
 
 #register-block {

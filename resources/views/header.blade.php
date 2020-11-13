@@ -74,7 +74,8 @@
         <div class="col-md-2">
             <span class="category" onclick="window.location.href =
                     location.protocol + '//' + location.host + '/events'">
-                    All</span>
+                    All
+            </span>
             @if (isset($categories))
                 @foreach($categories as $category)
                     <span class="category" onclick="window.location.href =
@@ -85,6 +86,26 @@
         </div>
         <div class="col-md-8">
             @yield('content')
+        </div>
+        <div class="col-md-2 tags">
+            @if (isset($tags))
+                <a class="tag-filter" id="day">Day</a>
+                <a class="tag-filter" id="week">Week</a>
+                <a class="tag-filter" id="month">Month</a>
+                <a class="tag-filter" id="year">Year</a>
+                <div class="popular-tags">
+                <h4>Popular tags</h4>
+                    @foreach($tags['popular'] as $popularTag)
+                        <a href="{{ url(url()->current() . '?tag=' . $popularTag->tag->name) }}" class="event_tag">{{ $popularTag->tag->name }}</a>
+                    @endforeach
+                </div>
+                <div class="rare-tags">
+                    <h4>Rare tags</h4>
+                    @foreach($tags['rare'] as $rareTag)
+                        <a href="{{ url(url()->current() . '?tag=' . $rareTag->tag->name) }}" class="event_tag">{{ $rareTag->tag->name }}</a>
+                    @endforeach
+                </div>
+            @endif
         </div>
     </div>
 </div>

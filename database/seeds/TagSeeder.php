@@ -19,7 +19,7 @@ class TagSeeder extends Seeder
 
         for ($i = 0; $i<10;$i++) {
             $tags[] = [
-                'name' => Str::random(32),
+                'name' => Str::random(mt_rand(3, 7)),
             ];
         }
 

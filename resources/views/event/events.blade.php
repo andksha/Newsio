@@ -117,7 +117,6 @@
         </div>
     </div>
     {{ $events->links() }}
-
     @if (auth()->guard('moderator')->user())
         <script src="{{ asset('js/moderator_event.js') }}" type="module"></script>
     @endif
