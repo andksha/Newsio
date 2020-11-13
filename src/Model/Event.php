@@ -18,6 +18,7 @@ use Newsio\Exception\InvalidOperationException;
  * @property \Illuminate\Database\Eloquent\Collection|\Newsio\Model\Tag[] $tags
  * @property \Illuminate\Database\Eloquent\Collection|\Newsio\Model\Link[] $links
  * @property \Illuminate\Database\Eloquent\Collection|\Newsio\Model\Link[] $removedLinks
+ * @property int $user_id
  * @property int $category_id
  * @property string $reason
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -47,7 +48,7 @@ class Event extends BaseModel implements JsonSerializable
     protected $table = 'events';
 
     protected $fillable = [
-        'title', 'category_id'
+        'title', 'user_id', 'category_id'
     ];
 
     protected $visible = [

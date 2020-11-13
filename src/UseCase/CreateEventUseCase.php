@@ -2,11 +2,9 @@
 
 namespace Newsio\UseCase;
 
-use Newsio\Boundary\CategoryBoundary;
 use Newsio\Boundary\IdBoundary;
-use Newsio\Boundary\LinksBoundary;
-use Newsio\Boundary\TagsBoundary;
 use Newsio\Boundary\TitleBoundary;
+use Newsio\Boundary\UseCase\CreateEventBoundary;
 use Newsio\Exception\AlreadyExistsException;
 use Newsio\Model\Event;
 
@@ -22,29 +20,27 @@ class CreateEventUseCase
     }
 
     /**
-     * @param TitleBoundary $title
-     * @param TagsBoundary $tags
-     * @param LinksBoundary $links
-     * @param CategoryBoundary $category
+     * @param CreateEventBoundary $boundary
      * @return Event
-     * @throws \Newsio\Exception\AlreadyExistsException
+     * @throws AlreadyExistsException
      * @throws \Newsio\Exception\BoundaryException
      * @throws \Newsio\Exception\InvalidWebsiteException
      */
-    public function create(TitleBoundary $title, TagsBoundary $tags, LinksBoundary $links, CategoryBoundary $category): Event
+    public function create(CreateEventBoundary $boundary): Event
     {
-        $this->checkTitle($title);
-        $this->createLinksUseCase->checkLinks($links);
+        $this->checkTitle($boundary->getTitle());
+        $this->createLinksUseCase->checkLinks($boundary->getLinks());
 
         $event = new Event();
         $event->fill([
-            'title'       => $title->getValue(),
-            'category_id' => $category->getValue(),
+            'title'       => $boundary->getTitle()->getValue(),
+            'user_id'     => $boundary->getUserId(),
+            'category_id' => $boundary->getCategory(),
         ]);
         $event->save();
 
-        $this->createTagsUseCase->createTags($tags)->createEventTags($event->id, $tags);
-        $this->createLinksUseCase->createLinks(new IdBoundary($event->id), $links);
+        $this->createTagsUseCase->createTags($boundary->getTags())->createEventTags($event->id, $boundary->getTags());
+        $this->createLinksUseCase->createLinks(new IdBoundary($event->id), $boundary->getLinks());
 
         return $event;
     }

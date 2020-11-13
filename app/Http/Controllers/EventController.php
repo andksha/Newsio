@@ -5,12 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Newsio\Boundary\CategoryBoundary;
 use Newsio\Boundary\IdBoundary;
 use Newsio\Boundary\LinksBoundary;
 use Newsio\Boundary\TagPeriodBoundary;
-use Newsio\Boundary\TagsBoundary;
-use Newsio\Boundary\TitleBoundary;
+use Newsio\Boundary\UseCase\CreateEventBoundary;
 use Newsio\Boundary\UseCase\GetEventsBoundary;
 use Newsio\Contract\ApplicationException;
 use Newsio\Exception\BoundaryException;
@@ -28,7 +26,6 @@ class EventController extends Controller
 
         try {
             $tags = $tagsUseCase->getPopularAndRareTags(new TagPeriodBoundary('week'));
-
             $events = $eventsUseCase->getEvents(new GetEventsBoundary(
                 $request->search,
                 $request->tag,
@@ -55,12 +52,13 @@ class EventController extends Controller
     public function create(Request $request, CreateEventUseCase $eventUseCase)
     {
         try {
-            $event = $eventUseCase->create(
-                new TitleBoundary($request->title),
-                new TagsBoundary($request->tags),
-                new LinksBoundary($request->links),
-                new CategoryBoundary($request->category)
-            );
+            $event = $eventUseCase->create(new CreateEventBoundary(
+                $request->title,
+                $request->tags,
+                $request->links,
+                $request->category,
+                auth()->id()
+            ));
         } catch (ApplicationException $e) {
             return response()->json([
                 'error_message' => $e->getMessage(),
