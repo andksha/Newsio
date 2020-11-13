@@ -4,7 +4,6 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Newsio\Model\Category;
-use Newsio\Model\Event;
 
 class EventSeeder extends Seeder
 {

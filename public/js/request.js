@@ -6,3 +6,23 @@ export function send(method, url, data, csrfToken, async = false) {
   xmlRequest.setRequestHeader('X-CSRF-TOKEN', csrfToken);
   xmlRequest.send(data);
 }
+
+export function handleResponse(responseName, closure) {
+  xmlRequest.onload = function () {
+    try {
+      let response = JSON.parse(xmlRequest.responseText);
+
+      if (typeof response.error_data != 'undefined' || typeof response.error_message != 'undefined') {
+        document.querySelector('.response-error').innerHTML = response.error_message;
+        document.querySelector('.response-error').style.display = 'block';
+      } else if(typeof response[responseName] != 'undefined') {
+        closure(response);
+      } else {
+        alert('Server error. Try again.');
+      }
+    } catch (e) {
+      console.log(e);
+      alert(e);
+    }
+  }
+}

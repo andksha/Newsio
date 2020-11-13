@@ -8,6 +8,7 @@ function start() {
   enableRegister();
   enableLogin();
   enableResetPassword();
+  enableTags();
 }
 
 function enableRegister() {
@@ -138,5 +139,40 @@ function enableResetPassword() {
         alert(e);
       }
     }
+  });
+}
+
+function enableTags() {
+  let popularTags = document.querySelector('.popular-tags');
+  let rareTags = document.querySelector('.rare-tags');
+
+  document.querySelectorAll('.tag-filter').forEach(function (filter) {
+    filter.addEventListener('click', function () {
+      document.querySelector('.response-error').style.display = 'none';
+
+      request.send('GET', 'tags?period=' + filter.id, [], '', true);
+      request.handleResponse('tags', function (response) {
+        let linkElement = document.createElement('a');
+
+        linkElement.classList.add('event_tag');
+        popularTags.innerHTML = '';
+        rareTags.innerHTML = '';
+
+        response.tags.popular.forEach(function (popularTag) {
+          fillTagsElement(popularTag, popularTags)
+        });
+
+        response.tags.rare.forEach(function (rareTag) {
+          fillTagsElement(rareTag, rareTags)
+        });
+
+        function fillTagsElement (tag, tagsElement) {
+          let link = linkElement.cloneNode();
+          link.href = location.protocol + '//' + location.host + location.pathname + '?tag=' + tag.tag.name;
+          link.innerHTML = tag.tag.name;
+          tagsElement.append(link);
+        }
+      });
+    });
   });
 }

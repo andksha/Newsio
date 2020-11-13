@@ -93,14 +93,14 @@
                 <a class="tag-filter" id="week">Week</a>
                 <a class="tag-filter" id="month">Month</a>
                 <a class="tag-filter" id="year">Year</a>
-                <div class="popular-tags">
                 <h4>Popular tags</h4>
+                <div class="popular-tags">
                     @foreach($tags['popular'] as $popularTag)
                         <a href="{{ url(url()->current() . '?tag=' . $popularTag->tag->name) }}" class="event_tag">{{ $popularTag->tag->name }}</a>
                     @endforeach
                 </div>
+                <h4>Rare tags</h4>
                 <div class="rare-tags">
-                    <h4>Rare tags</h4>
                     @foreach($tags['rare'] as $rareTag)
                         <a href="{{ url(url()->current() . '?tag=' . $rareTag->tag->name) }}" class="event_tag">{{ $rareTag->tag->name }}</a>
                     @endforeach

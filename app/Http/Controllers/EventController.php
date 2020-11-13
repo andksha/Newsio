@@ -10,26 +10,27 @@ use Newsio\Boundary\IdBoundary;
 use Newsio\Boundary\LinksBoundary;
 use Newsio\Boundary\NullableIntBoundary;
 use Newsio\Boundary\NullableStringBoundary;
+use Newsio\Boundary\TagPeriodBoundary;
 use Newsio\Boundary\TagsBoundary;
 use Newsio\Boundary\TitleBoundary;
 use Newsio\Contract\ApplicationException;
 use Newsio\Exception\BoundaryException;
 use Newsio\Model\Category;
-use Newsio\Model\EventTag;
 use Newsio\UseCase\AddLinksUseCase;
 use Newsio\UseCase\CreateEventUseCase;
 use Newsio\UseCase\GetEventsUseCase;
+use Newsio\UseCase\GetTagsUseCase;
 
 class EventController extends Controller
 {
-    public function events(Request $request, $removed = null)
+    public function events(Request $request, GetTagsUseCase $tagsUseCase, GetEventsUseCase $eventsUseCase, $removed = null)
     {
-        $uc = new GetEventsUseCase();
         $categories = Category::all();
-        $tags = EventTag::getPopularAndRareTags();
 
         try {
-            $events = $uc->getEvents(
+            $tags = $tagsUseCase->getPopularAndRareTags(new TagPeriodBoundary('week'));
+
+            $events = $eventsUseCase->getEvents(
                 new NullableStringBoundary($request->search),
                 new NullableStringBoundary($request->tag),
                 new NullableStringBoundary($removed),
@@ -51,12 +52,10 @@ class EventController extends Controller
         ]);
     }
 
-    public function create(Request $request)
+    public function create(Request $request, CreateEventUseCase $eventUseCase)
     {
-        $uc = new CreateEventUseCase();
-
         try {
-            $event = $uc->create(
+            $event = $eventUseCase->create(
                 new TitleBoundary($request->title),
                 new TagsBoundary($request->tags),
                 new LinksBoundary($request->links),
@@ -73,12 +72,10 @@ class EventController extends Controller
     }
 
 
-    public function addLinks(Request $request)
+    public function addLinks(Request $request, AddLinksUseCase $linksUseCase)
     {
-        $uc = new AddLinksUseCase();
-
         try {
-            $newLinks = $uc->addLinks(new IdBoundary($request->event_id), new LinksBoundary($request->links));
+            $newLinks = $linksUseCase->addLinks(new IdBoundary($request->event_id), new LinksBoundary($request->links));
         } catch (ApplicationException $e) {
             return response()->json([
                 'error_message' => $e->getMessage(),
@@ -87,5 +84,16 @@ class EventController extends Controller
         }
 
         return response()->json(['new_links' => $newLinks]);
+    }
+
+    public function getTags(Request $request, GetTagsUseCase $tagsUseCase)
+    {
+        try {
+            $tags = $tagsUseCase->getPopularAndRareTags(new TagPeriodBoundary($request->period));
+        } catch (ApplicationException $e) {
+            return $this->returnErrorResponse($e, Response::HTTP_BAD_REQUEST);
+        }
+
+        return response()->json(['tags' => $tags]);
     }
 }

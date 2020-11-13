@@ -20,6 +20,7 @@ Route::group(['middleware' => 'auth'], function () {
 Route::get('events/{removed?}', 'EventController@events')->name('events');
 Route::post('event', 'EventController@create')->name('create_event');
 Route::post('links', 'EventController@addLinks')->name('add_link');
+Route::get('tags', 'EventController@getTags')->name('get_tags');
 
 Route::get('websites/{status}', 'WebsiteController@websites')->name('websites');
 

@@ -41,4 +41,12 @@ class Controller extends BaseController
             'error_data' => $e->getErrorData()
         ]);
     }
+
+    public function returnErrorResponse(ApplicationException $e, int $responseCode)
+    {
+        return response()->json([
+            'error_message' => $e->getMessage(),
+            'error_data' => $e->getErrorData()
+        ], $responseCode);
+    }
 }

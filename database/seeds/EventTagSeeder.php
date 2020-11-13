@@ -16,14 +16,14 @@ class EventTagSeeder extends Seeder
     public function run()
     {
         $eventTags = [];
-        $tags = Tag::query()->where('name', '!=', 'test')->get();
+        $tags = Tag::query()->whereNotIn('name', ['test', 'tag1'])->get();
         $testTag = Tag::query()->where('name', 'test')->first();
         $testTag2 = Tag::query()->where('name', 'tag1')->first();
         $events = Event::all();
         $testEvent = $events->where('title', 'sdfgdstest')->first();
 
         for ($i = 0; $i<100;$i++) {
-            $timestamp = Carbon::now()->subMinutes(mt_rand(0, 200));
+            $timestamp = Carbon::now()->subDays(mt_rand(0, 40));
             $eventTags[] = [
                 'event_id' => $events->random()->id,
                 'tag_id' => $tags->random()->id,
@@ -32,7 +32,7 @@ class EventTagSeeder extends Seeder
             ];
         }
 
-        $timestamp = Carbon::now()->subMinutes(mt_rand(0, 200));
+        $timestamp = Carbon::now()->subDays(mt_rand(0, 40));
 
         $eventTags[] = [
             'event_id' => $events->random()->id,

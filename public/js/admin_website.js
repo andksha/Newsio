@@ -72,7 +72,6 @@ function enableRejectInput() {
           }
         } catch (e) {
           console.log(e);
-          console.log(request.xmlRequest.responseText);
           alert(e);
         }
       }
