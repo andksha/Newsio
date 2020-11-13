@@ -34,7 +34,7 @@ class EventController extends Controller
                 $request->tag,
                 $removed,
                 $request->category,
-                auth()->id()
+                null
             ));
         } catch (BoundaryException $e) {
             return view('event.events')->with([

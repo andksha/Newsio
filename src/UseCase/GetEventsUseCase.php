@@ -17,6 +17,10 @@ class GetEventsUseCase
     {
         $events = Event::query();
 
+        if ($boundary->getUserId()) {
+            $events->where('user_id', $boundary->getUserId());
+        }
+
         if ($boundary->getCategory()) {
             $events->where('category_id', $boundary->getCategory());
         }
