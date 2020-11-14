@@ -17,6 +17,7 @@ use Newsio\UseCase\AddLinksUseCase;
 use Newsio\UseCase\CreateEventUseCase;
 use Newsio\UseCase\GetEventsUseCase;
 use Newsio\UseCase\GetTagsUseCase;
+use Newsio\UseCase\SaveEventUseCase;
 
 class EventController extends Controller
 {
@@ -93,5 +94,16 @@ class EventController extends Controller
         }
 
         return response()->json(['tags' => $tags]);
+    }
+
+    public function saveEvent(Request $request, SaveEventUseCase $uc)
+    {
+        try {
+            $uc->save(new IdBoundary($request->event_id), new IdBoundary(auth()->id()));
+        } catch (ApplicationException $e) {
+            return $this->returnErrorResponse($e, Response::HTTP_BAD_REQUEST);
+        }
+
+        return response()->json(['success' => true]);
     }
 }

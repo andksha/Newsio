@@ -15,10 +15,10 @@ Route::group(['namespace' => 'Auth'], function () {
 
 Route::group(['middleware' => 'auth'], function () {
     Route::post('website', 'WebsiteController@apply')->name('apply_website');
+    Route::get('profile', 'User\ProfileController@profile')->name('profile');
 });
 
 Route::get('events/{removed?}', 'EventController@events')->name('events');
-Route::post('event', 'EventController@create')->name('create_event');
 Route::post('links', 'EventController@addLinks')->name('add_link');
 Route::get('tags', 'EventController@getTags')->name('get_tags');
 
