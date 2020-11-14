@@ -27,7 +27,11 @@ class EventController extends Controller
 
         try {
             $tags = $tagsUseCase->getPopularAndRareTags(new TagPeriodBoundary('week'));
-            $events = $eventsUseCase->getEvents(new GetEventsBoundary(array_merge($request->all(), ['removed' => $removed])));
+            $events = $eventsUseCase->getEvents(new GetEventsBoundary(array_merge($request->all(), [
+                    'removed' => $removed,
+                    'user_id' => auth()->id()
+                ])
+            ));
         } catch (BoundaryException $e) {
             return view('event.events')->with([
                 'events' => new LengthAwarePaginator(collect(), 0, $this->perPage),

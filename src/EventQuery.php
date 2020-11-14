@@ -5,6 +5,7 @@ namespace Newsio;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\DB;
+use Newsio\Boundary\UseCase\GetEventsBoundary;
 use Newsio\Model\Event;
 
 final class EventQuery
@@ -48,6 +49,14 @@ final class EventQuery
         }
 
         return $this;
+    }
+
+    public function frequentFields(GetEventsBoundary $boundary)
+    {
+        return $this->category($boundary->getCategory())
+            ->removed($boundary->getRemoved())
+            ->search($boundary->getSearch())
+            ->tag($boundary->getTag());
     }
 
     public function category(?int $categoryId): self

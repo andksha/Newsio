@@ -7,14 +7,14 @@ use Illuminate\Http\Request;
 use Newsio\Boundary\UseCase\GetEventsBoundary;
 use Newsio\Contract\ApplicationException;
 use Newsio\Model\Category;
-use Newsio\UseCase\GetEventsUseCase;
+use Newsio\UseCase\Profile\GetProfileUseCase;
 
 final class ProfileController extends Controller
 {
-    public function profile(Request $request, GetEventsUseCase $getEventsUseCase, $saved = null)
+    public function profile(Request $request, GetProfileUseCase $getProfileUseCase, $saved = null)
     {
         try {
-            $events = $getEventsUseCase->getEvents(new GetEventsBoundary(array_merge(
+            $events = $getProfileUseCase->getProfile(new GetEventsBoundary(array_merge(
                 $request->all(), [
                     'user_id' => auth()->id(),
                     'saved' => $saved,
