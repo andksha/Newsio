@@ -2,10 +2,12 @@
 
 namespace Newsio\UseCase;
 
+use Carbon\Carbon;
 use Newsio\Boundary\IdBoundary;
 use Newsio\Boundary\LinksBoundary;
 use Newsio\Exception\AlreadyExistsException;
 use Newsio\Exception\InvalidWebsiteException;
+use Newsio\Model\Event;
 use Newsio\Model\Link;
 use Newsio\Model\Website;
 
@@ -52,8 +54,19 @@ class CreateLinksUseCase
 
     public function createLinks(IdBoundary $eventId, LinksBoundary $linksBoundary): bool
     {
-        return Link::query()->insert(array_map(function ($value) use ($eventId) {
-            return ['event_id' => $eventId->getValue(), 'content' => $value];
+        $date = Carbon::now();
+
+        $result = Link::query()->insert(array_map(function ($value) use ($eventId, $date) {
+            return [
+                'event_id' => $eventId->getValue(),
+                'content' => $value,
+                'created_at' => $date,
+                'updated_at' => $date
+            ];
         }, $linksBoundary->getValues()));
+
+        return $result
+            ? Event::query()->where('id', $eventId->getValue())->update(['updated_at' => $date])
+            : $result;
     }
 }

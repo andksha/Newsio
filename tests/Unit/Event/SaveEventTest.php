@@ -61,8 +61,8 @@ final class SaveEventTest extends BaseTestCase
     public function test_SaveEvent_WithAlreadySavedEvent_ThrowsAlreadyExistsException()
     {
         $this->expectException(AlreadyExistsException::class);
-        $this->uc->save(new IdBoundary(2), new IdBoundary(2));
-        $this->uc->save(new IdBoundary(2), new IdBoundary(2));
+        $this->uc->save(new IdBoundary(2), new IdBoundary(3));
+        $this->uc->save(new IdBoundary(2), new IdBoundary(3));
     }
 
     /**

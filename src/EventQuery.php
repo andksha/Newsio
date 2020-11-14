@@ -3,6 +3,8 @@
 namespace Newsio;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Facades\DB;
 use Newsio\Model\Event;
 
 final class EventQuery
@@ -17,13 +19,26 @@ final class EventQuery
         return $event;
     }
 
+    public function whereUserSaved(?int $userId)
+    {
+        if ($userId) {
+            $this->query->whereHas('userSaved', function (Builder $query) use ($userId) {
+                $query->where('user_id', $userId);
+            });
+        }
+
+        return $this;
+    }
+
     public function withUserSaved(?int $userId)
     {
-        return $this->query->when($userId, function ($query, $userId) {
-            return $query->with(['userSaved' => function ($query) use ($userId) {
-                return $query->where('user_id', $userId);
+        if ($userId) {
+            $this->query->with(['userSaved' => function (HasOne $query) use ($userId) {
+                $query->where('user_id', $userId);
             }]);
-        });
+        }
+
+        return $this;
     }
 
     public function user(?int $userId): self
@@ -47,12 +62,14 @@ final class EventQuery
     public function search(?string $search): self
     {
         if ($search) {
-            $this->query->orWhere('title', 'like', '%' . $search . '%')
-                ->orWhereHas('tags', function (Builder $query) use ($search) {
-                    $query->where('name', 'like', '%' . $search . '%');
-                })->orWhereHas('links', function (Builder $query) use ($search) {
-                    $query->where('content', 'like', '%' . $search . '%');
-                });
+            $this->query->where(function (Builder $query) use ($search) {
+                $query->orWhereRaw(DB::raw('LOWER(title) LIKE ?'), ['%' . strtolower($search) . '%'])
+                    ->orWhereHas('tags', function (Builder $query) use ($search) {
+                        $query->where('name', 'like', '%' . $search . '%');
+                    })->orWhereHas('links', function (Builder $query) use ($search) {
+                        $query->where('content', 'like', '%' . $search . '%');
+                    });
+            });
         }
 
         return $this;

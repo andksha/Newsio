@@ -12,7 +12,7 @@ final class GetEventsBoundary
     private NullableStringBoundary $removed;
     private NullableIntBoundary $category;
     private NullableIntBoundary $userId;
-    private NullableIntBoundary $userSavedId;
+    private NullableStringBoundary $saved;
 
     /**
      * GetEventsBoundary constructor.
@@ -26,7 +26,7 @@ final class GetEventsBoundary
         $this->removed = new NullableStringBoundary($input['removed'] ?? null);
         $this->category = new NullableIntBoundary($input['category'] ?? null);
         $this->userId = new NullableIntBoundary($input['user_id'] ?? null);
-        $this->userSavedId = new NullableIntBoundary($input['user_saved_id'] ?? null);
+        $this->saved = new NullableStringBoundary($input['saved'] ?? null);
     }
 
     public function getSearch(): ?string
@@ -54,8 +54,8 @@ final class GetEventsBoundary
         return $this->userId->getValue();
     }
 
-    public function getUserSavedId(): ?int
+    public function getSaved(): ?string
     {
-        return $this->userSavedId->getValue();
+        return $this->saved->getValue();
     }
 }

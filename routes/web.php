@@ -18,7 +18,7 @@ Route::group(['middleware' => 'email.verified'], function () {
     Route::post('event', 'EventController@create')->name('create_event');
     Route::post('event/save', 'EventController@saveEvent')->name('save_event');
     Route::post('links', 'EventController@addLinks')->name('add_link');
-    Route::get('profile', 'User\ProfileController@profile')->name('profile');
+    Route::get('profile/{saved?}', 'User\ProfileController@profile')->name('profile');
 });
 
 Route::get('events/{removed?}', 'EventController@events')->name('events');
