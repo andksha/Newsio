@@ -16,9 +16,12 @@ class GetEventsTest extends BaseTestCase
         $this->uc = new GetEventsUseCase();
     }
 
+    /**
+     * @throws \Newsio\Contract\ApplicationException
+     */
     public function test_GetEvents_WithNoQuery_ReturnsEvents()
     {
-        $events = $this->uc->getEvents(new GetEventsBoundary(null, null, null, null, null, null));
+        $events = $this->uc->getEvents(new GetEventsBoundary([]));
 
         foreach ($events->items() as $item) {
             if ($item['deleted_at'] !== null) {
@@ -36,21 +39,27 @@ class GetEventsTest extends BaseTestCase
     {
         $query = 'test';
 
-        $events = $this->uc->getEvents(new GetEventsBoundary($query, null, null, null, null, null));
+        $events = $this->uc->getEvents(new GetEventsBoundary(['search' => $query]));
 
         $this->assertTrue($events->total() === 6 || $events->total() === 5);
     }
 
+    /**
+     * @throws \Newsio\Contract\ApplicationException
+     */
     public function test_GetEvents_WithTagQuery_ReturnsOnlyRequestedEvents()
     {
-        $events = $this->uc->getEvents(new GetEventsBoundary(null, 'test', null, null, null, null));
+        $events = $this->uc->getEvents(new GetEventsBoundary(['tag' => 'test']));
 
         $this->assertTrue($events->total() === 1);
     }
 
+    /**
+     * @throws \Newsio\Contract\ApplicationException
+     */
     public function test_GetEvents_WithRemovedQuery_ReturnsOnlyRemovedEvents()
     {
-        $events = $this->uc->getEvents(new GetEventsBoundary(null, null, 'removed', null, null, null));
+        $events = $this->uc->getEvents(new GetEventsBoundary(['removed' => 'removed']));
 
         foreach ($events->items() as $item) {
             if ($item['deleted_at'] === null) {
@@ -61,9 +70,12 @@ class GetEventsTest extends BaseTestCase
         $this->assertTrue(true);
     }
 
+    /**
+     * @throws \Newsio\Contract\ApplicationException
+     */
     public function test_GetEvents_WithAllSearchParameters_ReturnsEvents()
     {
-        $events = $this->uc->getEvents(new GetEventsBoundary('fgdsa', 'tag1', null, null, null, null));
+        $events = $this->uc->getEvents(new GetEventsBoundary(['search' => 'fgdsa', 'tag' => 'tag1']));
 
         foreach ($events as $event) {
             if (

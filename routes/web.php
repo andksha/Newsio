@@ -13,7 +13,7 @@ Route::group(['namespace' => 'Auth'], function () {
     Route::post('password/reset', 'ResetPasswordController@resetPassword');
 });
 
-Route::group(['middleware' => 'auth'], function () {
+Route::group(['middleware' => 'email.verified'], function () {
     Route::post('website', 'WebsiteController@apply')->name('apply_website');
     Route::post('event', 'EventController@create')->name('create_event');
     Route::post('event/save', 'EventController@saveEvent')->name('save_event');

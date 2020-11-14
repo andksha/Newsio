@@ -16,22 +16,17 @@ final class GetEventsBoundary
 
     /**
      * GetEventsBoundary constructor.
-     * @param $search
-     * @param $tag
-     * @param $removed
-     * @param $category
-     * @param $userId
-     * @param $userSavedId
+     * @param array $input
      * @throws \Newsio\Exception\BoundaryException
      */
-    public function __construct($search, $tag, $removed, $category, $userId, $userSavedId)
+    public function __construct(array $input)
     {
-        $this->search = new NullableStringBoundary($search);
-        $this->tag = new NullableStringBoundary($tag);
-        $this->removed = new NullableStringBoundary($removed);
-        $this->category = new NullableIntBoundary($category);
-        $this->userId = new NullableIntBoundary($userId);
-        $this->userSavedId = new NullableIntBoundary($userSavedId);
+        $this->search = new NullableStringBoundary($input['search'] ?? null);
+        $this->tag = new NullableStringBoundary($input['tag'] ?? null);
+        $this->removed = new NullableStringBoundary($input['removed'] ?? null);
+        $this->category = new NullableIntBoundary($input['category'] ?? null);
+        $this->userId = new NullableIntBoundary($input['user_id'] ?? null);
+        $this->userSavedId = new NullableIntBoundary($input['user_saved_id'] ?? null);
     }
 
     public function getSearch(): ?string
