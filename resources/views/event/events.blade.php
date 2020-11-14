@@ -37,5 +37,17 @@
 @endsection
 
 @section('content')
+    <div class="control-panel">
+        <a href="{{ url('events') }}" @if (strpos(url()->current(), 'removed') === false)class="active"@endif>
+            published
+        </a>
+        |
+        <a href="{{ url('events/removed') }}" @if (strpos(url()->current(), 'removed') !== false)class="active"@endif>
+            removed
+        </a>
+        @if (auth()->user() && strpos(url()->current(), '/events') !== false)
+            <button class="add-button" id="add-event-button">+</button>
+        @endif
+    </div>
     @include('event.events_layout')
 @endsection

@@ -21,6 +21,7 @@ class GetEventsUseCase
             ->tag($boundary->getTag())
             ->removed($boundary->getRemoved())
             ->orderByDesc('updated_at')
+            ->withUserSaved($boundary->getUserSavedId())
             ->paginate(15);
     }
 }

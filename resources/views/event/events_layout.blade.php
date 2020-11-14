@@ -1,15 +1,4 @@
-<div class="control-panel">
-    <a href="{{ url('events') }}" @if (strpos(url()->current(), 'removed') === false)class="active"@endif>
-        published
-    </a>
-    |
-    <a href="{{ url('events/removed') }}" @if (strpos(url()->current(), 'removed') !== false)class="active"@endif>
-        removed
-    </a>
-    @if (auth()->user())
-        <button class="add-button" id="add-event-button">+</button>
-    @endif
-</div>
+
 <div class="row" style="position: relative;z-index: 1;">
     <div class="col-md-12" id="events">
         <div class="row" id="inputs">
@@ -63,6 +52,11 @@
                         @endif
                     @endif
                     <span class="published-removed-links">
+                        @if (!$event->userSaved)
+                            <button class="save-button">Save</button>
+                        @else
+                            Saved
+                        @endif
                         <a class="show_published_links active">published ({{ $event->links->count() }})</a>
                         |
                         <a class="show_removed_links">removed ({{ $event->removedLinks->count() }})</a>

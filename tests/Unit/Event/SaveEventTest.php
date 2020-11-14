@@ -3,6 +3,7 @@
 namespace Tests\Unit\Event;
 
 use Newsio\Boundary\IdBoundary;
+use Newsio\Exception\AlreadyExistsException;
 use Newsio\Exception\ModelNotFoundException;
 use Newsio\UseCase\SaveEventUseCase;
 use Tests\BaseTestCase;
@@ -49,5 +50,15 @@ final class SaveEventTest extends BaseTestCase
         } catch (ModelNotFoundException $e) {
             $this->assertEquals('User not found', $e->getMessage());
         }
+    }
+
+    /**
+     * @throws \Newsio\Contract\ApplicationException
+     */
+    public function test_SaveEvent_WithAlreadySavedEvent_ThrowsAlreadyExistsException()
+    {
+        $this->expectException(AlreadyExistsException::class);
+        $this->uc->save(new IdBoundary(2), new IdBoundary(2));
+        $this->uc->save(new IdBoundary(2), new IdBoundary(2));
     }
 }

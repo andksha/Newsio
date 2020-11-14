@@ -12,6 +12,7 @@ final class GetEventsBoundary
     private NullableStringBoundary $removed;
     private NullableIntBoundary $category;
     private NullableIntBoundary $userId;
+    private NullableIntBoundary $userSavedId;
 
     /**
      * GetEventsBoundary constructor.
@@ -20,15 +21,17 @@ final class GetEventsBoundary
      * @param $removed
      * @param $category
      * @param $userId
+     * @param $userSavedId
      * @throws \Newsio\Exception\BoundaryException
      */
-    public function __construct($search, $tag, $removed, $category, $userId)
+    public function __construct($search, $tag, $removed, $category, $userId, $userSavedId)
     {
         $this->search = new NullableStringBoundary($search);
         $this->tag = new NullableStringBoundary($tag);
         $this->removed = new NullableStringBoundary($removed);
         $this->category = new NullableIntBoundary($category);
         $this->userId = new NullableIntBoundary($userId);
+        $this->userSavedId = new NullableIntBoundary($userSavedId);
     }
 
     public function getSearch(): ?string
@@ -56,4 +59,8 @@ final class GetEventsBoundary
         return $this->userId->getValue();
     }
 
+    public function getUserSavedId(): ?int
+    {
+        return $this->userSavedId->getValue();
+    }
 }

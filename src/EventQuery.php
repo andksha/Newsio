@@ -17,6 +17,15 @@ final class EventQuery
         return $event;
     }
 
+    public function withUserSaved(?int $userId)
+    {
+        return $this->query->when($userId, function ($query, $userId) {
+            return $query->with(['userSaved' => function ($query) use ($userId) {
+                return $query->where('user_id', $userId);
+            }]);
+        });
+    }
+
     public function user(?int $userId): self
     {
         if ($userId) {

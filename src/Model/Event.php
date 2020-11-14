@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use JsonSerializable;
 use Newsio\Exception\InvalidOperationException;
@@ -88,6 +89,11 @@ class Event extends BaseModel implements JsonSerializable
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class, 'events_tags', 'event_id', 'tag_id');
+    }
+
+    public function userSaved(): HasOne
+    {
+        return $this->hasOne(UserEvent::class, 'event_id');
     }
 
     public function links(): HasMany
