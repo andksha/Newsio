@@ -3,8 +3,11 @@
 namespace Tests\Unit\Event;
 
 use Newsio\Boundary\IdBoundary;
+use Newsio\Boundary\UseCase\CreateEventBoundary;
 use Newsio\Exception\AlreadyExistsException;
+use Newsio\Exception\InvalidOperationException;
 use Newsio\Exception\ModelNotFoundException;
+use Newsio\UseCase\CreateEventUseCase;
 use Newsio\UseCase\SaveEventUseCase;
 use Tests\BaseTestCase;
 
@@ -60,5 +63,18 @@ final class SaveEventTest extends BaseTestCase
         $this->expectException(AlreadyExistsException::class);
         $this->uc->save(new IdBoundary(2), new IdBoundary(2));
         $this->uc->save(new IdBoundary(2), new IdBoundary(2));
+    }
+
+    /**
+     * @throws \Newsio\Contract\ApplicationException
+     */
+    public function test_SaveEvent_WithUsersEvent_ThrowsInvalidOperationException()
+    {
+        $createEventUseCase = new CreateEventUseCase();
+        $event = $createEventUseCase->create(new CreateEventBoundary(
+            'test-save-event', [], ['https://biz.censor.net/event/ewfwef'], 2, 2));
+
+        $this->expectException(InvalidOperationException::class);
+        $this->uc->save(new IdBoundary($event->id), new IdBoundary(2));
     }
 }

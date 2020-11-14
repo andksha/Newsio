@@ -5,6 +5,7 @@ namespace Tests\Unit\Moderator;
 use Illuminate\Support\Str;
 use Newsio\Boundary\IdBoundary;
 use Newsio\Boundary\StringBoundary;
+use Newsio\Contract\ApplicationException;
 use Newsio\Exception\ModelNotFoundException;
 use Newsio\Model\Event;
 use Newsio\Model\Link;
@@ -28,6 +29,7 @@ class RemoveLinkTest extends BaseTestCase
         $this->event = new Event();
         $this->event->fill([
             'title' => 'to_be_removed',
+            'user_id' => 2,
             'category_id' => 6
         ]);
         $this->event->save();
@@ -49,6 +51,9 @@ class RemoveLinkTest extends BaseTestCase
         }
     }
 
+    /**
+     * @throws ApplicationException
+     */
     public function test_RemoveLink_WithValidIdAndReason_RemovesLink()
     {
         $this->createEvent();
@@ -57,6 +62,9 @@ class RemoveLinkTest extends BaseTestCase
         $this->assertTrue($link->reason === 'test_reason' && $link->deleted_at !== null);
     }
 
+    /**
+     * @throws ApplicationException
+     */
     public function test_RemoveLink_LinkIsTheLastApprovedLinkWithValidIdAndReason_RemovesLinkAndEvent()
     {
         $this->createEvent(false);
@@ -69,6 +77,9 @@ class RemoveLinkTest extends BaseTestCase
         );
     }
 
+    /**
+     * @throws ApplicationException
+     */
     public function test_RemoveLink_WithNonExistingId_ThrowsModelNotFoundException()
     {
         $this->expectException(ModelNotFoundException::class);

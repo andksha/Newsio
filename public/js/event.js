@@ -1,6 +1,7 @@
 import * as request from './request.js';
 
 let inputsDiv = document.getElementById('inputs');
+let csrfToken = document.querySelector('meta[name=csrf_token]').content;
 
 start();
 
@@ -14,12 +15,12 @@ function start() {
     });
   }
 
-  enableSearch();
   enableAddEventButton();
   enableSubmitButton();
 
   document.querySelectorAll('.event_title').forEach(title => enableTitle(title));
   document.querySelectorAll('.event').forEach(event => enableEvent(event));
+  document.querySelectorAll('.save-button').forEach(saveButton => enableSaveButton(saveButton));
   document.getElementById('search-input').placeholder = 'Search events';
 }
 
@@ -43,8 +44,6 @@ function enableAddLinkButton(event) {
 }
 
 function enableSubmitNewLinksButton(event) {
-  let csrfToken = document.querySelector('meta[name=csrf_token]').content;
-
   event.querySelector('.submit_links_button').addEventListener('click', function () {
     event.querySelector('.new-links-errors').style.display = 'none';
     let data = JSON.stringify({
@@ -90,10 +89,6 @@ function enableSubmitNewLinksButton(event) {
   });
 }
 
-function enableSearch() {
-
-}
-
 function enableAddEventButton() {
   let addButton = document.getElementById('add-event-button');
 
@@ -109,7 +104,6 @@ function enableAddEventButton() {
 function enableSubmitButton() {
   let submitButton = document.getElementById('submit_event_button');
   let data = [];
-  let csrfToken = document.querySelector('meta[name=csrf_token]').content;
 
   submitButton.addEventListener('click', function () {
     clearErrors();
@@ -285,4 +279,19 @@ function handleEvent(event) {
   enableEvent(eventDiv);
 
   document.querySelector('#inputs').after(eventDiv);
+}
+
+function enableSaveButton(saveButton) {
+  saveButton.addEventListener('click', function () {
+    let data = JSON.stringify({
+      event_id: saveButton.closest('.event').id
+    });
+
+    request.send('POST', 'event/save', data, csrfToken, true);
+    request.handleResponse('success', function () {
+      alert('Event saved.');
+      saveButton.parentElement.prepend('Saved');
+      saveButton.remove();
+    });
+  });
 }

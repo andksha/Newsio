@@ -52,10 +52,12 @@
                         @endif
                     @endif
                     <span class="published-removed-links">
-                        @if (!$event->userSaved)
-                            <button class="save-button">Save</button>
-                        @else
-                            Saved
+                        @if ($event->user_id !== auth()->id())
+                            @if (!$event->userSaved)
+                                <button class="save-button">Save</button>
+                            @else
+                                Saved
+                            @endif
                         @endif
                         <a class="show_published_links active">published ({{ $event->links->count() }})</a>
                         |

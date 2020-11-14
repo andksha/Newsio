@@ -18,7 +18,7 @@ class GetEventsTest extends BaseTestCase
 
     public function test_GetEvents_WithNoQuery_ReturnsEvents()
     {
-        $events = $this->uc->getEvents(new GetEventsBoundary(null, null, null, null, null));
+        $events = $this->uc->getEvents(new GetEventsBoundary(null, null, null, null, null, null));
 
         foreach ($events->items() as $item) {
             if ($item['deleted_at'] !== null) {
@@ -36,21 +36,21 @@ class GetEventsTest extends BaseTestCase
     {
         $query = 'test';
 
-        $events = $this->uc->getEvents(new GetEventsBoundary($query, null, null, null, null));
+        $events = $this->uc->getEvents(new GetEventsBoundary($query, null, null, null, null, null));
 
         $this->assertTrue($events->total() === 6 || $events->total() === 5);
     }
 
     public function test_GetEvents_WithTagQuery_ReturnsOnlyRequestedEvents()
     {
-        $events = $this->uc->getEvents(new GetEventsBoundary(null, 'test', null, null, null));
+        $events = $this->uc->getEvents(new GetEventsBoundary(null, 'test', null, null, null, null));
 
         $this->assertTrue($events->total() === 1);
     }
 
     public function test_GetEvents_WithRemovedQuery_ReturnsOnlyRemovedEvents()
     {
-        $events = $this->uc->getEvents(new GetEventsBoundary(null, null, 'removed', null, null));
+        $events = $this->uc->getEvents(new GetEventsBoundary(null, null, 'removed', null, null, null));
 
         foreach ($events->items() as $item) {
             if ($item['deleted_at'] === null) {
@@ -63,7 +63,7 @@ class GetEventsTest extends BaseTestCase
 
     public function test_GetEvents_WithAllSearchParameters_ReturnsEvents()
     {
-        $events = $this->uc->getEvents(new GetEventsBoundary('fgdsa', 'tag1', null, null, null));
+        $events = $this->uc->getEvents(new GetEventsBoundary('fgdsa', 'tag1', null, null, null, null));
 
         foreach ($events as $event) {
             if (

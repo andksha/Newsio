@@ -5,6 +5,7 @@ namespace Newsio\UseCase;
 use App\Model\User;
 use Newsio\Boundary\IdBoundary;
 use Newsio\Exception\AlreadyExistsException;
+use Newsio\Exception\InvalidOperationException;
 use Newsio\Exception\ModelNotFoundException;
 use Newsio\Model\Event;
 use Newsio\Model\UserEvent;
@@ -17,6 +18,7 @@ final class SaveEventUseCase
      * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model
      * @throws ModelNotFoundException
      * @throws AlreadyExistsException
+     * @throws InvalidOperationException
      */
     public function save(IdBoundary $eventId, IdBoundary $userId)
     {
@@ -26,6 +28,10 @@ final class SaveEventUseCase
 
         if (!$user = User::query()->find($userId->getValue())) {
             throw new ModelNotFoundException('User');
+        }
+
+        if ((int) $event->user_id === (int) $user->id) {
+            throw new InvalidOperationException('Can\'t save your own event');
         }
 
         if ($userEvent = UserEvent::query()

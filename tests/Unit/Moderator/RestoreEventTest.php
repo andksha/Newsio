@@ -4,6 +4,7 @@ namespace Tests\Unit\Moderator;
 
 use Illuminate\Support\Str;
 use Newsio\Boundary\IdBoundary;
+use Newsio\Contract\ApplicationException;
 use Newsio\Exception\InvalidOperationException;
 use Newsio\Exception\ModelNotFoundException;
 use Newsio\Model\Event;
@@ -28,6 +29,7 @@ class RestoreEventTest extends BaseTestCase
         $this->event = new Event();
         $this->event->fill([
             'title' => 'to_be_removed',
+            'user_id' => 2,
             'category_id' => 6
         ]);
         $this->event->reason = 'test_reason';
@@ -55,6 +57,9 @@ class RestoreEventTest extends BaseTestCase
         ]);
     }
 
+    /**
+     * @throws ApplicationException
+     */
     public function test_RestoreEvent_WithValidIdAndApprovedLinks_RestoresEvent()
     {
         $this->createEvent();
@@ -64,12 +69,18 @@ class RestoreEventTest extends BaseTestCase
         $this->assertTrue($event->deleted_at === null && $event->reason === '');
     }
 
+    /**
+     * @throws ApplicationException
+     */
     public function test_RestoreEvent_WithNonExistingId_ThrowsModelNotFoundException()
     {
         $this->expectException(ModelNotFoundException::class);
         $this->uc->restore(new IdBoundary(1000));
     }
 
+    /**
+     * @throws ApplicationException
+     */
     public function test_RestoreEvent_WithoutApprovedLinks_ThrowsInvalidOperationException()
     {
         $this->createEvent();
