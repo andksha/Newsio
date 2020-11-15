@@ -4,7 +4,6 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Support\Facades\Redirect;
 
 final class EmailIsVerified
 {
@@ -24,7 +23,7 @@ final class EmailIsVerified
                 ? response()->json([
                     'error_message' => 'Email must be verified'
                 ])
-                : Redirect::back()->with([
+                : redirect()->back()->with([
                     'error_message' => 'Email must be verified'
                 ]);
         }
