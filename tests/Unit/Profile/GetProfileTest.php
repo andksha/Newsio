@@ -3,6 +3,7 @@
 namespace Tests\Unit\Profile;
 
 use Newsio\Boundary\UseCase\GetEventsBoundary;
+use Newsio\Boundary\UseCase\GetProfileBoundary;
 use Newsio\Contract\ApplicationException;
 use Newsio\UseCase\Profile\GetProfileUseCase;
 use Tests\BaseTestCase;
@@ -22,7 +23,7 @@ final class GetProfileTest extends BaseTestCase
      */
     public function test_GetProfile_WithoutSavedParameter_ReturnsUsersEvents()
     {
-        $events = $this->uc->getProfile(new GetEventsBoundary(['user_id' => 2]));
+        $events = $this->uc->getProfile(new GetProfileBoundary(new GetEventsBoundary([]), ['user_id' => 2]));
 
         foreach ($events as $event) {
             if ((int)$event->user_id !== 2) {
@@ -38,7 +39,7 @@ final class GetProfileTest extends BaseTestCase
      */
     public function test_GetProfile_WithSavedParameter_ReturnsUsersSavedEvents()
     {
-        $events = $this->uc->getProfile(new GetEventsBoundary(['user_id' => 2, 'saved' => 'saved']));
+        $events = $this->uc->getProfile(new GetProfileBoundary(new GetEventsBoundary([]), ['user_id' => 2, 'saved' => 'saved']));
 
         foreach ($events as $event) {
             if ((int)$event->userSaved->user_id !== 2) {
