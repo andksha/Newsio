@@ -3,11 +3,10 @@
 namespace Tests\Unit\Event;
 
 use Newsio\Boundary\IdBoundary;
-use Newsio\Boundary\UseCase\CreateEventBoundary;
 use Newsio\Exception\AlreadyExistsException;
 use Newsio\Exception\InvalidOperationException;
 use Newsio\Exception\ModelNotFoundException;
-use Newsio\UseCase\CreateEventUseCase;
+use Newsio\Model\Event;
 use Newsio\UseCase\SaveEventUseCase;
 use Tests\BaseTestCase;
 
@@ -22,14 +21,24 @@ final class SaveEventTest extends BaseTestCase
         parent::setUp();
     }
 
+    private function createEvent()
+    {
+        return Event::query()->create([
+            'title' => 'test_incrementing',
+            'user_id' => 1,
+            'category_id' => 1
+        ]);
+    }
+
     /**
      * @throws \Newsio\Contract\ApplicationException
      */
     public function test_SaveEvent_WithValidIds_SavesEvent()
     {
-        $userEvent = $this->uc->save(new IdBoundary(2), new IdBoundary(3));
+        $eventId = $this->createEvent()->id;
+        $userEvent = $this->uc->save(new IdBoundary($eventId), new IdBoundary(3));
 
-        $this->assertTrue($userEvent->event_id === 2 && $userEvent->user_id === 3);
+        $this->assertTrue($userEvent->event_id === $eventId && $userEvent->user_id === 3);
     }
 
     /**
@@ -61,9 +70,10 @@ final class SaveEventTest extends BaseTestCase
      */
     public function test_SaveEvent_WithAlreadySavedEvent_ThrowsAlreadyExistsException()
     {
+        $eventId = $this->createEvent()->id;
         $this->expectException(AlreadyExistsException::class);
-        $this->uc->save(new IdBoundary(2), new IdBoundary(3));
-        $this->uc->save(new IdBoundary(2), new IdBoundary(3));
+        $this->uc->save(new IdBoundary($eventId), new IdBoundary(3));
+        $this->uc->save(new IdBoundary($eventId), new IdBoundary(3));
     }
 
     /**
@@ -71,11 +81,9 @@ final class SaveEventTest extends BaseTestCase
      */
     public function test_SaveEvent_WithUsersEvent_ThrowsInvalidOperationException()
     {
-        $createEventUseCase = new CreateEventUseCase();
-        $event = $createEventUseCase->create(new CreateEventBoundary(
-            'test-save-event', [], ['https://biz.censor.net/event/ewfwef'], 2, 2));
+        $event = $this->createEvent();
 
         $this->expectException(InvalidOperationException::class);
-        $this->uc->save(new IdBoundary($event->id), new IdBoundary(2));
+        $this->uc->save(new IdBoundary($event->id), new IdBoundary($event->user_id));
     }
 }
