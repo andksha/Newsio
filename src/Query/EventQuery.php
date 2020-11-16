@@ -1,6 +1,6 @@
 <?php
 
-namespace Newsio;
+namespace Newsio\Query;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasOne;

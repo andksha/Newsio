@@ -22,6 +22,7 @@ use Newsio\Exception\InvalidOperationException;
  * @property int $user_id
  * @property int $category_id
  * @property string $reason
+ * @property string $view_count
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
@@ -49,11 +50,20 @@ class Event extends BaseModel implements JsonSerializable
     protected $table = 'events';
 
     protected $fillable = [
-        'title', 'user_id', 'category_id'
+        'title', 'user_id', 'category_id', 'view_count'
     ];
 
     protected $visible = [
-        'id', 'title', 'tags', 'links', 'removed_links', 'reason', 'category_id', 'updated_at', 'deleted_at'
+        'id',
+        'title',
+        'tags',
+        'links',
+        'removed_links',
+        'reason',
+        'view_count',
+        'category_id',
+        'updated_at',
+        'deleted_at'
     ];
 
     public function remove(string $reason): Event

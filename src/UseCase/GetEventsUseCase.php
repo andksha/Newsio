@@ -4,7 +4,7 @@ namespace Newsio\UseCase;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Newsio\Boundary\UseCase\GetEventsBoundary;
-use Newsio\EventQuery;
+use Newsio\Query\EventQuery;
 
 class GetEventsUseCase
 {

@@ -3,7 +3,7 @@
 namespace Newsio\UseCase\Profile;
 
 use Newsio\Boundary\UseCase\GetProfileBoundary;
-use Newsio\EventQuery;
+use Newsio\Query\EventQuery;
 
 final class GetProfileUseCase
 {

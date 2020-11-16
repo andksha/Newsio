@@ -7,9 +7,11 @@ use Illuminate\Http\Response;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Newsio\Boundary\IdBoundary;
 use Newsio\Boundary\LinksBoundary;
+use Newsio\Boundary\StringBoundary;
 use Newsio\Boundary\TagPeriodBoundary;
 use Newsio\Boundary\UseCase\CreateEventBoundary;
 use Newsio\Boundary\UseCase\GetEventsBoundary;
+use Newsio\Boundary\UserIdentifierBoundary;
 use Newsio\Contract\ApplicationException;
 use Newsio\Exception\BoundaryException;
 use Newsio\Model\Category;
@@ -17,6 +19,7 @@ use Newsio\UseCase\AddLinksUseCase;
 use Newsio\UseCase\CreateEventUseCase;
 use Newsio\UseCase\GetEventsUseCase;
 use Newsio\UseCase\GetTagsUseCase;
+use Newsio\UseCase\IncrementViewCountUseCase;
 use Newsio\UseCase\SaveEventUseCase;
 
 class EventController extends Controller
@@ -94,12 +97,29 @@ class EventController extends Controller
         return response()->json(['tags' => $tags]);
     }
 
-    public function saveEvent(Request $request, SaveEventUseCase $uc)
+    public function saveEvent(Request $request, SaveEventUseCase $saveEventUseCase)
     {
         try {
-            $uc->save(new IdBoundary($request->event_id), new IdBoundary(auth()->id()));
+            $saveEventUseCase->save(new IdBoundary($request->event_id), new IdBoundary(auth()->id()));
         } catch (ApplicationException $e) {
             return $this->returnErrorResponse($e, Response::HTTP_BAD_REQUEST);
+        }
+
+        return response()->json(['success' => true]);
+    }
+
+    public function incrementViewCount(Request $request, IncrementViewCountUseCase $countUseCase)
+    {
+        try {
+            $countUseCase->incrementViewCount(
+                new IdBoundary($request->event_id),
+                new UserIdentifierBoundary(
+                    new StringBoundary($request->ip()),
+                    new StringBoundary($request->userAgent())
+                )
+            );
+        } catch (ApplicationException $e) {
+            return response()->json(['success' => false]);
         }
 
         return response()->json(['success' => true]);
