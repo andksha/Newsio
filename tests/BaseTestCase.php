@@ -2,10 +2,10 @@
 
 namespace Tests;
 
-use Newsio\Boundary\Auth\EmailBoundary;
-use Newsio\Boundary\Auth\PasswordBoundary;
-use Newsio\Contract\ApplicationException;
-use Newsio\UseCase\Auth\RegisterUseCase;
+use App\Model\EmailConfirmation;
+use App\Model\User;
+use Illuminate\Support\Facades\Hash;
+use Newsio\Model\Event;
 
 class BaseTestCase extends TestCase
 {
@@ -16,16 +16,29 @@ class BaseTestCase extends TestCase
         $this->artisan('migrate:refresh --seed');
     }
 
-    /**
-     * @throws ApplicationException
-     */
+    public function createEvent(string $title = 'test_incrementing')
+    {
+        return Event::query()->create([
+            'title' => $title,
+            'user_id' => 1,
+            'category_id' => 1
+        ]);
+    }
+
     public function createUser()
     {
-        $registerUseCase = new RegisterUseCase();
-        return $registerUseCase->register(
-            new EmailBoundary('test@test.test'),
-            new PasswordBoundary('test1234'),
-            new PasswordBoundary('test1234')
-        );
+        return User::query()->create([
+            'email' => 'test@test.test',
+            'password' => Hash::make('test1234')
+        ]);
     }
+
+    public function createEmailConfirmation()
+    {
+        return EmailConfirmation::query()->create([
+            'email' => 'test@test.test',
+            'token' => 'testtesttest'
+        ]);
+    }
+
 }

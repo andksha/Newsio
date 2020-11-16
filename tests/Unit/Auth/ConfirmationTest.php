@@ -18,7 +18,6 @@ class ConfirmationTest extends BaseTestCase
 {
     private ConfirmEmailUseCase $uc;
     private User $user;
-    private EmailConfirmation $emailConfirmation;
 
     protected function setUp(): void
     {
@@ -39,15 +38,7 @@ class ConfirmationTest extends BaseTestCase
             new PasswordBoundary('test1234')
         );
 
-        $this->emailConfirmation = EmailConfirmation::query()->where('email', 'test@test.test')->first();
-    }
-
-    private function createEmailConfirmation()
-    {
-        $this->emailConfirmation = EmailConfirmation::query()->create([
-            'email' => 'test@test.test',
-            'token' => 'testtesttest'
-        ]);
+        return EmailConfirmation::query()->where('email', 'test@test.test')->first();
     }
 
     /**
@@ -55,8 +46,8 @@ class ConfirmationTest extends BaseTestCase
      */
     public function test_ConfirmEmail_WithValidToken_ConfirmsEmail()
     {
-        $this->registerUser();
-        $user = $this->uc->confirm(new StringBoundary($this->emailConfirmation->token));
+        $emailConfirmation = $this->registerUser();
+        $user = $this->uc->confirm(new StringBoundary($emailConfirmation->token));
         $this->user->refresh();
 
         $this->assertTrue($user->email === $this->user->email && $this->user->email_verified_at !== null );
@@ -76,9 +67,9 @@ class ConfirmationTest extends BaseTestCase
      */
     public function test_ConfirmEmail_WithNonExistingUser_ThrowsModelNotFoundException()
     {
-        $this->createEmailConfirmation();
+        $emailConfirmation = $this->createEmailConfirmation();
         try {
-            $this->uc->confirm(new StringBoundary($this->emailConfirmation->token));
+            $this->uc->confirm(new StringBoundary($emailConfirmation->token));
         } catch (ModelNotFoundException $e) {
             $this->assertEquals('User not found', $e->getMessage());
         }

@@ -6,7 +6,6 @@ use Newsio\Boundary\IdBoundary;
 use Newsio\Exception\AlreadyExistsException;
 use Newsio\Exception\InvalidOperationException;
 use Newsio\Exception\ModelNotFoundException;
-use Newsio\Model\Event;
 use Newsio\UseCase\SaveEventUseCase;
 use Tests\BaseTestCase;
 
@@ -19,15 +18,6 @@ final class SaveEventTest extends BaseTestCase
         // @TODO: stop relying on seeds, create event and user in test
         $this->uc = new SaveEventUseCase();
         parent::setUp();
-    }
-
-    private function createEvent()
-    {
-        return Event::query()->create([
-            'title' => 'test_incrementing',
-            'user_id' => 1,
-            'category_id' => 1
-        ]);
     }
 
     /**

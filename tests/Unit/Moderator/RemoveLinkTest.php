@@ -24,7 +24,7 @@ class RemoveLinkTest extends BaseTestCase
         parent::setUp();
     }
 
-    private function createEvent(bool $moreThanOneLink = true)
+    public function createEvent(bool $moreThanOneLink = true)
     {
         $this->event = new Event();
         $this->event->fill([

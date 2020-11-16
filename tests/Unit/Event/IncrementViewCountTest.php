@@ -20,15 +20,6 @@ final class IncrementViewCountTest extends BaseTestCase
         parent::setUp();
     }
 
-    private function createEvent()
-    {
-        return Event::query()->create([
-            'title' => 'test_incrementing',
-            'user_id' => 1,
-            'category_id' => 1
-        ]);
-    }
-
     /**
      * @throws \Newsio\Contract\ApplicationException
      */

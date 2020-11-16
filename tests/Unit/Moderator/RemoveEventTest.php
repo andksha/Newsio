@@ -24,7 +24,7 @@ class RemoveEventTest extends BaseTestCase
         parent::setUp();
     }
 
-    private function createEvent()
+    public function createEvent()
     {
         $this->event = new Event();
         $this->event->fill([
