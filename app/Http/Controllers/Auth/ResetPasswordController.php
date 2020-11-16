@@ -8,7 +8,6 @@ use Newsio\Boundary\Auth\EmailBoundary;
 use Newsio\Boundary\Auth\PasswordBoundary;
 use Newsio\Boundary\StringBoundary;
 use Newsio\Contract\ApplicationException;
-use Newsio\Model\Category;
 use Newsio\UseCase\Auth\ForgotPasswordUseCase;
 use Newsio\UseCase\Auth\ResetPasswordUseCase;
 
@@ -34,10 +33,7 @@ class ResetPasswordController extends Controller
 
     public function getPasswordResetForm(Request $request)
     {
-        return view('reset')->with([
-            'token' => $request->token ?? '',
-            'categories' => Category::all()
-        ]);
+        return view('reset')->with(['token' => $request->token ?? '']);
     }
 
     public function resetPassword(Request $request)
