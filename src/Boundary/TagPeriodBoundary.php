@@ -20,7 +20,7 @@ final class TagPeriodBoundary
      * @param string $period
      * @throws BoundaryException
      */
-    public function __construct(string $period)
+    public function __construct($period)
     {
         if (!$this->allowedPeriod($period)) {
             throw new BoundaryException("Period $period is not allowed");

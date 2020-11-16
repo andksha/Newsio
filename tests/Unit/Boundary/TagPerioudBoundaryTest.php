@@ -53,4 +53,13 @@ final class TagPerioudBoundaryTest extends BaseTestCase
         $this->expectException(BoundaryException::class);
         new TagPeriodBoundary('halfmonth');
     }
+
+    /**
+     * @throws \Newsio\Exception\BoundaryException
+     */
+    public function test_Boundary_WithNullPeriod_ThrowsBoundaryException()
+    {
+        $this->expectException(BoundaryException::class);
+        new TagPeriodBoundary(null);
+    }
 }
