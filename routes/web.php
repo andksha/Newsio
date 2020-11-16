@@ -3,14 +3,15 @@
 use Illuminate\Support\Facades\Route;
 
 Route::group(['namespace' => 'Auth'], function () {
-    Route::post('register', 'RegisterController@register');
-    Route::get('confirmation', 'RegisterController@confirm');
-    Route::post('login', 'LoginController@login');
-    Route::get('logout', 'LoginController@logout');
-    Route::get('repeat-confirmation', 'RegisterController@resendConfirmationEmail')->middleware('auth');
-    Route::post('password', 'ResetPasswordController@sendResetPasswordEmail');
-    Route::get('password', 'ResetPasswordController@getPasswordResetForm');
-    Route::post('password/reset', 'ResetPasswordController@resetPassword');
+    Route::post('register', 'RegisterController@register')->name('register');
+    Route::get('confirmation', 'RegisterController@confirm')->name('confirmation');
+    Route::post('login', 'LoginController@login')->name('login');
+    Route::get('logout', 'LoginController@logout')->name('logout');
+    Route::get('repeat-confirmation', 'RegisterController@resendConfirmationEmail')->middleware('auth')
+        ->name('repeat-confirmation');
+    Route::get('password', 'ResetPasswordController@getPasswordResetForm')->name('reset-password-form');
+    Route::post('password', 'ResetPasswordController@sendResetPasswordEmail')->name('reset-password-email');
+    Route::post('password/reset', 'ResetPasswordController@resetPassword')->name('reset-password');
 });
 
 Route::group(['middleware' => ['auth', 'email.verified']], function () {
