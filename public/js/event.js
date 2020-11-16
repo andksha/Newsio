@@ -2,6 +2,7 @@ import * as request from './request.js';
 
 let inputsDiv = document.getElementById('inputs');
 let csrfToken = document.querySelector('meta[name=csrf_token]').content;
+let clickedEvents = [];
 
 start();
 
@@ -139,7 +140,17 @@ function enableSubmitButton() {
 function enableTitle(title) {
   title.addEventListener('click', function () {
     let links = title.parentElement.querySelector('.event_links');
+    let eventId = title.closest('.event').id;
+    let data = JSON.stringify({
+      'event_id': eventId
+    });
+
     links.style.display = links.style.display === 'none' || !links.style.display ? 'block' : 'none';
+
+    if (!clickedEvents.find(element => element === eventId)) {
+      request.send('POST', 'view-counter', data, csrfToken, true);
+      clickedEvents.push(eventId);
+    }
   });
 }
 

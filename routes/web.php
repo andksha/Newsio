@@ -23,6 +23,7 @@ Route::group(['middleware' => ['auth', 'email.verified']], function () {
 
 Route::get('events/{removed?}', 'EventController@events')->name('events');
 Route::get('tags', 'EventController@getTags')->name('get_tags');
+Route::post('view-counter', 'EventController@incrementViewCount')->name('view_counter');
 
 Route::get('websites/{status}', 'WebsiteController@websites')->name('websites');
 

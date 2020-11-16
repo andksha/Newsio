@@ -1,6 +1,7 @@
 <?php
 
 use App\Model\User;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -22,27 +23,32 @@ class EventSeeder extends Seeder
 
         $this->users = User::all();
         $this->categories = Category::all();
+        $timestamp = Carbon::now();
 
         for ($i = 0; $i < 20; $i++) {
             $events[] = [
                 'title' => Str::random(32),
                 'user_id' => $this->users->random()->id,
                 'category_id' => $this->categories->random()->id,
+                'created_at' => $timestamp,
+                'updated_at' => $timestamp,
                 'deleted_at' => null,
             ];
         }
 
-        $events = $this->fillEventsForGetEventsTest($events);
+        $events = $this->fillEventsForGetEventsTest($events, $timestamp);
 
         DB::table('events')->insert($events);
     }
 
-    private function fillEventsForGetEventsTest(array $events): array
+    private function fillEventsForGetEventsTest(array $events, string $timestamp): array
     {
         $events[] = [
             'title' => 'key word TEST is searched',
             'user_id' => $this->users->random()->id,
             'category_id' => $this->categories->random()->id,
+            'created_at' => $timestamp,
+            'updated_at' => $timestamp,
             'deleted_at' => null,
         ];
 
@@ -50,6 +56,8 @@ class EventSeeder extends Seeder
             'title' => 'sdfgdstest',
             'user_id' => $this->users->random()->id,
             'category_id' => 3,
+            'created_at' => $timestamp,
+            'updated_at' => $timestamp,
             'deleted_at' => null,
         ];
 
@@ -57,6 +65,8 @@ class EventSeeder extends Seeder
             'title' => 'title3',
             'user_id' => $this->users->random()->id,
             'category_id' => $this->categories->random()->id,
+            'created_at' => $timestamp,
+            'updated_at' => $timestamp,
             'deleted_at' => null,
         ];
 
@@ -64,6 +74,8 @@ class EventSeeder extends Seeder
             'title' => 'title4',
             'user_id' => $this->users->random()->id,
             'category_id' => 3,
+            'created_at' => $timestamp,
+            'updated_at' => $timestamp,
             'deleted_at' => null,
         ];
 
@@ -72,6 +84,8 @@ class EventSeeder extends Seeder
             'title' => 'test5',
             'user_id' => $this->users->random()->id,
             'category_id' => 3,
+            'created_at' => $timestamp,
+            'updated_at' => $timestamp,
             'deleted_at' => null,
         ];
 
@@ -79,6 +93,8 @@ class EventSeeder extends Seeder
             'title' => 'test6',
             'user_id' => $this->users->random()->id,
             'category_id' => 2,
+            'created_at' => $timestamp,
+            'updated_at' => $timestamp,
             'deleted_at' => null,
         ];
 

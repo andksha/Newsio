@@ -24,12 +24,6 @@ final class EventViewQuery
         return $this;
     }
 
-    public function lastNViews(int $n): self
-    {
-        $this->query->limit($n);
-        return $this;
-    }
-
     public function orderByDesc(string $orderby)
     {
         $this->query->orderByDesc($orderby);

@@ -18,7 +18,6 @@ class CreateEventsViewsTable extends Migration
             $table->integer('event_id');
             $table->string('user_identifier');
             $table->index(['event_id', 'user_identifier'], 'event_user_index');
-            $table->timestamps();
         });
     }
 

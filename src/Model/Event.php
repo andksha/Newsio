@@ -22,7 +22,7 @@ use Newsio\Exception\InvalidOperationException;
  * @property int $user_id
  * @property int $category_id
  * @property string $reason
- * @property string $view_count
+ * @property int $view_count
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
@@ -92,6 +92,13 @@ class Event extends BaseModel implements JsonSerializable
         $this->save();
 
         return $this;
+    }
+
+    public function incrementViewCount(): bool
+    {
+        $this->timestamps = false;
+        $this->view_count = $this->view_count + 1;
+        return $this->save(['timestamps' => false]);
     }
 
     /** Relations */

@@ -17,6 +17,7 @@ class GetEventsUseCase
         return EventQuery::query()
             ->frequentFields($boundary)
             ->orderByDesc('updated_at')
+            ->orderByDesc('id')
             ->withUserSaved($boundary->getUserId())
             ->paginate(15);
     }
