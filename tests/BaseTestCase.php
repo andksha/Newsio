@@ -3,8 +3,10 @@
 namespace Tests;
 
 use App\Model\EmailConfirmation;
+use App\Model\PasswordReset;
 use App\Model\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Newsio\Model\Event;
 
 class BaseTestCase extends TestCase
@@ -38,6 +40,15 @@ class BaseTestCase extends TestCase
         return EmailConfirmation::query()->create([
             'email' => 'test@test.test',
             'token' => 'testtesttest'
+        ]);
+    }
+
+
+    public function createPasswordReset(string $email)
+    {
+        return PasswordReset::query()->create([
+            'email' => $email,
+            'token' => Str::random(32)
         ]);
     }
 
