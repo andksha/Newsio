@@ -3,11 +3,13 @@
 namespace Tests;
 
 use App\Model\EmailConfirmation;
+use App\Model\Moderator;
 use App\Model\PasswordReset;
 use App\Model\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Newsio\Model\Event;
+use Newsio\Model\Link;
 
 class BaseTestCase extends TestCase
 {
@@ -18,13 +20,23 @@ class BaseTestCase extends TestCase
         $this->artisan('migrate:refresh --seed');
     }
 
-    public function createEvent(string $title = 'test_incrementing')
+    public function createEvent(string $title = 'test_event')
     {
         return Event::query()->create([
             'title' => $title,
             'user_id' => 1,
             'category_id' => 1
         ]);
+    }
+
+    public function createLink(int $eventId)
+    {
+        $link = new Link();
+        $link->content = 'https://golos.ua/vserlfvnervjn';
+        $link->event_id = $eventId;
+        $link->save();
+
+        return $link;
     }
 
     public function createUser()
@@ -49,6 +61,14 @@ class BaseTestCase extends TestCase
         return PasswordReset::query()->create([
             'email' => $email,
             'token' => Str::random(32)
+        ]);
+    }
+
+    public function createModerator()
+    {
+        return Moderator::query()->create([
+            'email' => 'test@modera.tor',
+            'password' => Hash::make('test1234')
         ]);
     }
 
