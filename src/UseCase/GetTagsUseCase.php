@@ -4,6 +4,7 @@ namespace Newsio\UseCase;
 
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Newsio\Boundary\TagPeriodBoundary;
 use Newsio\Model\EventTag;
@@ -17,13 +18,15 @@ final class GetTagsUseCase
      */
     public function getPopularAndRareTags(TagPeriodBoundary $period)
     {
-        return [
-            'popular' => $this->popularTags($period->getValue()),
-            'rare' => $this->rareTags($period->getValue())
-        ];
+        return Cache::remember('tags_' . $period->getPeriod(), 60*60, function () use ($period) {
+            return [
+                'popular' => $this->popularTags($period->getValue()),
+                'rare' => $this->rareTags($period->getValue())
+            ];
+        });
+
     }
 
-    // @TODO: caching
     private function popularTags(Carbon $period): Collection
     {
         return EventTag::query()->select('tag_id', DB::raw('count(*) as total'))
@@ -35,7 +38,6 @@ final class GetTagsUseCase
             ->get();
     }
 
-    // @TODO: caching
     private function rareTags(Carbon $period): Collection
     {
         return EventTag::query()->select('tag_id', DB::raw('count(*) as total'))

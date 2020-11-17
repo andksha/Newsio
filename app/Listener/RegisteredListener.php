@@ -16,7 +16,7 @@ class RegisteredListener
             'email' => $registered->getEmail(),
             'token' => Str::random(32)
         ]);
-        // @TODO: fix queue
+
         Mail::to($registered->getEmail())->queue(new RegisteredMail($emailConfirmation));
     }
 }

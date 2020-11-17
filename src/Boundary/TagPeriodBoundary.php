@@ -36,6 +36,11 @@ final class TagPeriodBoundary
         ]);
     }
 
+    public function getPeriod(): string
+    {
+        return $this->period;
+    }
+
     /**
      * @return Carbon
      * @throws BoundaryException
