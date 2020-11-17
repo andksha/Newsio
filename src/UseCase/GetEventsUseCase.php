@@ -14,6 +14,8 @@ class GetEventsUseCase
      */
     public function getEvents(GetEventsBoundary $boundary): LengthAwarePaginator
     {
+        // @TODO: caching
+
         return EventQuery::query()
             ->frequentFields($boundary)
             ->orderByDesc('updated_at')

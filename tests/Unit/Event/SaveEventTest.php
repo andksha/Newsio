@@ -15,7 +15,6 @@ final class SaveEventTest extends BaseTestCase
 
     protected function setUp(): void
     {
-        // @TODO: stop relying on seeds, create event and user in test
         $this->uc = new SaveEventUseCase();
         parent::setUp();
     }

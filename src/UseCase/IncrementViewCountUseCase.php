@@ -19,6 +19,7 @@ final class IncrementViewCountUseCase
      */
     public function incrementViewCount(IdBoundary $eventId, UserIdentifierBoundary $userIdentifier): bool
     {
+        // @TODO caching
         if (!EventViewQuery::query()
             ->findUserEventViews($eventId->getValue(), $userIdentifier->getValue())
             ->orderByDesc('id')
