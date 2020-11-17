@@ -24,7 +24,7 @@ class RestoreEventTest extends BaseTestCase
         parent::setUp();
     }
 
-    public function createEvent()
+    public function createDeletedEvent()
     {
         $this->event = new Event();
         $this->event->fill([
@@ -62,7 +62,7 @@ class RestoreEventTest extends BaseTestCase
      */
     public function test_RestoreEvent_WithValidIdAndApprovedLinks_RestoresEvent()
     {
-        $this->createEvent();
+        $this->createDeletedEvent();
         $this->createLinks();
         $event = $this->uc->restore(new IdBoundary($this->event->id));
 
@@ -83,7 +83,7 @@ class RestoreEventTest extends BaseTestCase
      */
     public function test_RestoreEvent_WithoutApprovedLinks_ThrowsInvalidOperationException()
     {
-        $this->createEvent();
+        $this->createDeletedEvent();
         $this->createLinks(false);
         $this->expectException(InvalidOperationException::class);
         $this->uc->restore(new IdBoundary($this->event->id));

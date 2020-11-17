@@ -24,7 +24,7 @@ class RemoveEventTest extends BaseTestCase
         parent::setUp();
     }
 
-    public function createEvent()
+    public function createEventAndLink()
     {
         $this->event = new Event();
         $this->event->fill([
@@ -51,7 +51,7 @@ class RemoveEventTest extends BaseTestCase
      */
     public function test_RemoveEvent_WithValidIdAndReason_RemovesEventWithItsLinks()
     {
-        $this->createEvent();
+        $this->createEventAndLink();
 
         $event = $this->uc->remove(new IdBoundary($this->event->id), new StringBoundary('test_reason'));
 

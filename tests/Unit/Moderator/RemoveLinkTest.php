@@ -24,7 +24,7 @@ class RemoveLinkTest extends BaseTestCase
         parent::setUp();
     }
 
-    public function createEvent(bool $moreThanOneLink = true)
+    public function createEventAndLinks(bool $moreThanOneLink = true)
     {
         $this->event = new Event();
         $this->event->fill([
@@ -56,7 +56,7 @@ class RemoveLinkTest extends BaseTestCase
      */
     public function test_RemoveLink_WithValidIdAndReason_RemovesLink()
     {
-        $this->createEvent();
+        $this->createEventAndLinks();
         $link = $this->uc->remove(new IdBoundary($this->link->id), new StringBoundary('test_reason'));
 
         $this->assertTrue($link->reason === 'test_reason' && $link->deleted_at !== null);
@@ -67,7 +67,7 @@ class RemoveLinkTest extends BaseTestCase
      */
     public function test_RemoveLink_LinkIsTheLastApprovedLinkWithValidIdAndReason_RemovesLinkAndEvent()
     {
-        $this->createEvent(false);
+        $this->createEventAndLinks(false);
         $link = $this->uc->remove(new IdBoundary($this->link->id), new StringBoundary('test_reason'));
 
         $this->assertTrue($link->reason === 'test_reason'

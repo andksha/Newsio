@@ -4,6 +4,7 @@ namespace Tests\Unit\Moderator;
 
 use Illuminate\Support\Str;
 use Newsio\Boundary\IdBoundary;
+use Newsio\Contract\ApplicationException;
 use Newsio\Exception\ModelNotFoundException;
 use Newsio\Model\Link;
 use Newsio\UseCase\Moderator\RestoreLinkUseCase;
@@ -20,7 +21,7 @@ class RestoreLinkTest extends BaseTestCase
         parent::setUp();
     }
 
-    private function createLink()
+    private function createDeletedLink()
     {
         $this->link = new Link();
         $this->link->deleted_at = '2020-11-06 17:04:24';
@@ -31,14 +32,20 @@ class RestoreLinkTest extends BaseTestCase
         $this->link->refresh();
     }
 
+    /**
+     * @throws ApplicationException
+     */
     public function test_RestoreLink_WithValidId_RestoresLink()
     {
-        $this->createLink();
+        $this->createDeletedLink();
         $link = $this->uc->restore(new IdBoundary($this->link->id));
 
         $this->assertTrue($link->deleted_at === null && $link->reason === '');
     }
 
+    /**
+     * @throws ApplicationException
+     */
     public function test_RestoreLink_WithNonExistingId_ThrowsModelNotFoundException()
     {
         $this->expectException(ModelNotFoundException::class);
