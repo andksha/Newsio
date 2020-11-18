@@ -36,7 +36,7 @@ final class TagPeriodBoundary
         ]);
     }
 
-    public function getPeriod(): string
+    public function getString(): string
     {
         return $this->period;
     }

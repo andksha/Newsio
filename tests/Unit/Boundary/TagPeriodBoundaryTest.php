@@ -7,7 +7,7 @@ use Newsio\Boundary\TagPeriodBoundary;
 use Newsio\Exception\BoundaryException;
 use Tests\BaseTestCase;
 
-final class TagPerioudBoundaryTest extends BaseTestCase
+final class TagPeriodBoundaryTest extends BaseTestCase
 {
     /**
      * @throws \Newsio\Exception\BoundaryException
@@ -16,6 +16,7 @@ final class TagPerioudBoundaryTest extends BaseTestCase
     {
         $boundary = new TagPeriodBoundary('day');
         $this->assertEquals(Carbon::now()->startOfDay(), $boundary->getValue());
+        $this->assertEquals('day', $boundary->getString());
     }
 
     /**

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Newsio\Boundary\TagPeriodBoundary;
 use Newsio\Model\EventTag;
+use Newsio\Model\Tag;
 
 final class GetTagsUseCase
 {
@@ -18,7 +19,7 @@ final class GetTagsUseCase
      */
     public function getPopularAndRareTags(TagPeriodBoundary $period)
     {
-        return Cache::remember('tags_' . $period->getPeriod(), 60*60, function () use ($period) {
+        return Cache::remember('tags_' . $period->getString(), Tag::CACHE_TTL, function () use ($period) {
             return [
                 'popular' => $this->popularTags($period->getValue()),
                 'rare' => $this->rareTags($period->getValue())
