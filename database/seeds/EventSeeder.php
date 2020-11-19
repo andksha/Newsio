@@ -30,8 +30,8 @@ class EventSeeder extends Seeder
                 'title' => Str::random(32),
                 'user_id' => $this->users->random()->id,
                 'category_id' => $this->categories->random()->id,
-                'created_at' => $timestamp,
-                'updated_at' => $timestamp,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()->subHours(mt_rand(0, 96)),
                 'deleted_at' => null,
             ];
         }
