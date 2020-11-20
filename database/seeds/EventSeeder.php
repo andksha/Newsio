@@ -25,7 +25,7 @@ class EventSeeder extends Seeder
         $this->categories = Category::all();
         $timestamp = Carbon::now();
 
-        for ($i = 0; $i < 20; $i++) {
+        for ($i = 0; $i < 200; $i++) {
             $events[] = [
                 'title' => Str::random(32),
                 'user_id' => $this->users->random()->id,

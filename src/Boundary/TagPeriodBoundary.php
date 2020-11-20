@@ -32,7 +32,10 @@ final class TagPeriodBoundary
     private function allowedPeriod($period)
     {
         return in_array($period, [
-            self::PERIOD_DAY, self::PERIOD_WEEK, self::PERIOD_MONTH, self::PERIOD_YEAR
+            self::PERIOD_DAY,
+            self::PERIOD_WEEK,
+            self::PERIOD_MONTH,
+            self::PERIOD_YEAR
         ]);
     }
 

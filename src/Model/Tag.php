@@ -36,6 +36,4 @@ class Tag extends BaseModel
     protected $fillable = ['name'];
 
     protected $visible = ['name', 'reason'];
-
-    public const CACHE_TTL = 3600;
 }

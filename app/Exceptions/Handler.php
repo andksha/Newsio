@@ -58,10 +58,12 @@ class Handler extends ExceptionHandler
 
         if ($exception instanceof Exception) {
             // @TODO: show 500 error
-            return response()->json([
-                'error_message' => $exception->getMessage(),
-                'trace' => $exception->getTraceAsString()
-            ]);
+            return $request->expectsJson()
+                ? response()->json([
+                    'error_message' => $exception->getMessage(),
+                    'trace' => $exception->getTraceAsString()
+                ])
+                : dd($exception->getMessage(), $exception->getFile(), $exception->getLine(), $exception->getTraceAsString());
         }
 
         return parent::render($request, $exception);

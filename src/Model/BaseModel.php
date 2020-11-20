@@ -4,6 +4,7 @@ namespace Newsio\Model;
 
 use Illuminate\Database\Eloquent\Model;
 
-class BaseModel extends Model
+abstract class BaseModel extends Model
 {
+
 }
