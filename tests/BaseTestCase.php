@@ -10,14 +10,24 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Newsio\Model\Event;
 use Newsio\Model\Link;
+use Predis\Client;
 
 class BaseTestCase extends TestCase
 {
+
     protected function setUp(): void
     {
         parent::setUp();
+        $client = new Client([
+            'host' => config('database.redis.default.host'),
+            'port' => config('database.redis.default.port'),
+            'password' => config('database.redis.default.password'),
+            'database' => 2
+        ]);
+        $client->flushdb();
 
-        $this->artisan('migrate:refresh --seed');
+        $this->artisan('migrate --seed');
+
     }
 
     public function createEvent(string $title = 'test_event')

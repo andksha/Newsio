@@ -18,7 +18,7 @@ final class EventCache implements EventCacheRepository
     private string $idKey;
     private int $ttl;
 
-    public function __construct(string $singularKey, string $pluralKey, int $ttl)
+    public function __construct(string $singularKey = 'event', string $pluralKey = 'events', int $ttl = 3600)
     {
         $this->singularKey = $singularKey;
         $this->pluralKey = $pluralKey;

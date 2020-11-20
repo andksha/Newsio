@@ -3,6 +3,7 @@
 namespace Tests\Unit\Event;
 
 use Newsio\Boundary\TagPeriodBoundary;
+use Newsio\Model\Cache\TagCache;
 use Newsio\UseCase\GetTagsUseCase;
 use Tests\BaseTestCase;
 
@@ -12,8 +13,8 @@ final class GetTagsTest extends BaseTestCase
 
     protected function setUp(): void
     {
-        $this->uc = new GetTagsUseCase();
         parent::setUp();
+        $this->uc = new GetTagsUseCase(new TagCache());
     }
 
     /**
