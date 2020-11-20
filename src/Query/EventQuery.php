@@ -110,9 +110,25 @@ final class EventQuery
         return $this;
     }
 
+    public function with(array $relations)
+    {
+        $this->query->with($relations);
+        return $this;
+    }
+
     public function paginate(int $perPage)
     {
         return $this->query->paginate($perPage);
+    }
+
+    public function offset(int $offset)
+    {
+        return $this->query->offset($offset);
+    }
+
+    public function limit(int $limit)
+    {
+        return $this->query->limit($limit);
     }
 
     /**
@@ -121,5 +137,10 @@ final class EventQuery
     public function get()
     {
         return $this->query->get();
+    }
+
+    public function count(): int
+    {
+        return $this->query->count();
     }
 }

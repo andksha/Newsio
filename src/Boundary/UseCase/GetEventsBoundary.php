@@ -12,6 +12,7 @@ final class GetEventsBoundary
     private NullableStringBoundary $removed;
     private NullableIntBoundary $category;
     private NullableIntBoundary $userId;
+    private NullableIntBoundary $currentPage;
 
     /**
      * GetEventsBoundary constructor.
@@ -25,6 +26,7 @@ final class GetEventsBoundary
         $this->removed = new NullableStringBoundary($input['removed'] ?? null);
         $this->category = new NullableIntBoundary($input['category'] ?? null);
         $this->userId = new NullableIntBoundary($input['user_id'] ?? null);
+        $this->currentPage = new NullableIntBoundary($input['page'] ?? 1);
     }
 
     public function getSearch(): ?string
@@ -50,5 +52,10 @@ final class GetEventsBoundary
     public function getUserId(): ?int
     {
         return $this->userId->getValue();
+    }
+
+    public function getCurrentPage(): int
+    {
+        return $this->currentPage->getValue();
     }
 }

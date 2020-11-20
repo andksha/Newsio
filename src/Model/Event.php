@@ -66,6 +66,19 @@ class Event extends BaseModel implements JsonSerializable
         'deleted_at'
     ];
 
+    public const MAX_CACHED_PAGES = 10;
+
+
+    public static function paginationStart(int $page): int
+    {
+        return ($page - 1) * 15;
+    }
+
+    public static function paginationStop(int $page): int
+    {
+        return ($page * 15) - 1;
+    }
+
     public function remove(string $reason): Event
     {
         $this->reason = $reason;
