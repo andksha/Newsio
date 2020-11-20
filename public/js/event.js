@@ -81,6 +81,7 @@ function enableSubmitNewLinksButton(event) {
           }
         }else {
           alert('Server error. Try again.');
+          console.log(response);
         }
       } catch (e) {
         console.log(e);
@@ -128,6 +129,7 @@ function enableSubmitButton() {
           handleEvent(response.event);
         } else {
           alert('Server error. Try again.');
+          console.log(response);
         }
       } catch (e) {
         console.log(e);
@@ -148,8 +150,9 @@ function enableTitle(title) {
     links.style.display = links.style.display === 'none' || !links.style.display ? 'block' : 'none';
 
     if (!clickedEvents.find(element => element === eventId)) {
-      request.send('POST', 'view-counter', data, csrfToken, true);
       clickedEvents.push(eventId);
+      request.send('POST', 'view-counter', data, csrfToken, true);
+      request.handleResponse('success', function (){});
     }
   });
 }
