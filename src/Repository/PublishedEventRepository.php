@@ -20,7 +20,7 @@ final class PublishedEventRepository extends BaseEventRepository implements Even
         return new PublishedEventCache();
     }
 
-    protected function getJob(EventCacheRepository $eventCache, GetEventsBoundary $boundary)
+    protected function getCacheJob(EventCacheRepository $eventCache, GetEventsBoundary $boundary)
     {
         return new CachePublishedEvents($eventCache, $boundary);
     }

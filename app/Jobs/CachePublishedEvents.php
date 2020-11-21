@@ -44,6 +44,6 @@ class CachePublishedEvents implements ShouldQueue
             ->limit(PublishedEventRepository::TO_CACHE)
             ->get();
 
-        $this->eventCache->setEvents($events, $this->boundary);
+        $this->eventCache->setEvents($events);
     }
 }

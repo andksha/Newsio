@@ -14,21 +14,21 @@ abstract class BaseEventRepository implements EventRepository
     public function getEvents(GetEventsBoundary $boundary): LengthAwarePaginator
     {
         $eventCache = $this->getEventCache();
-        $events = $eventCache->getEvents($boundary);
 
-        if ($events->isEmpty()) {
-            dispatch($this->getJob($eventCache, $boundary));
+        if ($eventCache->cacheIsLoaded()) {
+            $events = $eventCache->getEvents($boundary);
+            $this->loadUserSaved($events, $boundary);
 
-            return $this->getEventsFromDB($boundary);
+            return $this->makePaginator($events, $boundary, $this->getTotal(), $this->getRoute());
         }
 
-        $this->loadUserSaved($events, $boundary);
+        dispatch($this->getCacheJob($eventCache, $boundary));
 
-        return $this->makePaginator($events, $boundary, $this->getTotal(), $this->getRoute());
+        return $this->getEventsFromDB($boundary);
     }
 
     abstract protected function getEventCache(): EventCacheRepository;
-    abstract protected function getJob(EventCacheRepository $eventCache, GetEventsBoundary $boundary);
+    abstract protected function getCacheJob(EventCacheRepository $eventCache, GetEventsBoundary $boundary);
     abstract protected function getEventsFromDB(GetEventsBoundary $boundary): LengthAwarePaginator;
     abstract protected function getTotal(): int;
     abstract protected function getRoute(): string;

@@ -20,7 +20,7 @@ final class RemovedEventRepository extends BaseEventRepository implements EventR
         return new RemovedEventCache();
     }
 
-    public function getJob(EventCacheRepository $eventCache, GetEventsBoundary $boundary)
+    public function getCacheJob(EventCacheRepository $eventCache, GetEventsBoundary $boundary)
     {
         return new CacheRemovedEvents($eventCache, $boundary);
     }

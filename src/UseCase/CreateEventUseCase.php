@@ -47,7 +47,7 @@ class CreateEventUseCase
         $this->createLinksUseCase->createLinks(new IdBoundary($event->id), $boundary->getLinks());
 
         $event->load(['tags', 'links']);
-//        $this->eventCache->addOrUpdateEvent($event);
+        $this->eventCache->addOrUpdateEvent($event);
 
         return $event;
     }

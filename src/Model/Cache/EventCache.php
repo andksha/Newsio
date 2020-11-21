@@ -53,47 +53,84 @@ final class EventCache implements EventCacheRepository
         }
     }
 
-    public function setEvents(Collection $events, GetEventsBoundary $boundary)
+    public function setEvents(Collection $events)
     {
-        $toSet = [];
-
         if ($events->isEmpty()) {
             return [];
         }
 
-        if (!$this->client->exists($this->listKey)) {
-            $this->client->rpush($this->listKey, range(0, $this->eventsToCache - 1));
-        }
+        $toSet = [];
+        $listKeys = [];
 
-        foreach ($events as $index => $event) {
+        $this->client->del([$this->listKey, $this->hsetKey]);
+
+        foreach ($events as  $event) {
             $key = $this->idKey . $event->id;
             $toSet[$key] = serialize($event);
-            $this->client->lset($this->listKey, $index, $key);
-        }
-
-        $result = $this->client->hmset($this->hsetKey, $toSet);
-        $this->client->expire($this->hsetKey, $this->ttl);
-        $this->client->expire($this->listKey, $this->ttl);
-
-        return $result;
-    }
-
-    public function addOrUpdateEvent(Event $event): array
-    {
-        $newKey = $this->idKey . $event->id;
-        $keyToRemove = $this->client->lindex($this->listKey, $this->eventsToCache - 1);
-
-        if ($keyToRemove === null) {
-            return [];
+            $listKeys[] = $key;
         }
 
         $this->client->multi();
 
-        $this->client->lpush($this->listKey, [$newKey]);
-        $this->client->hset($this->hsetKey, $newKey, $event);
+        $this->client->hmset($this->hsetKey, $toSet);
+        $this->client->rpush($this->listKey, $listKeys);
+
+        if ($events->count() < 150) {
+            $this->client->rpush($this->listKey, array_fill(0, $this->eventsToCache - $events->count(), 1));
+        }
+
+        $this->client->expire($this->hsetKey, $this->ttl);
+        $this->client->expire($this->listKey, $this->ttl);
+
+        return $this->client->exec();
+    }
+
+    public function addOrUpdateEvent(Event $event): array
+    {
+        $eventKey = $this->idKey . $event->id;
+
+        if (!$this->cacheIsLoaded()) {
+            return [];
+        }
+
+        if ($this->client->hexists($this->hsetKey, $eventKey)) {
+            return $this->updateEvent($event, $eventKey);
+        }
+
+        return $this->addEvent($event, $eventKey);
+    }
+
+    private function addEvent(Event $event, $eventKey)
+    {
+        $keyToRemove = $this->client->lindex($this->listKey, $this->eventsToCache - 1);
+
+        $this->client->multi();
+
+        $this->client->lpush($this->listKey, [$eventKey]);
+        $this->client->hset($this->hsetKey, $eventKey, $event);
         $this->client->rpop($this->listKey);
         $this->client->hdel($this->hsetKey, [$keyToRemove]);
 
         return $this->client->exec();
+    }
+
+    private function updateEvent(Event $event, $eventKey)
+    {
+        $this->client->multi();
+
+        $this->client->lrem($this->listKey, 1, $eventKey);
+        $this->client->hdel($this->hsetKey, [$eventKey]);
+        $this->client->hset($this->hsetKey, $eventKey, $event);
+        $this->client->lpush($this->listKey, [$eventKey]);
+
+        return $this->client->exec();
+    }
+
+    public function cacheIsLoaded(): bool
+    {
+        return $this->client->exists($this->listKey)
+            && $this->client->exists($this->hsetKey)
+            && ($this->client->llen($this->listKey) > 0)
+            && ($this->client->hlen($this->hsetKey) > 0);
     }
 }

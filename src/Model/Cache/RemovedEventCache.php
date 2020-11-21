@@ -22,13 +22,18 @@ final class RemovedEventCache implements EventCacheRepository
         return $this->eventCache->getEvents($boundary);
     }
 
-    public function setEvents(Collection $events, GetEventsBoundary $boundary)
+    public function setEvents(Collection $events)
     {
-        return $this->eventCache->setEvents($events, $boundary);
+        return $this->eventCache->setEvents($events);
     }
 
     public function addOrUpdateEvent(Event $event): array
     {
         return $this->eventCache->addOrUpdateEvent($event);
+    }
+
+    public function cacheIsLoaded(): bool
+    {
+        return $this->eventCache->cacheIsLoaded();
     }
 }

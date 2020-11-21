@@ -26,6 +26,10 @@ class EventController extends Controller
 {
     public function events(Request $request, GetTagsUseCase $tagsUseCase, GetEventsUseCase $eventsUseCase, $removed = null)
     {
+        /**
+         * @TODO: cache categories, total
+         */
+
         $categories = Category::all();
 
         try {

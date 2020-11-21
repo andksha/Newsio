@@ -45,6 +45,6 @@ class CacheRemovedEvents implements ShouldQueue
             ->limit(RemovedEventRepository::TO_CACHE)
             ->get();
 
-        $this->eventCache->setEvents($events, $this->boundary);
+        $this->eventCache->setEvents($events);
     }
 }

@@ -7,6 +7,7 @@ use App\Model\Moderator;
 use App\Model\PasswordReset;
 use App\Model\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Str;
 use Newsio\Model\Event;
 use Newsio\Model\Link;
@@ -18,6 +19,7 @@ class BaseTestCase extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        Queue::fake();
         $client = new Client([
             'host' => config('database.redis.default.host'),
             'port' => config('database.redis.default.port'),
@@ -26,7 +28,7 @@ class BaseTestCase extends TestCase
         ]);
         $client->flushdb();
 
-        $this->artisan('migrate --seed');
+        $this->artisan('migrate:fresh --seed');
 
     }
 

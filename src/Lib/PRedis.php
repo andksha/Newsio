@@ -120,6 +120,16 @@ final class PRedis implements RedisClient
         return $this->client->hdel($key, $fields);
     }
 
+    public function hlen(string $key): int
+    {
+        return $this->client->hlen($key);
+    }
+
+    public function hexists(string $key, string $field): bool
+    {
+        return (bool) $this->client->hexists($key, $field);
+    }
+
     public function zadd(string $key, array $dictionary)
     {
         foreach ($dictionary as $dkey => $value) {
@@ -157,6 +167,11 @@ final class PRedis implements RedisClient
     public function llen(string $key)
     {
         return $this->client->llen($key);
+    }
+
+    public function lrem(string $key, int $count, $value)
+    {
+        return $this->client->lrem($key, $count, $value);
     }
 
     public function rpop(string $key)

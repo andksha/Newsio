@@ -10,7 +10,9 @@ interface EventCacheRepository
 {
     public function getEvents(GetEventsBoundary $boundary): Collection;
 
-    public function setEvents(Collection $events, GetEventsBoundary $boundary);
+    public function setEvents(Collection $events);
 
     public function addOrUpdateEvent(Event $event): array;
+
+    public function cacheIsLoaded(): bool;
 }
