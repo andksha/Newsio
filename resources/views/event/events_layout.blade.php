@@ -52,7 +52,7 @@
                         @endif
                     @endif
                     <span class="published-removed-links">
-                        @if ($event->user_id !== auth()->id())
+                        @if (auth()->id() && $event->user_id !== auth()->id())
                             @if (!$event->userSaved || (int) $event->userSaved->user_id !== (int) auth()->id())
                                 <button class="save-button">Save</button>
                             @else

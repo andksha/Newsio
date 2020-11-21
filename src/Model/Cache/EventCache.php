@@ -17,8 +17,9 @@ final class EventCache implements EventCacheRepository
     private string $hsetKey;
     private string $idKey;
     private int $ttl;
+    private int $eventsToCache;
 
-    public function __construct(string $singularKey = 'event', string $pluralKey = 'events', int $ttl = 3600)
+    public function __construct(string $singularKey = 'event', string $pluralKey = 'events', int $ttl = 3600, int $eventsToCache = 150)
     {
         $this->singularKey = $singularKey;
         $this->pluralKey = $pluralKey;
@@ -28,6 +29,7 @@ final class EventCache implements EventCacheRepository
         $this->ttl = $ttl;
 
         $this->client = new PRedis();
+        $this->eventsToCache = $eventsToCache;
     }
 
     public function getEvents(GetEventsBoundary $boundary): Collection
@@ -53,7 +55,6 @@ final class EventCache implements EventCacheRepository
 
     public function setEvents(Collection $events, GetEventsBoundary $boundary)
     {
-        $start = Event::paginationStart($boundary->getCurrentPage());
         $toSet = [];
 
         if ($events->isEmpty()) {
@@ -61,13 +62,13 @@ final class EventCache implements EventCacheRepository
         }
 
         if (!$this->client->exists($this->listKey)) {
-            $this->client->rpush($this->listKey, range(0, 149));
+            $this->client->rpush($this->listKey, range(0, $this->eventsToCache - 1));
         }
 
-        foreach ($events as $event) {
+        foreach ($events as $index => $event) {
             $key = $this->idKey . $event->id;
             $toSet[$key] = serialize($event);
-            $this->client->lset($this->listKey, $start++, $key);
+            $this->client->lset($this->listKey, $index, $key);
         }
 
         $result = $this->client->hmset($this->hsetKey, $toSet);
@@ -75,5 +76,24 @@ final class EventCache implements EventCacheRepository
         $this->client->expire($this->listKey, $this->ttl);
 
         return $result;
+    }
+
+    public function addOrUpdateEvent(Event $event): array
+    {
+        $newKey = $this->idKey . $event->id;
+        $keyToRemove = $this->client->lindex($this->listKey, $this->eventsToCache - 1);
+
+        if ($keyToRemove === null) {
+            return [];
+        }
+
+        $this->client->multi();
+
+        $this->client->lpush($this->listKey, [$newKey]);
+        $this->client->hset($this->hsetKey, $newKey, $event);
+        $this->client->rpop($this->listKey);
+        $this->client->hdel($this->hsetKey, [$keyToRemove]);
+
+        return $this->client->exec();
     }
 }

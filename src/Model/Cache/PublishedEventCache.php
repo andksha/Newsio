@@ -5,6 +5,8 @@ namespace Newsio\Model\Cache;
 use Illuminate\Database\Eloquent\Collection;
 use Newsio\Boundary\UseCase\GetEventsBoundary;
 use Newsio\Contract\EventCacheRepository;
+use Newsio\Model\Event;
+use Newsio\Repository\PublishedEventRepository;
 
 final class PublishedEventCache implements EventCacheRepository
 {
@@ -12,7 +14,7 @@ final class PublishedEventCache implements EventCacheRepository
 
     public function __construct()
     {
-        $this->eventCache = new EventCache('event', 'events', 60*60);
+        $this->eventCache = new EventCache('event', 'events', 60*60, PublishedEventRepository::TO_CACHE);
     }
 
     public function getEvents(GetEventsBoundary $boundary): Collection
@@ -24,4 +26,10 @@ final class PublishedEventCache implements EventCacheRepository
     {
         return $this->eventCache->setEvents($events, $boundary);
     }
+
+    public function addOrUpdateEvent(Event $event): array
+    {
+        return $this->eventCache->addOrUpdateEvent($event);
+    }
+
 }

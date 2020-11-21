@@ -62,21 +62,6 @@ final class PRedis implements RedisClient
         return $this->client->mset($dictionary);
     }
 
-    public function hmset(string $key, array $dictionary)
-    {
-        $values = [];
-
-        foreach ($dictionary as $dKey => $value) {
-            if (is_array($value)) {
-                $values[$dKey] = serialize($value);
-            } else {
-                $values[$dKey] = $value;
-            }
-        }
-
-        return $this->client->hmset($key, $values);
-    }
-
     public function get(string $key)
     {
         $value = $this->client->get($this->prefix . $key);
@@ -96,6 +81,28 @@ final class PRedis implements RedisClient
         return $result;
     }
 
+    public function hset(string $key, string $field, $value)
+    {
+        $serializedValue = serialize($value);
+
+        return $this->client->hset($key, $field, $serializedValue);
+    }
+
+    public function hmset(string $key, array $dictionary)
+    {
+        $values = [];
+
+        foreach ($dictionary as $dKey => $value) {
+            if (is_array($value)) {
+                $values[$dKey] = serialize($value);
+            } else {
+                $values[$dKey] = $value;
+            }
+        }
+
+        return $this->client->hmset($key, $values);
+    }
+
     public function hmget(string $key, array $fields)
     {
         $serializedEvents = $this->client->hmget($key, $fields);
@@ -108,6 +115,11 @@ final class PRedis implements RedisClient
         return $result;
     }
 
+    public function hdel(string $key, array $fields)
+    {
+        return $this->client->hdel($key, $fields);
+    }
+
     public function zadd(string $key, array $dictionary)
     {
         foreach ($dictionary as $dkey => $value) {
@@ -117,9 +129,19 @@ final class PRedis implements RedisClient
         return $this->client->zadd($key, array_flip($dictionary));
     }
 
+    public function lindex(string $key, int $index): ?string
+    {
+        return $this->client->lindex($key, $index);
+    }
+
     public function lset(string $key, int $index, $value)
     {
         return $this->client->lset($key, $index, $value);
+    }
+
+    public function lpush(string $key, array $values)
+    {
+        return $this->client->lpush($key, $values);
     }
 
     public function lrange(string $key, int $start, int $stop): array
@@ -130,6 +152,16 @@ final class PRedis implements RedisClient
     public function rpush(string $key, $values)
     {
         return $this->client->rpush($key, $values);
+    }
+
+    public function llen(string $key)
+    {
+        return $this->client->llen($key);
+    }
+
+    public function rpop(string $key)
+    {
+        return $this->client->rpop($key);
     }
 
     public function del(array $keys)
