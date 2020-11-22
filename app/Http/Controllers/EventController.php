@@ -75,7 +75,6 @@ class EventController extends Controller
         return response()->json(['event' => $event]);
     }
 
-
     public function addLinks(Request $request, AddLinksUseCase $linksUseCase)
     {
         try {

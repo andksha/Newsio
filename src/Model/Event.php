@@ -67,6 +67,11 @@ class Event extends BaseModel implements JsonSerializable
     ];
 
     public const MAX_CACHED_PAGES = 10;
+    public const DEFAULT_RELATIONS = [
+        'tags',
+        'links',
+        'removedLinks',
+    ];
 
 
     public static function paginationStart(int $page): int

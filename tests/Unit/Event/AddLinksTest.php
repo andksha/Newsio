@@ -4,6 +4,7 @@ namespace Tests\Unit\Event;
 
 use Newsio\Boundary\IdBoundary;
 use Newsio\Boundary\LinksBoundary;
+use Newsio\Contract\ApplicationException;
 use Newsio\Exception\BoundaryException;
 use Newsio\Exception\InvalidWebsiteException;
 use Newsio\Exception\ModelNotFoundException;
@@ -22,6 +23,9 @@ class AddLinksTest extends BaseTestCase
         $this->uc = new AddLinksUseCase();
     }
 
+    /**
+     * @throws ApplicationException
+     */
     public function test_AddLinks_WithValidIdAndLinks_AddsLinks()
     {
         $event = Event::query()->first();
@@ -33,12 +37,18 @@ class AddLinksTest extends BaseTestCase
         $this->assertEquals(2, $links);
     }
 
+    /**
+     * @throws ApplicationException
+     */
     public function test_AddLinks_WithNonExistingEvent_ThrowsModelNotFoundException()
     {
         $this->expectException(ModelNotFoundException::class);
         $this->uc->addLinks(new IdBoundary(1000), new LinksBoundary(['https://test.com/test', 'https://test2.com/test']));
     }
 
+    /**
+     * @throws ApplicationException
+     */
     public function test_AddLinks_WithUnverifiedWebsite_ThrowsInvalidWebsiteException()
     {
         $event = Event::query()->first();
@@ -46,6 +56,9 @@ class AddLinksTest extends BaseTestCase
         $this->uc->addLinks(new IdBoundary($event->id), new LinksBoundary(['https://test.com/test', 'https://test2.com/test']));
     }
 
+    /**
+     * @throws ApplicationException
+     */
     public function test_AddLinks_WithMoreThan3Links_ThrowsBoundaryException()
     {
         $event = Event::query()->first();
@@ -58,6 +71,9 @@ class AddLinksTest extends BaseTestCase
         ]));
     }
 
+    /**
+     * @throws ApplicationException
+     */
     public function test_AddLinks_WithDomainOnly_ThrowsInvalidWebsiteException()
     {
         $event = Event::query()->first();

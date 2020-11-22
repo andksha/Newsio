@@ -24,7 +24,7 @@ class GetEventsUseCase
             ->frequentFields($boundary)
             ->orderByDesc('updated_at')
             ->withUserSaved($boundary->getUserId())
-            ->with(['tags', 'links', 'removedLinks', 'category'])
+            ->with(Event::DEFAULT_RELATIONS)
             ->paginate(15);
     }
 

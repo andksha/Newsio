@@ -8,6 +8,7 @@ use Newsio\Boundary\UseCase\GetEventsBoundary;
 use Newsio\Contract\EventCacheRepository;
 use Newsio\Contract\EventRepository;
 use Newsio\Model\Cache\RemovedEventCache;
+use Newsio\Model\Event;
 use Newsio\Query\EventQuery;
 
 final class RemovedEventRepository extends BaseEventRepository implements EventRepository
@@ -31,7 +32,7 @@ final class RemovedEventRepository extends BaseEventRepository implements EventR
             ->removed($boundary->getRemoved())
             ->orderByDesc('updated_at')
             ->withUserSaved($boundary->getUserId())
-            ->with(['tags', 'links', 'removedLinks', 'category'])
+            ->with(Event::DEFAULT_RELATIONS)
             ->paginate(self::PER_PAGE);
     }
 

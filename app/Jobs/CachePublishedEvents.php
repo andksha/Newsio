@@ -9,6 +9,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Newsio\Boundary\UseCase\GetEventsBoundary;
 use Newsio\Contract\EventCacheRepository;
+use Newsio\Model\Event;
 use Newsio\Query\EventQuery;
 use Newsio\Repository\PublishedEventRepository;
 
@@ -40,7 +41,7 @@ class CachePublishedEvents implements ShouldQueue
     {
         $events = EventQuery::query()
             ->orderByDesc('updated_at')
-            ->with(['tags', 'links', 'removedLinks', 'category'])
+            ->with(Event::DEFAULT_RELATIONS)
             ->limit(PublishedEventRepository::TO_CACHE)
             ->get();
 

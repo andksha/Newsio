@@ -9,6 +9,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Newsio\Boundary\UseCase\GetEventsBoundary;
 use Newsio\Contract\EventCacheRepository;
+use Newsio\Model\Event;
 use Newsio\Query\EventQuery;
 use Newsio\Repository\RemovedEventRepository;
 
@@ -41,7 +42,7 @@ class CacheRemovedEvents implements ShouldQueue
         $events = EventQuery::query()
             ->removed($this->boundary->getRemoved())
             ->orderByDesc('updated_at')
-            ->with(['tags', 'links', 'removedLinks', 'category'])
+            ->with(Event::DEFAULT_RELATIONS)
             ->limit(RemovedEventRepository::TO_CACHE)
             ->get();
 
