@@ -9,6 +9,7 @@ use Newsio\Contract\ApplicationException;
 use Newsio\Exception\ModelNotFoundException;
 use Newsio\Model\Event;
 use Newsio\Model\Link;
+use Newsio\Repository\PublishedEventRepository;
 use Newsio\UseCase\Moderator\RemoveEventUseCase;
 use Tests\BaseTestCase;
 
@@ -19,7 +20,7 @@ class RemoveEventTest extends BaseTestCase
 
     protected function setUp(): void
     {
-        $this->uc = new RemoveEventUseCase();
+        $this->uc = new RemoveEventUseCase(new PublishedEventRepository());
 
         parent::setUp();
     }

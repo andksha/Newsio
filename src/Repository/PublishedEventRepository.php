@@ -29,7 +29,7 @@ final class PublishedEventRepository extends BaseEventRepository implements Even
     protected function getEventsFromDB(GetEventsBoundary $boundary): LengthAwarePaginator
     {
         return EventQuery::query()
-            ->orderByDesc('updated_at')
+            ->defaultOrder()
             ->withUserSaved($boundary->getUserId())
             ->with(Event::DEFAULT_RELATIONS)
             ->paginate(self::PER_PAGE);
@@ -44,5 +44,4 @@ final class PublishedEventRepository extends BaseEventRepository implements Even
     {
         return route('events');
     }
-
 }

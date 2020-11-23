@@ -50,7 +50,7 @@ class Link extends BaseModel
         if (!$this->query()->where('event_id', $this->event_id)
             ->where('reason', '')
             ->where('deleted_at', null)
-            ->first()
+            ->first() && !$this->event->trashed()
         ) {
             $this->event->reason = $reason;
             $this->event->deleted_at = $this->deleted_at;
@@ -71,6 +71,6 @@ class Link extends BaseModel
 
     public function event(): BelongsTo
     {
-        return $this->belongsTo(Event::class, 'event_id');
+        return $this->belongsTo(Event::class, 'event_id')->withTrashed();
     }
 }

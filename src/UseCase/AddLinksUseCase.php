@@ -34,12 +34,13 @@ class AddLinksUseCase
 
         if (!$event = Event::query()->find($id->getValue())) {
             throw new ModelNotFoundException('Event');
+
         }
 
         $existingLinks = $event->links->pluck('content');
         $createLinksUseCase->checkLinks($links)->createLinks(new IdBoundary($event->id), $links);
 
-        $event->load(Event::DEFAULT_RELATIONS);
+        $event->refresh()->load(Event::DEFAULT_RELATIONS);
         $this->eventCache->addOrUpdateEvent($event);
 
         return $event->links->pluck('content')->diff($existingLinks);

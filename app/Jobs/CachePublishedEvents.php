@@ -40,7 +40,7 @@ class CachePublishedEvents implements ShouldQueue
     public function handle()
     {
         $events = EventQuery::query()
-            ->orderByDesc('updated_at')
+            ->defaultOrder()
             ->with(Event::DEFAULT_RELATIONS)
             ->limit(PublishedEventRepository::TO_CACHE)
             ->get();

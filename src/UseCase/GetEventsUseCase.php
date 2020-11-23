@@ -22,7 +22,7 @@ class GetEventsUseCase
 
         return EventQuery::query()
             ->frequentFields($boundary)
-            ->orderByDesc('updated_at')
+            ->defaultOrder()
             ->withUserSaved($boundary->getUserId())
             ->with(Event::DEFAULT_RELATIONS)
             ->paginate(15);

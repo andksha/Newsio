@@ -41,7 +41,7 @@ class CacheRemovedEvents implements ShouldQueue
     {
         $events = EventQuery::query()
             ->removed($this->boundary->getRemoved())
-            ->orderByDesc('updated_at')
+            ->defaultOrder()
             ->with(Event::DEFAULT_RELATIONS)
             ->limit(RemovedEventRepository::TO_CACHE)
             ->get();

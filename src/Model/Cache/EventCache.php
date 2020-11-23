@@ -2,6 +2,7 @@
 
 namespace Newsio\Model\Cache;
 
+use Closure;
 use Illuminate\Database\Eloquent\Collection;
 use Newsio\Boundary\UseCase\GetEventsBoundary;
 use Newsio\Contract\EventCacheRepository;
@@ -45,8 +46,8 @@ final class EventCache implements EventCacheRepository
             $searchResults = $this->client->hmget($this->hsetKey, $eventsKeys);
             $events = new Collection($searchResults);
 
-            return $events->sortBy(function ($a, $b) {
-                return ($a->updated_at ?? '') <=> ($b->updated_at ?? '');
+            return $events->sortByDesc(function ($event) {
+                return $event->updated_at;
             });
         } else {
             return new Collection();
@@ -122,6 +123,42 @@ final class EventCache implements EventCacheRepository
         $this->client->hdel($this->hsetKey, [$eventKey]);
         $this->client->hset($this->hsetKey, $eventKey, $event);
         $this->client->lpush($this->listKey, [$eventKey]);
+
+        return $this->client->exec();
+    }
+
+    public function removeEvent(Event $event)
+    {
+        $eventKey = $this->idKey . $event->id;
+
+        $this->client->multi();
+
+        $this->client->lrem($this->listKey, 1, $eventKey);
+        $this->client->hdel($this->hsetKey, [$eventKey]);
+
+        return $this->client->exec();
+    }
+
+    public function pushLastEvent(Closure $closure)
+    {
+        $listLen = $this->client->llen($this->listKey);
+
+        if (!$this->cacheIsLoaded()) {
+            return [];
+        }
+
+        $this->client->multi();
+
+        if ($listLen < $this->eventsToCache) {
+            $lastEvent = $closure();
+
+            if ($lastEvent) {
+                $lastEventKey = $this->idKey . $lastEvent->id;
+
+                $this->client->rpush($this->listKey, $lastEventKey);
+                $this->client->hset($this->hsetKey, $lastEventKey, $lastEvent);
+            }
+        }
 
         return $this->client->exec();
     }

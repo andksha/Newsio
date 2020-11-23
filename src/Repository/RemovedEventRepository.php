@@ -30,7 +30,7 @@ final class RemovedEventRepository extends BaseEventRepository implements EventR
     {
         return EventQuery::query()
             ->removed($boundary->getRemoved())
-            ->orderByDesc('updated_at')
+            ->defaultOrder()
             ->withUserSaved($boundary->getUserId())
             ->with(Event::DEFAULT_RELATIONS)
             ->paginate(self::PER_PAGE);
@@ -45,5 +45,4 @@ final class RemovedEventRepository extends BaseEventRepository implements EventR
     {
         return route('events', ['removed' => 'removed']);
     }
-
 }

@@ -17,15 +17,13 @@ class EventController extends Controller
 {
     /**
      * @param Request $request
+     * @param RemoveEventUseCase $removeEventUseCase
      * @return \Illuminate\Http\JsonResponse
-     * @throws \Exception
      */
-    public function removeEvent(Request $request)
+    public function removeEvent(Request $request, RemoveEventUseCase $removeEventUseCase)
     {
-        $uc = new RemoveEventUseCase();
-
         try {
-            $event = $uc->remove(new IdBoundary($request->event_id), new StringBoundary($request->reason));
+            $event = $removeEventUseCase->remove(new IdBoundary($request->event_id), new StringBoundary($request->reason));
         } catch (ApplicationException $e) {
             return response()->json([
                 'error_message' => $e->getMessage(),
@@ -36,11 +34,10 @@ class EventController extends Controller
         return response()->json(['event' => $event]);
     }
 
-    public function restoreEvent(Request $request)
+    public function restoreEvent(Request $request, RestoreEventUseCase $restoreEventUseCase)
     {
-        $uc = new RestoreEventUseCase();
         try {
-            $event = $uc->restore(new IdBoundary($request->event_id));
+            $event = $restoreEventUseCase->restore(new IdBoundary($request->event_id));
         } catch (ApplicationException $e) {
             return response()->json([
                 'error_message' => $e->getMessage(),
@@ -53,15 +50,13 @@ class EventController extends Controller
 
     /**
      * @param Request $request
+     * @param RemoveLinkUseCase $removeLinkUseCase
      * @return \Illuminate\Http\JsonResponse
-     * @throws \Exception
      */
-    public function removeLink(Request $request)
+    public function removeLink(Request $request, RemoveLinkUseCase $removeLinkUseCase)
     {
-        $uc = new RemoveLinkUseCase();
-
         try {
-            $link = $uc->remove(new IdBoundary($request->link_id), new StringBoundary($request->reason));
+            $link = $removeLinkUseCase->remove(new IdBoundary($request->link_id), new StringBoundary($request->reason));
         } catch (ApplicationException $e) {
             return response()->json([
                 'error_message' => $e->getMessage(),
@@ -72,12 +67,10 @@ class EventController extends Controller
         return response()->json(['link' => $link]);
     }
 
-    public function restoreLink(Request $request)
+    public function restoreLink(Request $request, RestoreLinkUseCase $restoreLinkUseCase)
     {
-        $uc = new RestoreLinkUseCase();
-
         try {
-            $link = $uc->restore(new IdBoundary($request->link_id));
+            $link = $restoreLinkUseCase->restore(new IdBoundary($request->link_id));
         } catch (ApplicationException $e) {
             return response()->json([
                 'error_message' => $e->getMessage(),

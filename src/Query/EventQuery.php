@@ -104,6 +104,13 @@ final class EventQuery
         return $this;
     }
 
+    public function defaultOrder()
+    {
+        $this->query->orderByDesc('updated_at');
+
+        return $this;
+    }
+
     public function orderByDesc(string $orderBy)
     {
         $this->query->orderByDesc($orderBy);

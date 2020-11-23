@@ -20,7 +20,7 @@ final class GetProfileUseCase
             ->user($boundary->getUserId())
             ->frequentFields($boundary->getEventsBoundary())
             ->withUserSaved($boundary->getUserId())
-            ->orderByDesc('updated_at')
+            ->defaultOrder()
             ->paginate(15);
     }
 
@@ -30,7 +30,7 @@ final class GetProfileUseCase
             ->frequentFields($boundary->getEventsBoundary())
             ->whereUserSaved($boundary->getUserId())
             ->withUserSaved($boundary->getUserId())
-            ->orderByDesc('updated_at')
+            ->defaultOrder()
             ->paginate(15);
     }
 }

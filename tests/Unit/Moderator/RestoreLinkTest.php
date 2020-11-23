@@ -7,6 +7,7 @@ use Newsio\Boundary\IdBoundary;
 use Newsio\Contract\ApplicationException;
 use Newsio\Exception\ModelNotFoundException;
 use Newsio\Model\Link;
+use Newsio\Repository\RemovedEventRepository;
 use Newsio\UseCase\Moderator\RestoreLinkUseCase;
 use Tests\BaseTestCase;
 
@@ -17,7 +18,7 @@ class RestoreLinkTest extends BaseTestCase
 
     protected function setUp(): void
     {
-        $this->uc = new RestoreLinkUseCase();
+        $this->uc = new RestoreLinkUseCase(new RemovedEventRepository());
         parent::setUp();
     }
 

@@ -6,9 +6,17 @@ use Newsio\Boundary\IdBoundary;
 use Newsio\Boundary\StringBoundary;
 use Newsio\Exception\ModelNotFoundException;
 use Newsio\Model\Event;
+use Newsio\Repository\PublishedEventRepository;
 
 class RemoveEventUseCase
 {
+    private PublishedEventRepository $publishedEventRepository;
+
+    public function __construct(PublishedEventRepository $publishedEventRepository)
+    {
+        $this->publishedEventRepository = $publishedEventRepository;
+    }
+
     /**
      * @param IdBoundary $id
      * @param StringBoundary $reason
@@ -22,6 +30,9 @@ class RemoveEventUseCase
         }
 
         $event->remove($reason->getValue());
+        $event->refresh()->load(Event::DEFAULT_RELATIONS);
+
+        $this->publishedEventRepository->removeEvent($event);
 
         return $event;
     }

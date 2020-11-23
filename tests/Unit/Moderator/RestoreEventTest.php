@@ -9,6 +9,7 @@ use Newsio\Exception\InvalidOperationException;
 use Newsio\Exception\ModelNotFoundException;
 use Newsio\Model\Event;
 use Newsio\Model\Link;
+use Newsio\Repository\RemovedEventRepository;
 use Newsio\UseCase\Moderator\RestoreEventUseCase;
 use Tests\BaseTestCase;
 
@@ -19,7 +20,7 @@ class RestoreEventTest extends BaseTestCase
 
     protected function setUp(): void
     {
-        $this->uc = new RestoreEventUseCase();
+        $this->uc = new RestoreEventUseCase(new RemovedEventRepository());
 
         parent::setUp();
     }
