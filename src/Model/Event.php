@@ -88,9 +88,15 @@ class Event extends BaseModel implements JsonSerializable
     {
         $this->reason = $reason;
         $this->deleted_at = Carbon::now();
+        $this->save();
+
+        return $this;
+    }
+
+    public function removeLinks(): Event
+    {
         $this->links()->update(['reason' => 'Removed with event']);
         $this->links()->delete();
-        $this->save();
 
         return $this;
     }

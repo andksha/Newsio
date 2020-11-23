@@ -29,7 +29,7 @@ class RemoveEventUseCase
             throw new ModelNotFoundException('Event');
         }
 
-        $event->remove($reason->getValue());
+        $event->remove($reason->getValue())->removeLinks();
         $event->refresh()->load(Event::DEFAULT_RELATIONS);
 
         $this->publishedEventRepository->removeEvent($event);
