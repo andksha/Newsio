@@ -29,6 +29,7 @@ abstract class BaseEventRepository implements EventRepository
 
             return $paginator->withPath($this->getRoute());
         }
+
         dispatch($this->getCacheJob($eventCache, $boundary));
 
         return $this->getEventsFromDB($boundary);

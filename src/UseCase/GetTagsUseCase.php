@@ -6,16 +6,17 @@ use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Newsio\Boundary\TagPeriodBoundary;
-use Newsio\Model\Cache\TagCache;
+use Newsio\Contract\Cache;
+use Newsio\Model\Cache\BaseCache;
 use Newsio\Model\EventTag;
 
 final class GetTagsUseCase
 {
-    private TagCache $tagCache;
+    private Cache $cache;
 
-    public function __construct(TagCache $tagCache)
+    public function __construct(BaseCache $cache)
     {
-        $this->tagCache = $tagCache;
+        $this->cache = $cache;
     }
 
     /**
@@ -25,7 +26,7 @@ final class GetTagsUseCase
      */
     public function getPopularAndRareTags(TagPeriodBoundary $period)
     {
-        return $this->tagCache->hremember($period->getString(), function () use ($period) {
+        return $this->cache->hremember('tags', $period->getString(), function () use ($period) {
             return [
                 'popular' => $this->popularTags($period->getValue()),
                 'rare' => $this->rareTags($period->getValue())
