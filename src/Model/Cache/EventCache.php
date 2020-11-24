@@ -6,12 +6,13 @@ use Closure;
 use Illuminate\Database\Eloquent\Collection;
 use Newsio\Boundary\UseCase\GetEventsBoundary;
 use Newsio\Contract\EventCacheRepository;
+use Newsio\Contract\RedisClient;
 use Newsio\Lib\PRedis;
 use Newsio\Model\Event;
 
 final class EventCache implements EventCacheRepository
 {
-    private PRedis $client;
+    private RedisClient $client;
     private string $singularKey;
     private string $pluralKey;
     private string $listKey;

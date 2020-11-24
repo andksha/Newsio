@@ -9,11 +9,9 @@ use Predis\Client;
 final class PRedis implements RedisClient
 {
     private Client $client;
-    private string $prefix;
 
     public function __construct()
     {
-        $this->prefix = config('app.name') . '.' . config('database.redis.default.database') . '.';
         $this->client = new Client([
             'host' => config('database.redis.default.host'),
             'port' => config('database.redis.default.port'),
@@ -49,12 +47,12 @@ final class PRedis implements RedisClient
 
     public function set(string $key, $value): bool
     {
-        return (bool) $this->client->set($this->prefix . $key, serialize($value));
+        return (bool) $this->client->set($key, serialize($value));
     }
 
     public function setex(string $key, $value, int $ttl): bool
     {
-        return (bool) $this->client->setex($this->prefix . $key, $ttl, serialize($value));
+        return (bool) $this->client->setex($key, $ttl, serialize($value));
     }
 
     public function mset(array $dictionary)
@@ -64,7 +62,7 @@ final class PRedis implements RedisClient
 
     public function get(string $key)
     {
-        $value = $this->client->get($this->prefix . $key);
+        $value = $this->client->get($key);
 
         return unserialize($value);
     }

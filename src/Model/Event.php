@@ -154,7 +154,6 @@ class Event extends BaseModel implements JsonSerializable
 
     public function jsonSerialize()
     {
-        // @TODO: add a resource for each operation (creating, removing, getting)
         return [
             'id'            => $this->id,
             'title'         => $this->title,

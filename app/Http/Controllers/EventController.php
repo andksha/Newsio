@@ -14,6 +14,7 @@ use Newsio\Boundary\UseCase\GetEventsBoundary;
 use Newsio\Boundary\UserIdentifierBoundary;
 use Newsio\Contract\ApplicationException;
 use Newsio\Exception\BoundaryException;
+use Newsio\Model\Cache\CategoryCache;
 use Newsio\Model\Category;
 use Newsio\UseCase\AddLinksUseCase;
 use Newsio\UseCase\CreateEventUseCase;
@@ -24,14 +25,16 @@ use Newsio\UseCase\SaveEventUseCase;
 
 class EventController extends Controller
 {
-    public function events(Request $request, GetTagsUseCase $tagsUseCase, GetEventsUseCase $eventsUseCase, $removed = null)
+    public function events(Request $request, CategoryCache $categoryCache, GetTagsUseCase $tagsUseCase, GetEventsUseCase $eventsUseCase, $removed = null)
     {
 
         /**
-         * @TODO: cache categories, total
+         * @TODO: cache total
          */
 
-        $categories = Category::all();
+        $categories = $categoryCache->remember('all_categories', function () {
+            return Category::all();
+        });
 
         try {
             $tags = $tagsUseCase->getPopularAndRareTags(new TagPeriodBoundary('week'));

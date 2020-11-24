@@ -6,13 +6,13 @@ use Closure;
 use Newsio\Contract\Cache;
 use Newsio\Lib\PRedis;
 
-final class TagCache implements Cache
+final class CategoryCache implements Cache
 {
     private Cache $baseCache;
 
     public function __construct()
     {
-        $this->baseCache = new BaseCache(new PRedis(), 'tags', 3600);
+        $this->baseCache = new BaseCache(new PRedis(), 'categories', 604800); // one week
     }
 
     public function hremember(string $key, Closure $closure)
@@ -24,5 +24,4 @@ final class TagCache implements Cache
     {
         return $this->baseCache->remember($key, $closure);
     }
-
 }

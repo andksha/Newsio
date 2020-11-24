@@ -25,7 +25,7 @@ final class GetTagsUseCase
      */
     public function getPopularAndRareTags(TagPeriodBoundary $period)
     {
-        return $this->tagCache->remember($period->getString(), function () use ($period) {
+        return $this->tagCache->hremember($period->getString(), function () use ($period) {
             return [
                 'popular' => $this->popularTags($period->getValue()),
                 'rare' => $this->rareTags($period->getValue())
