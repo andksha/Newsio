@@ -28,6 +28,10 @@ interface RedisClient
 
     public function hmget(string $key, array $fields);
 
+    public function hremember(string $pluralKey, string $key, Closure $closure, int $ttl = 3600);
+
+    public function remember(string $key, Closure $closure, int $ttl = 3600);
+
     public function zadd(string $key, array $dictionary);
 
     public function lset(string $key, int $index, $value);

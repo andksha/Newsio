@@ -128,6 +128,36 @@ final class PRedis implements RedisClient
         return (bool) $this->client->hexists($key, $field);
     }
 
+    public function hremember(string $pluralKey, string $key, Closure $closure, int $ttl = 3600)
+    {
+        $value = $this->hmget($pluralKey, [$key]);
+
+        if (isset($value[0]) && $value[0] !== false) {
+            return $value[0];
+        }
+
+        $value = $closure();
+        $this->hmset($pluralKey, [$key => $value]);
+        $this->expire($pluralKey, $ttl);
+
+        return $value;
+    }
+
+    public function remember(string $key, Closure $closure, int $ttl = 3600)
+    {
+        $value = $this->get($key);
+
+        if (!$value) {
+            $value = $closure();
+
+            $this->setex($key, $value, $ttl);
+
+            return $value;
+        }
+
+        return $value;
+    }
+
     public function zadd(string $key, array $dictionary)
     {
         foreach ($dictionary as $dkey => $value) {

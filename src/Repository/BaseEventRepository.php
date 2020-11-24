@@ -25,7 +25,7 @@ abstract class BaseEventRepository implements EventRepository
                 return $query->load('userSaved')->where('user_id', $userId);
             });
 
-            $paginator = new Paginator($events, $this->getTotal(), 15, $boundary->getCurrentPage());
+            $paginator = new Paginator($events, $this->getTotal($eventCache), 15, $boundary->getCurrentPage());
 
             return $paginator->withPath($this->getRoute());
         }
@@ -38,7 +38,7 @@ abstract class BaseEventRepository implements EventRepository
     abstract protected function getEventCache(): EventCacheRepository;
     abstract protected function getCacheJob(EventCacheRepository $eventCache, GetEventsBoundary $boundary);
     abstract protected function getEventsFromDB(GetEventsBoundary $boundary): LengthAwarePaginator;
-    abstract protected function getTotal(): int;
+    abstract protected function getTotal(EventCacheRepository $eventCache): int;
     abstract protected function getRoute(): string;
 
     public function removeEvent(Event $event)

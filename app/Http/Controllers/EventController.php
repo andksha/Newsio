@@ -14,7 +14,7 @@ use Newsio\Boundary\UseCase\GetEventsBoundary;
 use Newsio\Boundary\UserIdentifierBoundary;
 use Newsio\Contract\ApplicationException;
 use Newsio\Exception\BoundaryException;
-use Newsio\Model\Cache\BaseCache;
+use Newsio\Lib\PRedis;
 use Newsio\Model\Category;
 use Newsio\UseCase\AddLinksUseCase;
 use Newsio\UseCase\CreateEventUseCase;
@@ -25,14 +25,9 @@ use Newsio\UseCase\SaveEventUseCase;
 
 class EventController extends Controller
 {
-    public function events(Request $request, BaseCache $cache, GetTagsUseCase $tagsUseCase, GetEventsUseCase $eventsUseCase, $removed = null)
+    public function events(Request $request, PRedis $client, GetTagsUseCase $tagsUseCase, GetEventsUseCase $eventsUseCase, $removed = null)
     {
-
-        /**
-         * @TODO: cache total
-         */
-
-        $categories = $cache->remember('categories.all', function () {
+        $categories = $client->remember('categories.all', function () {
             return Category::all();
         }, 604800); // one week
 

@@ -20,4 +20,7 @@ interface EventCacheRepository
     public function pushLastEvent(Closure $closure);
 
     public function cacheIsLoaded(): bool;
+
+    public function getTotal(Closure $closure): int;
+
 }

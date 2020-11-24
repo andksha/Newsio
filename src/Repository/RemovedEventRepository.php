@@ -36,9 +36,11 @@ final class RemovedEventRepository extends BaseEventRepository implements EventR
             ->paginate(self::PER_PAGE);
     }
 
-    protected function getTotal(): int
+    protected function getTotal(EventCacheRepository $eventCacheRepository): int
     {
-        return EventQuery::query()->removed('removed')->count();
+        return $eventCacheRepository->getTotal(function () {
+            return EventQuery::query()->removed('removed')->count();
+        });
     }
 
     protected function getRoute(): string

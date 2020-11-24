@@ -47,4 +47,10 @@ final class PublishedEventCache implements EventCacheRepository
     {
         return $this->eventCache->cacheIsLoaded();
     }
+
+    public function getTotal(Closure $closure): int
+    {
+        return $this->eventCache->getTotal($closure);
+    }
+
 }

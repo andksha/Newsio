@@ -35,9 +35,11 @@ final class PublishedEventRepository extends BaseEventRepository implements Even
             ->paginate(self::PER_PAGE);
     }
 
-    protected function getTotal(): int
+    protected function getTotal(EventCacheRepository $eventCache): int
     {
-        return EventQuery::query()->count();
+        return $eventCache->getTotal(function () {
+            return EventQuery::query()->count();
+        });
     }
 
     protected function getRoute(): string

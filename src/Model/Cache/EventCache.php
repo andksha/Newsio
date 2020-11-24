@@ -171,4 +171,9 @@ final class EventCache implements EventCacheRepository
             && ($this->client->llen($this->listKey) > 0)
             && ($this->client->hlen($this->hsetKey) > 0);
     }
+
+    public function getTotal(Closure $closure): int
+    {
+        return $this->client->remember($this->pluralKey . '.total', $closure, 300); // 5 minutes
+    }
 }
