@@ -57,3 +57,15 @@ services:
       - ${REDIS_PORT}:6379
     networks:
       - newsio
+
+  cron_newsio:
+    container_name: cron_newsio
+    build:
+      context: ../
+      dockerfile: docker/php_cron/Dockerfile
+    working_dir: /application
+    restart: unless-stopped
+    volumes:
+      - ../:/application
+    networks:
+      - newsio
