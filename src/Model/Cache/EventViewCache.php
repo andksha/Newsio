@@ -10,8 +10,7 @@ use Newsio\Lib\PRedis;
 final class EventViewCache
 {
     private RedisClient $client;
-    // @TODO: return back to 100
-    public const MAX_CACHED = 1;
+    public const MAX_CACHED = 100;
     private string $eventViewsKey;
     private string $eventViewCountKey;
     private string $idKey;
@@ -42,17 +41,20 @@ final class EventViewCache
             'user_identifier' => $userIdentifier->getValue()
         ];
 
-        return $this->client->hset($this->eventViewsKey, $field, $value);
+        $this->client->hset($this->eventViewsKey, $field, $value);
+        $this->incrementViewCount($eventId);
+
+        return $this->updateEvent($eventId);
     }
 
-    public function incrementViewCount(IdBoundary $eventId)
+    private function incrementViewCount(IdBoundary $eventId)
     {
         return $this->client->hincrby($this->eventViewCountKey, $eventId->getValue(), 1);
     }
 
-    public function updateEvent(IdBoundary $idBoundary)
+    private function updateEvent(IdBoundary $eventId)
     {
-        $eventKey = $this->idKey . $idBoundary->getValue();
+        $eventKey = $this->idKey . $eventId->getValue();
         $event = $this->client->hget('events.hset', $eventKey);
 
         if ($event) {

@@ -21,16 +21,16 @@ final class PublishedEventRepository extends BaseEventRepository implements Even
         return new PublishedEventCache();
     }
 
-    protected function getCacheJob(EventCacheRepository $eventCache, GetEventsBoundary $boundary)
+    protected function getCacheJob(EventCacheRepository $eventCache, GetEventsBoundary $getEventsBoundary)
     {
-        return new CachePublishedEvents($eventCache, $boundary);
+        return new CachePublishedEvents($eventCache, $getEventsBoundary);
     }
 
-    protected function getEventsFromDB(GetEventsBoundary $boundary): LengthAwarePaginator
+    protected function getEventsFromDB(GetEventsBoundary $getEventsBoundary): LengthAwarePaginator
     {
         return EventQuery::query()
             ->defaultOrder()
-            ->withUserSaved($boundary->getUserId())
+            ->withUserSaved($getEventsBoundary->getUserId())
             ->with(Event::DEFAULT_RELATIONS)
             ->paginate(self::PER_PAGE);
     }

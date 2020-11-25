@@ -18,9 +18,9 @@ final class PublishedEventCache implements EventCacheRepository
         $this->eventCache = new EventCache('event', 'events', 60*60, PublishedEventRepository::TO_CACHE);
     }
 
-    public function getEvents(GetEventsBoundary $boundary): Collection
+    public function getEvents(GetEventsBoundary $getEventsBoundary): Collection
     {
-        return $this->eventCache->getEvents($boundary);
+        return $this->eventCache->getEvents($getEventsBoundary);
     }
 
     public function setEvents(Collection $events)

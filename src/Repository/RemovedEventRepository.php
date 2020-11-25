@@ -21,17 +21,17 @@ final class RemovedEventRepository extends BaseEventRepository implements EventR
         return new RemovedEventCache();
     }
 
-    public function getCacheJob(EventCacheRepository $eventCache, GetEventsBoundary $boundary)
+    public function getCacheJob(EventCacheRepository $eventCache, GetEventsBoundary $getEventsBoundary)
     {
-        return new CacheRemovedEvents($eventCache, $boundary);
+        return new CacheRemovedEvents($eventCache, $getEventsBoundary);
     }
 
-    protected function getEventsFromDB(GetEventsBoundary $boundary): LengthAwarePaginator
+    protected function getEventsFromDB(GetEventsBoundary $getEventsBoundary): LengthAwarePaginator
     {
         return EventQuery::query()
-            ->removed($boundary->getRemoved())
+            ->removed($getEventsBoundary->getRemoved())
             ->defaultOrder()
-            ->withUserSaved($boundary->getUserId())
+            ->withUserSaved($getEventsBoundary->getUserId())
             ->with(Event::DEFAULT_RELATIONS)
             ->paginate(self::PER_PAGE);
     }

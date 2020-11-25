@@ -18,9 +18,9 @@ final class RemovedEventCache implements EventCacheRepository
         $this->eventCache = new EventCache('event.removed', 'events.removed', 60*60, RemovedEventRepository::TO_CACHE);
     }
 
-    public function getEvents(GetEventsBoundary $boundary): Collection
+    public function getEvents(GetEventsBoundary $getEventsBoundary): Collection
     {
-        return $this->eventCache->getEvents($boundary);
+        return $this->eventCache->getEvents($getEventsBoundary);
     }
 
     public function setEvents(Collection $events)

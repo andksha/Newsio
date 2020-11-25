@@ -7,29 +7,29 @@ use Newsio\Query\EventQuery;
 
 final class GetProfileUseCase
 {
-    public function getProfile(GetProfileBoundary $boundary)
+    public function getProfile(GetProfileBoundary $getProfileBoundary)
     {
-        return $boundary->getSaved() === 'saved'
-            ? $this->getSavedEvents($boundary)
-            : $this->getMyEvents($boundary);
+        return $getProfileBoundary->getSaved() === 'saved'
+            ? $this->getSavedEvents($getProfileBoundary)
+            : $this->getMyEvents($getProfileBoundary);
     }
 
-    private function getMyEvents(GetProfileBoundary $boundary)
+    private function getMyEvents(GetProfileBoundary $getProfileBoundary)
     {
         return EventQuery::query()
-            ->user($boundary->getUserId())
-            ->frequentFields($boundary->getEventsBoundary())
-            ->withUserSaved($boundary->getUserId())
+            ->user($getProfileBoundary->getUserId())
+            ->frequentFields($getProfileBoundary->getEventsBoundary())
+            ->withUserSaved($getProfileBoundary->getUserId())
             ->defaultOrder()
             ->paginate(15);
     }
 
-    private function getSavedEvents(GetProfileBoundary $boundary)
+    private function getSavedEvents(GetProfileBoundary $getProfileBoundary)
     {
         return EventQuery::query()
-            ->frequentFields($boundary->getEventsBoundary())
-            ->whereUserSaved($boundary->getUserId())
-            ->withUserSaved($boundary->getUserId())
+            ->frequentFields($getProfileBoundary->getEventsBoundary())
+            ->whereUserSaved($getProfileBoundary->getUserId())
+            ->withUserSaved($getProfileBoundary->getUserId())
             ->defaultOrder()
             ->paginate(15);
     }

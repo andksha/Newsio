@@ -51,12 +51,12 @@ final class EventQuery
         return $this;
     }
 
-    public function frequentFields(GetEventsBoundary $boundary)
+    public function frequentFields(GetEventsBoundary $getEventsBoundary)
     {
-        return $this->category($boundary->getCategory())
-            ->removed($boundary->getRemoved())
-            ->search($boundary->getSearch())
-            ->tag($boundary->getTag());
+        return $this->category($getEventsBoundary->getCategory())
+            ->removed($getEventsBoundary->getRemoved())
+            ->search($getEventsBoundary->getSearch())
+            ->tag($getEventsBoundary->getTag());
     }
 
     public function category(?int $categoryId): self

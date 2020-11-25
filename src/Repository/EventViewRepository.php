@@ -39,13 +39,9 @@ final class EventViewRepository
         return $event;
     }
 
-    public function createEventView(IdBoundary $eventId, UserIdentifierBoundary $userIdentifier): EventViewRepository
+    public function createEventView(IdBoundary $eventId, UserIdentifierBoundary $userIdentifier)
     {
-        $this->eventViewCache->createEventView($eventId, $userIdentifier);
-        $this->eventViewCache->incrementViewCount($eventId);
-        $this->eventViewCache->updateEvent($eventId);
-
-        return $this;
+        return $this->eventViewCache->createEventView($eventId, $userIdentifier);
     }
 
     public function updateEvents()

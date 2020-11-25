@@ -34,10 +34,10 @@ final class EventCache implements EventCacheRepository
         $this->eventsToCache = $eventsToCache;
     }
 
-    public function getEvents(GetEventsBoundary $boundary): Collection
+    public function getEvents(GetEventsBoundary $getEventsBoundary): Collection
     {
-        $start = Event::paginationStart($boundary->getCurrentPage());
-        $stop = Event::paginationStop($boundary->getCurrentPage());
+        $start = Event::paginationStart($getEventsBoundary->getCurrentPage());
+        $stop = Event::paginationStop($getEventsBoundary->getCurrentPage());
 
         $eventsKeys = array_filter($this->client->lrange($this->listKey, $start, $stop), function ($value) {
             return strpos($value, $this->idKey) !== false;

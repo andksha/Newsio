@@ -7,9 +7,9 @@ use Newsio\Boundary\UseCase\GetEventsBoundary;
 
 final class EventRepositoryFactory
 {
-    public function makeEventRepository(GetEventsBoundary $boundary)
+    public function makeEventRepository(GetEventsBoundary $getEventsBoundary)
     {
-        if ($boundary->getRemoved() === 'removed') {
+        if ($getEventsBoundary->getRemoved() === 'removed') {
             return new RemovedEventRepository();
         }
 

@@ -24,27 +24,27 @@ class CreateEventUseCase
     }
 
     /**
-     * @param CreateEventBoundary $boundary
+     * @param CreateEventBoundary $createEventBoundary
      * @return Event
      * @throws AlreadyExistsException
      * @throws \Newsio\Exception\BoundaryException
      * @throws \Newsio\Exception\InvalidWebsiteException
      */
-    public function create(CreateEventBoundary $boundary): Event
+    public function create(CreateEventBoundary $createEventBoundary): Event
     {
-        $this->checkTitle($boundary->getTitle());
-        $this->createLinksUseCase->checkLinks($boundary->getLinks());
+        $this->checkTitle($createEventBoundary->getTitle());
+        $this->createLinksUseCase->checkLinks($createEventBoundary->getLinks());
 
         $event = new Event();
         $event->fill([
-            'title'       => $boundary->getTitle()->getValue(),
-            'user_id'     => $boundary->getUserId(),
-            'category_id' => $boundary->getCategory(),
+            'title'       => $createEventBoundary->getTitle()->getValue(),
+            'user_id'     => $createEventBoundary->getUserId(),
+            'category_id' => $createEventBoundary->getCategory(),
         ]);
         $event->save();
 
-        $this->createTagsUseCase->createTags($boundary->getTags())->createEventTags($event->id, $boundary->getTags());
-        $this->createLinksUseCase->createLinks(new IdBoundary($event->id), $boundary->getLinks());
+        $this->createTagsUseCase->createTags($createEventBoundary->getTags())->createEventTags($event->id, $createEventBoundary->getTags());
+        $this->createLinksUseCase->createLinks(new IdBoundary($event->id), $createEventBoundary->getLinks());
 
         $event->refresh()->load(['tags', 'links']);
         $this->eventCache->addOrUpdateEvent($event);

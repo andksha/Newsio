@@ -11,34 +11,34 @@ use Newsio\Repository\EventRepositoryFactory;
 class GetEventsUseCase
 {
     /**
-     * @param GetEventsBoundary $boundary
+     * @param GetEventsBoundary $getEventsBoundary
      * @return LengthAwarePaginator
      */
-    public function getEvents(GetEventsBoundary $boundary): LengthAwarePaginator
+    public function getEvents(GetEventsBoundary $getEventsBoundary): LengthAwarePaginator
     {
-        if (!$this->searchParametersPresent($boundary) && $boundary->getCurrentPage() <= Event::MAX_CACHED_PAGES) {
-            return $this->loadFromCache($boundary, new EventRepositoryFactory());
+        if (!$this->searchParametersPresent($getEventsBoundary) && $getEventsBoundary->getCurrentPage() <= Event::MAX_CACHED_PAGES) {
+            return $this->loadFromCache($getEventsBoundary, new EventRepositoryFactory());
         }
 
         return EventQuery::query()
-            ->frequentFields($boundary)
+            ->frequentFields($getEventsBoundary)
             ->defaultOrder()
-            ->withUserSaved($boundary->getUserId())
+            ->withUserSaved($getEventsBoundary->getUserId())
             ->with(Event::DEFAULT_RELATIONS)
             ->paginate(15);
     }
 
-    private function searchParametersPresent(GetEventsBoundary $boundary): bool
+    private function searchParametersPresent(GetEventsBoundary $getEventsBoundary): bool
     {
-        return $boundary->getSearch()
-            || $boundary->getTag()
-            || $boundary->getCategory();
+        return $getEventsBoundary->getSearch()
+            || $getEventsBoundary->getTag()
+            || $getEventsBoundary->getCategory();
     }
 
-    public function loadFromCache(GetEventsBoundary $boundary, EventRepositoryFactory $factory): LengthAwarePaginator
+    public function loadFromCache(GetEventsBoundary $getEventsBoundary, EventRepositoryFactory $factory): LengthAwarePaginator
     {
-        $eventRepository = $factory->makeEventRepository($boundary);
+        $eventRepository = $factory->makeEventRepository($getEventsBoundary);
 
-        return $eventRepository->getEvents($boundary);
+        return $eventRepository->getEvents($getEventsBoundary);
     }
 }

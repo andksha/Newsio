@@ -15,29 +15,29 @@ use Newsio\Query\EventQuery;
 
 abstract class BaseEventRepository implements EventRepository
 {
-    public function getEvents(GetEventsBoundary $boundary): LengthAwarePaginator
+    public function getEvents(GetEventsBoundary $getEventsBoundary): LengthAwarePaginator
     {
         $eventCache = $this->getEventCache();
 
         if ($eventCache->cacheIsLoaded()) {
-            $events = $eventCache->getEvents($boundary);
-            $events->when($boundary->getUserId(), function (Collection $query, $userId) {
+            $events = $eventCache->getEvents($getEventsBoundary);
+            $events->when($getEventsBoundary->getUserId(), function (Collection $query, $userId) {
                 return $query->load('userSaved')->where('user_id', $userId);
             });
 
-            $paginator = new Paginator($events, $this->getTotal($eventCache), 15, $boundary->getCurrentPage());
+            $paginator = new Paginator($events, $this->getTotal($eventCache), 15, $getEventsBoundary->getCurrentPage());
 
             return $paginator->withPath($this->getRoute());
         }
 
-        dispatch($this->getCacheJob($eventCache, $boundary));
+        dispatch($this->getCacheJob($eventCache, $getEventsBoundary));
 
-        return $this->getEventsFromDB($boundary);
+        return $this->getEventsFromDB($getEventsBoundary);
     }
 
     abstract protected function getEventCache(): EventCacheRepository;
-    abstract protected function getCacheJob(EventCacheRepository $eventCache, GetEventsBoundary $boundary);
-    abstract protected function getEventsFromDB(GetEventsBoundary $boundary): LengthAwarePaginator;
+    abstract protected function getCacheJob(EventCacheRepository $eventCache, GetEventsBoundary $getEventsBoundary);
+    abstract protected function getEventsFromDB(GetEventsBoundary $getEventsBoundary): LengthAwarePaginator;
     abstract protected function getTotal(EventCacheRepository $eventCache): int;
     abstract protected function getRoute(): string;
 

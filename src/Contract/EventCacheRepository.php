@@ -9,7 +9,7 @@ use Newsio\Model\Event;
 
 interface EventCacheRepository
 {
-    public function getEvents(GetEventsBoundary $boundary): Collection;
+    public function getEvents(GetEventsBoundary $getEventsBoundary): Collection;
 
     public function setEvents(Collection $events);
 

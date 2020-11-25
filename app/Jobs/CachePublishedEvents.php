@@ -18,18 +18,18 @@ class CachePublishedEvents implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     private EventCacheRepository $eventCache;
-    private GetEventsBoundary $boundary;
+    private GetEventsBoundary $getEventsBoundary;
 
     /**
      * Create a new job instance.
      *
      * @param EventCacheRepository $eventCache
-     * @param GetEventsBoundary $boundary
+     * @param GetEventsBoundary $getEventsBoundary
      */
-    public function __construct(EventCacheRepository $eventCache, GetEventsBoundary $boundary)
+    public function __construct(EventCacheRepository $eventCache, GetEventsBoundary $getEventsBoundary)
     {
         $this->eventCache = $eventCache;
-        $this->boundary = $boundary;
+        $this->getEventsBoundary = $getEventsBoundary;
     }
 
     /**

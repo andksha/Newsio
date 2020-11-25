@@ -18,18 +18,18 @@ class CacheRemovedEvents implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     private EventCacheRepository $eventCache;
-    private GetEventsBoundary $boundary;
+    private GetEventsBoundary $getEventsBoundary;
 
     /**
      * Create a new job instance.
      *
      * @param EventCacheRepository $eventCache
-     * @param GetEventsBoundary $boundary
+     * @param GetEventsBoundary $getEventsBoundary
      */
-    public function __construct(EventCacheRepository $eventCache, GetEventsBoundary $boundary)
+    public function __construct(EventCacheRepository $eventCache, GetEventsBoundary $getEventsBoundary)
     {
         $this->eventCache = $eventCache;
-        $this->boundary = $boundary;
+        $this->getEventsBoundary = $getEventsBoundary;
     }
 
     /**
@@ -40,7 +40,7 @@ class CacheRemovedEvents implements ShouldQueue
     public function handle()
     {
         $events = EventQuery::query()
-            ->removed($this->boundary->getRemoved())
+            ->removed($this->getEventsBoundary->getRemoved())
             ->defaultOrder()
             ->with(Event::DEFAULT_RELATIONS)
             ->limit(RemovedEventRepository::TO_CACHE)
