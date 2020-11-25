@@ -38,7 +38,6 @@ class EventController extends Controller
                     'user_id' => auth()->id()
                 ])
             ));
-
         } catch (BoundaryException $e) {
             return view('event.events')->with([
                 'events' => new LengthAwarePaginator(collect(), 0, $this->perPage),

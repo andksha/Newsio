@@ -5,12 +5,17 @@ namespace Newsio\UseCase;
 use Newsio\Boundary\IdBoundary;
 use Newsio\Boundary\UserIdentifierBoundary;
 use Newsio\Exception\ModelNotFoundException;
-use Newsio\Model\Event;
-use Newsio\Model\EventView;
-use Newsio\Query\EventViewQuery;
+use Newsio\Repository\EventViewRepository;
 
 final class IncrementViewCountUseCase
 {
+    private EventViewRepository $eventViewRepository;
+
+    public function __construct(EventViewRepository $eventViewRepository)
+    {
+        $this->eventViewRepository = $eventViewRepository;
+    }
+
     /**
      * @param IdBoundary $eventId
      * @param UserIdentifierBoundary $userIdentifier
@@ -19,24 +24,16 @@ final class IncrementViewCountUseCase
      */
     public function incrementViewCount(IdBoundary $eventId, UserIdentifierBoundary $userIdentifier): bool
     {
-        // @TODO caching
-        if (!EventViewQuery::query()
-            ->findUserEventViews($eventId->getValue(), $userIdentifier->getValue())
-            ->orderByDesc('id')
-            ->first()
-        ) {
-            EventView::query()->insert([
-                'event_id' => $eventId->getValue(),
-                'user_identifier' => $userIdentifier->getValue()
-            ]);
-
-            if (!$event = Event::query()->find($eventId->getValue())) {
-                throw new ModelNotFoundException('Event');
-            }
-
-            return $event->incrementViewCount();
+        if ($this->eventViewRepository->getEventView($eventId, $userIdentifier)) {
+            return false;
         }
 
-        return false;
+        if (!$this->eventViewRepository->getEvent($eventId)) {
+            throw new ModelNotFoundException('Event');
+        }
+
+        $this->eventViewRepository->createEventView($eventId, $userIdentifier);
+
+        return true;
     }
 }

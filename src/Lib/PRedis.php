@@ -3,6 +3,7 @@
 namespace Newsio\Lib;
 
 use Closure;
+use ErrorException;
 use Newsio\Contract\RedisClient;
 use Predis\Client;
 
@@ -101,6 +102,11 @@ final class PRedis implements RedisClient
         return $this->client->hmset($key, $values);
     }
 
+    public function hget(string $key, string $field)
+    {
+        return unserialize($this->client->hget($key, $field));
+    }
+
     public function hmget(string $key, array $fields)
     {
         $serializedEvents = $this->client->hmget($key, $fields);
@@ -108,6 +114,21 @@ final class PRedis implements RedisClient
 
         foreach ($serializedEvents as $key => $value) {
             $result[$key] = unserialize($value);
+        }
+
+        return $result;
+    }
+
+    public function hgetall(string $key)
+    {
+        $result = $this->client->hgetall($key);
+
+        foreach ($result as $key => $value) {
+            try {
+                $result[$key] = unserialize($value);
+            } catch (ErrorException $e) {
+                $result[$key] = $value;
+            }
         }
 
         return $result;
@@ -126,6 +147,11 @@ final class PRedis implements RedisClient
     public function hexists(string $key, string $field): bool
     {
         return (bool) $this->client->hexists($key, $field);
+    }
+
+    public function hincrby(string $key, string $field, int $increment)
+    {
+        return $this->client->hincrby($key, $field, $increment);
     }
 
     public function hremember(string $pluralKey, string $key, Closure $closure, int $ttl = 3600)

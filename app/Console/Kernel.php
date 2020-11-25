@@ -2,6 +2,8 @@
 
 namespace App\Console;
 
+use App\Console\Command\InsertEventViews;
+use App\Console\Command\UpdateEventCount;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -13,7 +15,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        InsertEventViews::class,
+        UpdateEventCount::class
     ];
 
     /**
@@ -24,7 +27,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        $schedule->command('event.views:insert')->everyTenMinutes();
+        $schedule->command('events.view.count:update')->everyTenMinutes();
     }
 
     /**
@@ -34,7 +38,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__.'/Command');
 
         require base_path('routes/console.php');
     }

@@ -26,7 +26,11 @@ interface RedisClient
 
     public function mget(array $keys);
 
+    public function hget(string $key, string $field);
+
     public function hmget(string $key, array $fields);
+
+    public function hincrby(string $key, string $field, int $increment);
 
     public function hremember(string $pluralKey, string $key, Closure $closure, int $ttl = 3600);
 
