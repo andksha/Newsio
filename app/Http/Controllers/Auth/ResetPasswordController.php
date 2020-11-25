@@ -13,12 +13,10 @@ use Newsio\UseCase\Auth\ResetPasswordUseCase;
 
 class ResetPasswordController extends Controller
 {
-    public function sendResetPasswordEmail(Request $request)
+    public function sendResetPasswordEmail(Request $request, ForgotPasswordUseCase $forgotPasswordUseCase)
     {
-        $uc = new ForgotPasswordUseCase();
-
         try {
-            $success = $uc->sendResetPasswordEmail(new EmailBoundary($request->email));
+            $success = $forgotPasswordUseCase->sendResetPasswordEmail(new EmailBoundary($request->email));
         } catch (ApplicationException $e) {
             return response()->json([
                 'error_message' => $e->getMessage(),
@@ -36,12 +34,10 @@ class ResetPasswordController extends Controller
         return view('reset')->with(['token' => $request->token ?? '']);
     }
 
-    public function resetPassword(Request $request)
+    public function resetPassword(Request $request, ResetPasswordUseCase $resetPasswordUseCase)
     {
-        $uc = new ResetPasswordUseCase();
-
         try {
-            $uc->resetPassword(
+            $resetPasswordUseCase->resetPassword(
                 new PasswordBoundary($request->password),
                 new PasswordBoundary($request->password_confirmation),
                 new StringBoundary($request->token)

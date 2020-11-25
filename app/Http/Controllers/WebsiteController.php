@@ -43,12 +43,10 @@ class WebsiteController extends Controller
         ]);
     }
 
-    public function apply(Request $request)
+    public function apply(Request $request, ApplyWebsiteUseCase $applyWebsiteUseCase)
     {
-        $uc = new ApplyWebsiteUseCase();
-
         try {
-            $uc->apply(new DomainBoundary($request->domain));
+            $applyWebsiteUseCase->apply(new DomainBoundary($request->domain));
         } catch (ApplicationException $e) {
             return redirect()->back()->with([
                 'error_message' => $e->getMessage(),

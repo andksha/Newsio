@@ -12,12 +12,10 @@ use Newsio\UseCase\Admin\RejectWebsiteUseCase;
 
 class WebsiteController extends Controller
 {
-    public function approve(Request $request)
+    public function approve(Request $request, ApproveWebsiteUseCase $approveWebsiteUseCase)
     {
-        $uc = new ApproveWebsiteUseCase();
-
         try {
-            $website = $uc->approve(new IdBoundary($request->website_id));
+            $website = $approveWebsiteUseCase->approve(new IdBoundary($request->website_id));
         } catch (ApplicationException $e) {
             return response()->json(['error_message' => $e->getMessage()]);
         }
@@ -25,12 +23,10 @@ class WebsiteController extends Controller
         return response()->json(['website' => $website]);
     }
 
-    public function reject(Request $request)
+    public function reject(Request $request, RejectWebsiteUseCase $rejectWebsiteUseCase)
     {
-        $uc = new RejectWebsiteUseCase();
-
         try {
-            $website = $uc->reject(new IdBoundary($request->website_id), new StringBoundary($request->reason));
+            $website = $rejectWebsiteUseCase->reject(new IdBoundary($request->website_id), new StringBoundary($request->reason));
         } catch (ApplicationException $e) {
             return response()->json(['error_message' => $e->getMessage()]);
         }

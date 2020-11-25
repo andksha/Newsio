@@ -11,12 +11,10 @@ use Newsio\UseCase\Auth\LoginUseCase;
 
 class LoginController extends Controller
 {
-    public function login(Request $request)
+    public function login(Request $request, LoginUseCase $loginUseCase)
     {
-        $uc = new LoginUseCase();
-
         try {
-           $success = $uc->login(new EmailBoundary($request->email), new PasswordBoundary($request->password));
+           $success = $loginUseCase->login(new EmailBoundary($request->email), new PasswordBoundary($request->password));
         } catch (ApplicationException $e) {
             return response()->json([
                 'error_message' => $e->getMessage(),

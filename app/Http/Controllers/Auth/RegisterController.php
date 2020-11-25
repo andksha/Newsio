@@ -14,12 +14,10 @@ use Newsio\UseCase\Auth\ResendConfirmationEmailUseCase;
 
 class RegisterController extends Controller
 {
-    public function register(Request $request)
+    public function register(Request $request, RegisterUseCase $registerUseCase)
     {
-        $uc = new RegisterUseCase();
-
         try {
-            $user = $uc->register(
+            $user = $registerUseCase->register(
                 new EmailBoundary($request->email),
                 new PasswordBoundary($request->password),
                 new PasswordBoundary($request->password_confirmation)
@@ -36,12 +34,10 @@ class RegisterController extends Controller
         ]);
     }
 
-    public function confirm(Request $request)
+    public function confirm(Request $request, ConfirmEmailUseCase $confirmEmailUseCase)
     {
-        $uc = new ConfirmEmailUseCase();
-
         try {
-            $uc->confirm(new StringBoundary($request->token));
+            $confirmEmailUseCase->confirm(new StringBoundary($request->token));
         } catch (ApplicationException $e) {
             return redirect()->route('events')->with(['error_message' => $e->getMessage()]);
         }
@@ -49,13 +45,12 @@ class RegisterController extends Controller
         return redirect()->route('events');
     }
 
-    public function resendConfirmationEmail()
+    public function resendConfirmationEmail(ResendConfirmationEmailUseCase $resendConfirmationEmailUseCase)
     {
-        $uc = new ResendConfirmationEmailUseCase();
         $user = auth()->user();
 
         try {
-            $uc->resend(new EmailBoundary($user->email));
+            $resendConfirmationEmailUseCase->resend(new EmailBoundary($user->email));
         } catch (ApplicationException $e) {
             return redirect()->back()->with([
                 'error_message' => $e->getMessage(),

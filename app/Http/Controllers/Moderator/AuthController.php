@@ -23,10 +23,10 @@ class AuthController extends Controller
         ]);
     }
 
-    public function confirmModerator(Request $request, ConfirmModeratorUseCase $uc)
+    public function confirmModerator(Request $request, ConfirmModeratorUseCase $confirmModeratorUseCase)
     {
         try {
-            $uc->confirm(
+            $confirmModeratorUseCase->confirm(
                 new PasswordBoundary($request->password),
                 new PasswordBoundary($request->password_confirmation),
                 new StringBoundary($request->token)
@@ -43,10 +43,10 @@ class AuthController extends Controller
         return view('moderator.login');
     }
 
-    public function login(Request $request, LoginUseCase $uc)
+    public function login(Request $request, LoginUseCase $loginUseCase)
     {
         try {
-            $uc->login(new EmailBoundary($request->email), new PasswordBoundary($request->password), 'moderator');
+            $loginUseCase->login(new EmailBoundary($request->email), new PasswordBoundary($request->password), 'moderator');
         } catch (ApplicationException $e) {
             return $this->redirectBackWithError($e);
         }

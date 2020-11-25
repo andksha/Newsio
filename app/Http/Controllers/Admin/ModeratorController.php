@@ -18,10 +18,10 @@ class ModeratorController extends Controller
         return view('admin/moderators')->with(['moderators' => $moderators]);
     }
 
-    public function createModerator(Request $request, CreateModeratorUseCase $uc)
+    public function createModerator(Request $request, CreateModeratorUseCase $createModeratorUseCase)
     {
         try {
-            $uc->createModerator(
+            $createModeratorUseCase->createModerator(
                 new EmailBoundary($request->email)
             );
         } catch (ApplicationException $e) {
