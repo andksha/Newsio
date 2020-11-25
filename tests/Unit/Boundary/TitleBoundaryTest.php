@@ -10,9 +10,9 @@ class TitleBoundaryTest extends BaseTestCase
 {
     public function test_Boundary_WithValidTitle_ReturnsStringValue()
     {
-        $boundary = new TitleBoundary('title');
+        $titleBoundary = new TitleBoundary('title');
 
-        $this->assertEquals($boundary->getValue(), 'title');
+        $this->assertEquals($titleBoundary->getValue(), 'title');
     }
 
     public function test_Boundary_WithEmptyTitle_ThrowsBoundaryException()
@@ -21,6 +21,9 @@ class TitleBoundaryTest extends BaseTestCase
         new TitleBoundary('');
     }
 
+    /**
+     * @throws BoundaryException
+     */
     public function test_Boundary_WithArrayTitle_ThrowsBoundaryException()
     {
         $this->expectException(BoundaryException::class);

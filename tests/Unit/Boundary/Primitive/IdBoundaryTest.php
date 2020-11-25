@@ -10,8 +10,8 @@ class IdBoundaryTest extends BaseTestCase
 {
     public function test_Boundary_WithValidParameter_ReturnsInteger()
     {
-        $boundary = new IdBoundary('3');
-        $this->assertEquals(3, $boundary->getValue());
+        $idBoundary = new IdBoundary('3');
+        $this->assertEquals(3, $idBoundary->getValue());
     }
 
     public function test_Boundary_WithAlphaNumParameter_ThrowsBoundaryException()

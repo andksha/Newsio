@@ -10,8 +10,8 @@ class StringBoundaryTest extends BaseTestCase
 {
     public function test_Boundary_WithValidParameter_ReturnsString()
     {
-        $boundary = new StringBoundary('string');
-        $this->assertEquals('string', $boundary->getValue());
+        $stringBoundary = new StringBoundary('string');
+        $this->assertEquals('string', $stringBoundary->getValue());
     }
 
     public function test_Boundary_WithEmptyParameter_ThrowsBoundaryException()

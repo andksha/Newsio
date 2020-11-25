@@ -14,9 +14,9 @@ final class TagPeriodBoundaryTest extends BaseTestCase
      */
     public function test_Boundary_WithDayPeriod_ReturnsStartOfDay()
     {
-        $boundary = new TagPeriodBoundary('day');
-        $this->assertEquals(Carbon::now()->startOfDay(), $boundary->getValue());
-        $this->assertEquals('day', $boundary->getString());
+        $tagPeriodBoundary = new TagPeriodBoundary('day');
+        $this->assertEquals(Carbon::now()->startOfDay(), $tagPeriodBoundary->getValue());
+        $this->assertEquals('day', $tagPeriodBoundary->getString());
     }
 
     /**
@@ -24,8 +24,8 @@ final class TagPeriodBoundaryTest extends BaseTestCase
      */
     public function test_Boundary_WithWeekPeriod_ReturnsSubWeek()
     {
-        $boundary = new TagPeriodBoundary('week');
-        $this->assertEquals(Carbon::now()->subWeek()->format('Y-m-d'), $boundary->getValue()->format('Y-m-d'));
+        $tagPeriodBoundary = new TagPeriodBoundary('week');
+        $this->assertEquals(Carbon::now()->subWeek()->format('Y-m-d'), $tagPeriodBoundary->getValue()->format('Y-m-d'));
     }
 
     /**
@@ -33,8 +33,8 @@ final class TagPeriodBoundaryTest extends BaseTestCase
      */
     public function test_Boundary_WithMonthPeriod_ReturnsStartOfMonth()
     {
-        $boundary = new TagPeriodBoundary('month');
-        $this->assertEquals(Carbon::now()->subMonth()->startOfMonth()->format('Y-m-d'), $boundary->getValue()->format('Y-m-d'));
+        $tagPeriodBoundary = new TagPeriodBoundary('month');
+        $this->assertEquals(Carbon::now()->subMonth()->startOfMonth()->format('Y-m-d'), $tagPeriodBoundary->getValue()->format('Y-m-d'));
     }
 
     /**
@@ -42,8 +42,8 @@ final class TagPeriodBoundaryTest extends BaseTestCase
      */
     public function test_Boundary_WithYearPeriod_ReturnsStartOfYear()
     {
-        $boundary = new TagPeriodBoundary('year');
-        $this->assertEquals(Carbon::now()->subYear()->startOfYear()->format('Y-m-d'), $boundary->getValue()->format('Y-m-d'));
+        $tagPeriodBoundary = new TagPeriodBoundary('year');
+        $this->assertEquals(Carbon::now()->subYear()->startOfYear()->format('Y-m-d'), $tagPeriodBoundary->getValue()->format('Y-m-d'));
     }
 
     /**

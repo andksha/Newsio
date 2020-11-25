@@ -8,44 +8,65 @@ use Tests\BaseTestCase;
 
 class TagsBoundaryTest extends BaseTestCase
 {
+    /**
+     * @throws BoundaryException
+     */
     public function test_Boundary_WithValidTags_ReturnsUniqueTags()
     {
-        $boundary = new TagsBoundary(['tag1', 'tag2', 'tag2']);
+        $tagBoundary = new TagsBoundary(['tag1', 'tag2', 'tag2']);
 
-        $this->assertEquals(['tag1', 'tag2'], $boundary->getValues());
+        $this->assertEquals(['tag1', 'tag2'], $tagBoundary->getValues());
     }
 
+    /**
+     * @throws BoundaryException
+     */
     public function test_Boundary_WithEmptyArray_ReturnsEmptyArray()
     {
-        $boundary = new TagsBoundary([]);
+        $tagBoundary = new TagsBoundary([]);
 
-        $this->assertEquals([], $boundary->getValues());
+        $this->assertEquals([], $tagBoundary->getValues());
     }
 
+    /**
+     * @throws BoundaryException
+     */
     public function test_Boundary_WithNullTag_ThrowsBoundaryException()
     {
         $this->expectException(BoundaryException::class);
         new TagsBoundary(null);
     }
 
+    /**
+     * @throws BoundaryException
+     */
     public function test_Boundary_WithInvalidTags_ThrowsBoundaryException()
     {
         $this->expectException(BoundaryException::class);
         new TagsBoundary([null, 34, 'test']);
     }
 
+    /**
+     * @throws BoundaryException
+     */
     public function test_Boundary_WithEmptyTags_ThrowsBoundaryException()
     {
         $this->expectException(BoundaryException::class);
         new TagsBoundary(['']);
     }
 
+    /**
+     * @throws BoundaryException
+     */
     public function test_Boundary_WithInvalidFormat_ThrowsBoundaryException()
     {
         $this->expectException(BoundaryException::class);
         new TagsBoundary(['tag-(1^)']);
     }
 
+    /**
+     * @throws BoundaryException
+     */
     public function test_Boundary_WithTooManyTags_ThrowsBoundaryException()
     {
         $this->expectException(BoundaryException::class);

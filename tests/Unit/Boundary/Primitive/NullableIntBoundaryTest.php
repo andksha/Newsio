@@ -10,14 +10,14 @@ class NullableIntBoundaryTest extends BaseTestCase
 {
     public function test_Boundary_WithValidParameter_ReturnsInt()
     {
-        $boundary = new NullableIntBoundary('3');
-        $this->assertEquals(3, $boundary->getValue());
+        $nullableIntBoundary = new NullableIntBoundary('3');
+        $this->assertEquals(3, $nullableIntBoundary->getValue());
     }
 
     public function test_Boundary_WithNullParameter_ReturnsNull()
     {
-        $boundary = new NullableIntBoundary(null);
-        $this->assertEquals(null, $boundary->getValue());
+        $nullableIntBoundary = new NullableIntBoundary(null);
+        $this->assertEquals(null, $nullableIntBoundary->getValue());
     }
 
     public function test_Boundary_WithAlphaNumParameter_ThrowsBoundaryException()

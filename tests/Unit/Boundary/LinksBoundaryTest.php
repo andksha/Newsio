@@ -8,18 +8,24 @@ use Tests\BaseTestCase;
 
 class LinksBoundaryTest extends BaseTestCase
 {
+    /**
+     * @throws BoundaryException
+     */
     public function test_Boundary_WithValidTags_ReturnsUniqueTags()
     {
-        $boundary = new LinksBoundary(['https://test.com/test', 'https://test2.com/test', 'https://test2.com/test']);
+        $linksBoundary = new LinksBoundary(['https://test.com/test', 'https://test2.com/test', 'https://test2.com/test']);
 
-        $this->assertEquals(['https://test.com/test', 'https://test2.com/test'], $boundary->getValues());
+        $this->assertEquals(['https://test.com/test', 'https://test2.com/test'], $linksBoundary->getValues());
     }
 
+    /**
+     * @throws BoundaryException
+     */
     public function test_Boundary_WithEmptyArray_ReturnsEmptyArray()
     {
-        $boundary = new LinksBoundary([]);
+        $linksBoundary = new LinksBoundary([]);
 
-        $this->assertEquals([], $boundary->getValues());
+        $this->assertEquals([], $linksBoundary->getValues());
     }
 
     public function test_Boundary_WithNullLinks_ThrowsBoundaryException()
@@ -28,18 +34,27 @@ class LinksBoundaryTest extends BaseTestCase
         new LinksBoundary(null);
     }
 
+    /**
+     * @throws BoundaryException
+     */
     public function test_Boundary_WithInvalidLinks_ThrowsBoundaryException()
     {
         $this->expectException(BoundaryException::class);
         new LinksBoundary([null, 34, 'test']);
     }
 
+    /**
+     * @throws BoundaryException
+     */
     public function test_Boundary_WithEmptyLinks_ThrowsBoundaryException()
     {
         $this->expectException(BoundaryException::class);
         new LinksBoundary(['']);
     }
 
+    /**
+     * @throws BoundaryException
+     */
     public function test_Boundary_WithInvalidFormat_ThrowsBoundaryException()
     {
         $this->expectException(BoundaryException::class);

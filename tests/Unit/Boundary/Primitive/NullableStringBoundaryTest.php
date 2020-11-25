@@ -10,16 +10,16 @@ class NullableStringBoundaryTest extends BaseTestCase
 {
     public function test_Boundary_WithStringParameter_ReturnsStringValue()
     {
-        $boundary = new NullableStringBoundary('test');
+        $nullableStringBoundary = new NullableStringBoundary('test');
 
-        $this->assertEquals($boundary->getValue(), 'test');
+        $this->assertEquals($nullableStringBoundary->getValue(), 'test');
     }
 
     public function test_Boundary_WithNullParameter_ReturnsNull()
     {
-        $boundary = new NullableStringBoundary(null);
+        $nullableStringBoundary = new NullableStringBoundary(null);
 
-        $this->assertEquals($boundary->getValue(), null);
+        $this->assertEquals($nullableStringBoundary->getValue(), null);
     }
 
     /**
