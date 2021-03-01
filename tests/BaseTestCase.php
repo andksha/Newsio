@@ -6,6 +6,9 @@ use App\Model\EmailConfirmation;
 use App\Model\Moderator;
 use App\Model\PasswordReset;
 use App\Model\User;
+use DatabaseSeeder;
+use Illuminate\Container\Container;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Str;
@@ -15,10 +18,38 @@ use Predis\Client;
 
 class BaseTestCase extends TestCase
 {
+    protected static bool $migrated = false;
+    protected ?DatabaseSeeder $dbSeeder = null;
+
+    protected static bool $reseeded = false;
+
+    /**
+     * Child tests may specify seeds they need to run again on clean table in format:
+     * 'tableName' => Seeder::class
+     * Such seeds are run once before each class.
+     * @var array $toReseed
+     */
+    protected static array $toReseed = [];
+
+    public function __construct(?string $name = null, array $data = [], $dataName = '')
+    {
+        parent::__construct($name, $data, $dataName);
+        $this->dbSeeder = new DatabaseSeeder();
+        $this->dbSeeder->setContainer(new Container());
+    }
+
+    public static function setUpBeforeClass(): void
+    {
+        parent::setUpBeforeClass();
+        static::$reseeded = false;
+    }
 
     protected function setUp(): void
     {
         parent::setUp();
+        $this->migrate();
+        $this->reseed();
+
         Queue::fake();
         $client = new Client([
             'host' => config('database.redis.default.host'),
@@ -29,7 +60,31 @@ class BaseTestCase extends TestCase
         $client->flushdb();
 
         $this->artisan('migrate:fresh --seed');
+    }
 
+    protected function migrate()
+    {
+        if (self::$migrated === false) {
+            self::$migrated = true;
+            $this->artisan('migrate:fresh --seed');
+//            TODO: call seeders
+//            $this->dbSeeder->call($this->dbSeeder::TEST_SEEDERS);
+        }
+    }
+
+    // reseed data specified in each test individually
+    protected function reseed()
+    {
+        if (empty(static::$toReseed) || static::$reseeded) {
+            return;
+        }
+
+        foreach (static::$toReseed as $tableName => $seeder) {
+            DB::table($tableName)->truncate();
+        }
+
+        $this->dbSeeder->call(static::$toReseed);
+        static::$reseeded = true;
     }
 
     public function createEvent(string $title = 'test_event')

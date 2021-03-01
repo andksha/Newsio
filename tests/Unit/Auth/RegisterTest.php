@@ -4,8 +4,7 @@ namespace Tests\Unit\Auth;
 
 use App\Mail\Auth\RegisteredMail;
 use Illuminate\Support\Facades\Mail;
-use Newsio\Boundary\Auth\EmailBoundary;
-use Newsio\Boundary\Auth\PasswordBoundary;
+use Newsio\Boundary\UseCase\RegisterBoundary;
 use Newsio\Exception\BoundaryException;
 use Newsio\Exception\InvalidOperationException;
 use Newsio\UseCase\Auth\RegisterUseCase;
@@ -27,11 +26,11 @@ class RegisterTest extends BaseTestCase
     public function test_Register_WithValidEmailAndPasswords_RegistersUserAndSendsEmail()
     {
         Mail::fake();
-        $user = $this->uc->register(
-            new EmailBoundary('test@test.taa'),
-            new PasswordBoundary('12345678'),
-            new PasswordBoundary('12345678')
-        );
+        $user = $this->uc->register(new RegisterBoundary([
+            'email' => 'test@test.taa',
+            'password' => '12345678',
+            'password_confirmation' => '12345678',
+        ]));
 
         Mail::assertQueued(RegisteredMail::class);
         $this->assertEquals('test@test.taa', $user->email);
@@ -43,11 +42,11 @@ class RegisterTest extends BaseTestCase
     public function test_Register_WithInvalidEmail_ThrowsBoundaryException()
     {
         $this->expectException(BoundaryException::class);
-        $this->uc->register(
-            new EmailBoundary('test@test.t'),
-            new PasswordBoundary('12345678'),
-            new PasswordBoundary('12345678')
-        );
+        $this->uc->register(new RegisterBoundary([
+            'email' => 'test@test.t',
+            'password' => '12345678',
+            'password_confirmation' => '12345678',
+        ]));
     }
 
     /**
@@ -56,11 +55,11 @@ class RegisterTest extends BaseTestCase
     public function test_Register_WithInvalidPassword_ThrowsBoundaryException()
     {
         $this->expectException(BoundaryException::class);
-        $this->uc->register(
-            new EmailBoundary('test@test.taa'),
-            new PasswordBoundary('1234'),
-            new PasswordBoundary('1234')
-        );
+        $this->uc->register(new RegisterBoundary([
+            'email' => 'test@test.taa',
+            'password' => '1234',
+            'password_confirmation' => '1234',
+        ]));
     }
 
     /**
@@ -69,10 +68,10 @@ class RegisterTest extends BaseTestCase
     public function test_Register_WithInvalidPasswordConfirmation_ThrowsBoundaryException()
     {
         $this->expectException(InvalidOperationException::class);
-        $this->uc->register(
-            new EmailBoundary('test@test.taa'),
-            new PasswordBoundary('12345678'),
-            new PasswordBoundary('1234567910')
-        );
+        $this->uc->register(new RegisterBoundary([
+            'email' => 'test@test.taa',
+            'password' => '12345678',
+            'password_confirmation' => '12345678910',
+        ]));
     }
 }

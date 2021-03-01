@@ -5,9 +5,8 @@ namespace Tests\Unit\Auth;
 use App\Model\EmailConfirmation;
 use App\Model\User;
 use Illuminate\Support\Facades\Mail;
-use Newsio\Boundary\Auth\EmailBoundary;
-use Newsio\Boundary\Auth\PasswordBoundary;
 use Newsio\Boundary\StringBoundary;
+use Newsio\Boundary\UseCase\RegisterBoundary;
 use Newsio\Contract\ApplicationException;
 use Newsio\Exception\ModelNotFoundException;
 use Newsio\UseCase\Auth\ConfirmEmailUseCase;
@@ -32,11 +31,11 @@ class ConfirmationTest extends BaseTestCase
     private function registerUser()
     {
         $registerUseCase = new RegisterUseCase();
-        $this->user = $registerUseCase->register(
-            new EmailBoundary('test@test.test'),
-            new PasswordBoundary('test1234'),
-            new PasswordBoundary('test1234')
-        );
+        $this->user = $registerUseCase->register(new RegisterBoundary([
+            'email' => 'test@test.test',
+            'password' => 'test1234',
+            'password_confirmation' => 'test1234',
+        ]));
 
         return EmailConfirmation::query()->where('email', 'test@test.test')->first();
     }

@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Newsio\Boundary\Auth\EmailBoundary;
-use Newsio\Boundary\Auth\PasswordBoundary;
 use Newsio\Boundary\StringBoundary;
+use Newsio\Boundary\UseCase\RegisterBoundary;
 use Newsio\Contract\ApplicationException;
 use Newsio\UseCase\Auth\ConfirmEmailUseCase;
 use Newsio\UseCase\Auth\RegisterUseCase;
@@ -17,10 +17,11 @@ class RegisterController extends Controller
     public function register(Request $request, RegisterUseCase $registerUseCase)
     {
         try {
-            $user = $registerUseCase->register(
-                new EmailBoundary($request->email),
-                new PasswordBoundary($request->password),
-                new PasswordBoundary($request->password_confirmation)
+            $user = $registerUseCase->register(new RegisterBoundary([
+                    'email' => $request->email,
+                    'password' => $request->password,
+                    'password_confirmation' => $request->password_confirmation,
+                ])
             );
         } catch (ApplicationException $e) {
             return response()->json([
