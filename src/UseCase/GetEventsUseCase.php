@@ -6,6 +6,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Newsio\Boundary\UseCase\GetEventsBoundary;
 use Newsio\Model\Event;
 use Newsio\Query\EventQuery;
+use Newsio\Repository\BaseEventRepository;
 use Newsio\Repository\EventRepositoryFactory;
 
 class GetEventsUseCase
@@ -16,7 +17,10 @@ class GetEventsUseCase
      */
     public function getEvents(GetEventsBoundary $getEventsBoundary): LengthAwarePaginator
     {
-        if (!$this->searchParametersPresent($getEventsBoundary) && $getEventsBoundary->getCurrentPage() <= Event::MAX_CACHED_PAGES) {
+        if (
+            !$this->searchParametersPresent($getEventsBoundary)
+            && $getEventsBoundary->getCurrentPage() <= BaseEventRepository::MAX_CACHED_PAGES
+        ) {
             return $this->loadFromCache($getEventsBoundary, new EventRepositoryFactory());
         }
 

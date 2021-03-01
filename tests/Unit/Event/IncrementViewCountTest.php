@@ -52,8 +52,8 @@ final class IncrementViewCountTest extends BaseTestCase
         $result = $this->executeUseCase($event->id, 'testIP', 'testUserAgent');
         $cachedEvent = $this->client->hget('events.hset', 'id.' . $event->id);
 
-        $this->assertEquals(1, $cachedEvent->view_count);
         $this->assertTrue($result);
+        $this->assertEquals(1, $cachedEvent->view_count);
     }
 
     /**
@@ -68,9 +68,8 @@ final class IncrementViewCountTest extends BaseTestCase
         $result = $this->executeUseCase($event->id, 'testIP', 'testUserAgent');
         $cachedEvent = $this->client->hget('events.hset', 'id.' . $event->id);
 
-        $this->assertEquals(1, $cachedEvent->view_count);
         $this->assertFalse($result);
-
+        $this->assertEquals(1, $cachedEvent->view_count);
     }
 
     /**

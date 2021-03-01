@@ -9,6 +9,7 @@ use Newsio\Contract\EventCacheRepository;
 use Newsio\Contract\RedisClient;
 use Newsio\Lib\PRedis;
 use Newsio\Model\Event;
+use Newsio\Repository\BaseEventRepository;
 
 final class EventCache implements EventCacheRepository
 {
@@ -36,8 +37,8 @@ final class EventCache implements EventCacheRepository
 
     public function getEvents(GetEventsBoundary $getEventsBoundary): Collection
     {
-        $start = Event::paginationStart($getEventsBoundary->getCurrentPage());
-        $stop = Event::paginationStop($getEventsBoundary->getCurrentPage());
+        $start = BaseEventRepository::paginationStart($getEventsBoundary->getCurrentPage());
+        $stop = BaseEventRepository::paginationStop($getEventsBoundary->getCurrentPage());
 
         $eventsKeys = array_filter($this->client->lrange($this->listKey, $start, $stop), function ($value) {
             return strpos($value, $this->idKey) !== false;
