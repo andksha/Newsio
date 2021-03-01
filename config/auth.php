@@ -52,8 +52,18 @@ return [
         ],
 
         'api' => [
-            'driver' => 'token',
+            'driver' => 'jwt',
             'provider' => 'users',
+            'hash' => false,
+        ],
+        'api.admin' => [
+            'driver' => 'jwt',
+            'provider' => 'admins',
+            'hash' => false,
+        ],
+        'api.moderator' => [
+            'driver' => 'jwt',
+            'provider' => 'moderators',
             'hash' => false,
         ],
     ],

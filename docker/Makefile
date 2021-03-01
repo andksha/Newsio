@@ -3,6 +3,10 @@
 start:
 	docker-compose up -d
 
+#start web only
+swo:
+	docker-compose up -d newsio_nginx newsio_phpfpm
+
 stop:
 	docker-compose stop
 
@@ -19,6 +23,15 @@ init:
 	docker-compose exec newsio_phpfpm chgrp -R www-data storage bootstrap/cache && chmod -R ug+rwx storage bootstrap/cache
 	docker-compose exec newsio_phpfpm mkdir -p logs
 	docker-compose exec newsio_phpfpm chmod -R 755 logs/
+
+permissions:
+# 	docker-compose exec newsio_phpfpm php artisan route:clear
+# 	docker-compose exec newsio_phpfpm php artisan config:clear
+# 	docker-compose exec newsio_phpfpm php artisan cache:clear
+	docker-compose exec newsio_phpfpm usermod -aG sudo www-data
+	docker-compose exec newsio_phpfpm chown -R www-data:www-data storage bootstrap/cache
+	docker-compose exec newsio_phpfpm chgrp -R www-data storage bootstrap/cache
+	docker-compose exec newsio_phpfpm chmod -R 755 storage/logs
 
 refresh:
 	docker-compose exec newsio_phpfpm chmod -R 755 logs/
