@@ -3,8 +3,10 @@
 namespace App\Providers;
 
 use App\Event\ModeratorCreatedEvent;
+use App\Event\EventCreatedEvent;
 use App\Event\RegisteredEvent;
 use App\Listener\ModeratorCreatedListener;
+use App\Listener\OperationListener;
 use App\Listener\RegisteredListener;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
@@ -22,6 +24,9 @@ class EventServiceProvider extends ServiceProvider
         ModeratorCreatedEvent::class => [
             ModeratorCreatedListener::class
         ],
+        EventCreatedEvent::class => [
+            OperationListener::class
+        ]
     ];
 
     /**

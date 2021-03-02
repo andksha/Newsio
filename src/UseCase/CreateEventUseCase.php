@@ -2,6 +2,7 @@
 
 namespace Newsio\UseCase;
 
+use App\Event\EventCreatedEvent;
 use Newsio\Boundary\IdBoundary;
 use Newsio\Boundary\TitleBoundary;
 use Newsio\Boundary\UseCase\CreateEventBoundary;
@@ -47,6 +48,7 @@ class CreateEventUseCase
         $this->createLinksUseCase->createLinks(new IdBoundary($event->id), $createEventBoundary->getLinks());
 
         $event->refresh()->load(['tags', 'links']);
+        EventCreatedEvent::dispatch($event);
         $this->eventCache->addOrUpdateEvent($event);
 
         return $event;
