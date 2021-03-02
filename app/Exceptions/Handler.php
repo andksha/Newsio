@@ -2,8 +2,13 @@
 
 namespace App\Exceptions;
 
+use App\Http\API\APIResponse;
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Response;
+use Illuminate\Validation\UnauthorizedException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
 
@@ -54,6 +59,14 @@ class Handler extends ExceptionHandler
     {
         if ($exception instanceof HttpException) {
             return parent::render($request, $exception);
+        }
+
+        if (
+            $exception instanceof UnauthorizedException
+            || $exception instanceof AuthorizationException
+            || $exception instanceof AuthenticationException
+        ) {
+            return APIResponse::error($exception->getMessage(), [], Response::HTTP_FORBIDDEN);
         }
 
         if ($exception instanceof Exception) {

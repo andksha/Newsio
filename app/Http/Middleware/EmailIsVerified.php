@@ -2,8 +2,11 @@
 
 namespace App\Http\Middleware;
 
+use App\Http\API\APIResponse;
 use Closure;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 
 final class EmailIsVerified
 {
@@ -12,19 +15,18 @@ final class EmailIsVerified
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
-     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse|JsonResponse
      */
     public function handle($request, Closure $next)
     {
         if (! $request->user() ||
             ($request->user() instanceof MustVerifyEmail &&
                 ! $request->user()->hasVerifiedEmail())) {
+            $message = 'Email must be verified';
             return $request->expectsJson()
-                ? response()->json([
-                    'error_message' => 'Email must be verified'
-                ])
+                ? APIResponse::error($message, [], Response::HTTP_FORBIDDEN)
                 : redirect()->back()->with([
-                    'error_message' => 'Email must be verified'
+                    'error_message' => $message
                 ]);
         }
 

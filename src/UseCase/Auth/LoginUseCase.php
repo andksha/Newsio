@@ -20,14 +20,14 @@ class LoginUseCase
     {
         $this->logAllUsersOut();
 
-        if (!Auth::guard($guard)->attempt([
+        if (!$token = Auth::guard($guard)->attempt([
             'email' => $email->getValue(),
             'password' => $password->getValue()
         ])) {
             throw new InvalidDataException('Invalid credentials');
         }
 
-        return true;
+        return $token;
     }
 
     private function logAllUsersOut()

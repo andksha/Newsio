@@ -3,6 +3,9 @@
 use App\Http\API\Controllers\Auth\LoginController;
 use App\Http\API\Controllers\Auth\RegisterController;
 use App\Http\API\Controllers\Auth\ResetPasswordController;
+use App\Http\API\Controllers\EventController;
+use App\Http\API\Controllers\User\ProfileController;
+use App\Http\API\Controllers\WebsiteController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -31,13 +34,19 @@ Route::group(['namespace' => 'Auth'], function () {
     Route::post('password/reset', [ResetPasswordController::class, 'resetPassword'])->name('reset-password');
 });
 
-Route::group(['middleware' => ['auth', 'email.verified']], function () {
-    Route::post('website', 'WebsiteController@apply')->name('apply_website');
-    Route::post('event', 'EventController@create')->name('create_event');
-    Route::post('event/save', 'EventController@saveEvent')->name('save_event');
-    Route::post('links', 'EventController@addLinks')->name('add_link');
-    Route::get('profile/{saved?}', 'User\ProfileController@profile')->name('profile');
+Route::group(['middleware' => ['auth:api', 'email.verified']], function () {
+    Route::post('website', [WebsiteController::class,'apply'])->name('apply_website');
+    Route::post('event', [EventController::class, 'create'])->name('create_event');
+    Route::post('event/save', [EventController::class, 'saveEvent'])->name('save_event');
+    Route::post('links', [EventController::class, 'addLinks'])->name('add_link');
+    Route::get('profile/{saved?}', [ProfileController::class, 'profile'])->name('profile');
 });
+
+Route::get('events/{removed?}', [EventController::class, 'events'])->name('events');
+Route::get('tags', [EventController::class, 'getTags'])->name('get_tags');
+Route::post('view-counter', [EventController::class, 'incrementViewCount'])->name('view_counter');
+
+Route::get('websites/{status}', [WebsiteController::class, 'websites'])->name('websites');
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
