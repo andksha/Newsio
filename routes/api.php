@@ -31,7 +31,6 @@ Route::group(['namespace' => 'Auth'], function () {
     Route::post('password/reset', [ResetPasswordController::class, 'resetPassword'])->name('reset-password');
 });
 
-// TODO: move controllers and tests for routes below from newsio, check tests
 Route::group(['middleware' => ['auth', 'email.verified']], function () {
     Route::post('website', 'WebsiteController@apply')->name('apply_website');
     Route::post('event', 'EventController@create')->name('create_event');

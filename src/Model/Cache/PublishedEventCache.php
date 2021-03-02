@@ -11,7 +11,7 @@ use Newsio\Repository\PublishedEventRepository;
 
 final class PublishedEventCache implements EventCacheRepository
 {
-    private EventCache $eventCache;
+    private EventCacheRepository $eventCache;
 
     public function __construct()
     {
