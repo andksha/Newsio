@@ -28,7 +28,7 @@ Route::group(['namespace' => 'Auth'], function () {
         ->middleware('auth')
         ->name('repeat-confirmation');
     Route::post('login', [LoginController::class, 'login'])->name('login');
-    Route::get('logout', [LoginController::class, 'logout'])->name('logout');
+    Route::get('logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth:api');
     Route::post('refresh', [LoginController::class, 'refresh'])->name('refresh-token');
     Route::post('password', [ResetPasswordController::class, 'sendResetPasswordEmail'])->name('reset-password-email');
     Route::post('password/reset', [ResetPasswordController::class, 'resetPassword'])->name('reset-password');

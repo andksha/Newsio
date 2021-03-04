@@ -13,4 +13,12 @@ final class GetConfirmationTest extends BaseTestCase
 
         $response->assertStatus(200);
     }
+
+    public function test_APIGetConfirmation_WithValidToken_ConfirmsEmail()
+    {
+        $emailConfirmation = $this->createEmailConfirmation();
+        $response = $this->followingRedirects()->get('api/confirmation?token=' . $emailConfirmation->token);
+
+        $response->assertStatus(200);
+    }
 }

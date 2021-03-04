@@ -27,7 +27,7 @@ class LoginController extends Controller
 
     public function logout(): JsonResponse
     {
-        auth()->logout();
+        auth('api')->logout();
 
         return APIResponse::ok([], Response::HTTP_OK);
     }

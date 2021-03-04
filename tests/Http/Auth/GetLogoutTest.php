@@ -15,4 +15,11 @@ final class GetLogoutTest extends BaseTestCase
         $response->assertSee('Register');
         $response->assertSee('Login');
     }
+
+    public function test_APIGetLogout_LogsUserOutAndRedirectsBack()
+    {
+        $response = $this->withBearerToken()->get('api/logout');
+        $response->dump();
+        $response->assertStatus(200);
+    }
 }

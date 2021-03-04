@@ -23,6 +23,8 @@ class BaseTestCase extends TestCase
 
     protected static bool $reseeded = false;
 
+    protected static string $token;
+
     /**
      * Child tests may specify seeds they need to run again on clean table in format:
      * 'tableName' => Seeder::class
@@ -139,4 +141,15 @@ class BaseTestCase extends TestCase
         ]);
     }
 
+    public function withBearerToken(): BaseTestCase
+    {
+        if (!isset(self::$token)) {
+            self::$token = $this->post('api/login', [
+                'email' => $this->createUser()->email,
+                'password' => 'test1234'
+            ])->json('payload.token');
+        }
+        $this->withHeader('Authorization', 'Bearer ' . self::$token);
+        return $this;
+    }
 }

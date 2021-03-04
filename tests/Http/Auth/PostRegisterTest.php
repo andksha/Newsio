@@ -16,4 +16,15 @@ final class PostRegisterTest extends BaseTestCase
 
         $response->assertJsonStructure(['user' => []]);
     }
+
+    public function test_APIPostRegister_WithValidInput_ReturnsUser()
+    {
+        $response = $this->post('api/register', [
+            'email' => 'andrewafk2000@gmail.com',
+            'password' => 'test1234',
+            'password_confirmation' => 'test1234'
+        ]);
+
+        $response->assertJsonStructure(['payload' => ['user']]);
+    }
 }
