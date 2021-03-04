@@ -143,13 +143,11 @@ class BaseTestCase extends TestCase
 
     public function withBearerToken(): BaseTestCase
     {
-        if (!isset(self::$token)) {
-            self::$token = $this->post('api/login', [
-                'email' => $this->createUser()->email,
+        $user = $this->createUser();
+        $user->verify()->save();
+        return $this->withHeader('Authorization', 'Bearer ' . $this->post('api/login', [
+                'email' => $user->email,
                 'password' => 'test1234'
-            ])->json('payload.token');
-        }
-        $this->withHeader('Authorization', 'Bearer ' . self::$token);
-        return $this;
+            ])->json('payload.token'));
     }
 }
