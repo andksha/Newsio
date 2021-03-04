@@ -15,4 +15,13 @@ final class PostSaveEventTest extends BaseTestCase
 
         $response->assertJson(['success' => true]);
     }
+
+    public function test_APIPostSaveEvent_WithValidInput_ReturnsSuccess()
+    {
+        $event = $this->createEvent();
+        $response = $this->actingAs($this->createUser()->verify(), 'api')
+            ->post('api/event/save', ['event_id' => $event->id]);
+
+        $response->assertJson(['payload' => ['success' => true]]);
+    }
 }

@@ -19,4 +19,19 @@ final class PostCreateEventTest extends BaseTestCase
 
         $response->assertJsonStructure(['event' => []]);
     }
+
+    public function test_APIPostCreateTest_WithValidInput_ReturnsEvent()
+    {
+        $response = $this->actingAs($this->createUser()->verify(), 'api')->post('api/event', [
+            'title' => 'test55',
+            'tags' => [],
+            'links' => ['https://www.radiosvoboda.org/test'],
+            'category' => 2,
+        ]);
+
+        $response->assertJsonStructure(['payload' => [
+                'event' => []
+            ]
+        ]);
+    }
 }

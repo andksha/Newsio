@@ -34,4 +34,15 @@ final class GetEventsTest extends BaseTestCase
         $response->assertSee('test-reason');
         $response->assertSee('X');
     }
+
+    public function test_APIGetEvents_WithValidParameters_ReturnsEvents()
+    {
+        $response = $this->get('/api/events/removed');
+
+        $response->assertJsonStructure(['payload' => [
+            'events' ,
+            'categories' ,
+            'tags',
+        ]]);
+    }
 }

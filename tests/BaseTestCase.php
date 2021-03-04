@@ -141,11 +141,12 @@ class BaseTestCase extends TestCase
         ]);
     }
 
-    public function withBearerToken(): BaseTestCase
+    public function withBearerToken($guard = 'api'): BaseTestCase
     {
         $user = $this->createUser();
         $user->verify()->save();
-        return $this->withHeader('Authorization', 'Bearer ' . $this->post('api/login', [
+        return $this->actingAs($user, $guard)
+            ->withHeader('Authorization', 'Bearer ' . $this->post('api/login', [
                 'email' => $user->email,
                 'password' => 'test1234'
             ])->json('payload.token'));

@@ -22,4 +22,16 @@ final class GetTagsTest extends BaseTestCase
         $response->assertStatus(400);
         $response->assertJsonStructure(['error_message' => [], 'error_data' => []]);
     }
+
+    public function test_APIGetTags_WithValidPeriod_ReturnsTags()
+    {
+        $response = $this->get('/api/tags?period=week');
+        $response->assertStatus(200);
+        $response->assertJsonStructure(['payload' => [
+            'tags' => [
+                'popular' => [],
+                'rare' => []
+            ]
+        ]]);
+    }
 }

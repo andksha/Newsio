@@ -13,4 +13,11 @@ final class PostViewCounterTest extends BaseTestCase
 
         $response->assertJson(['success' => true]);
     }
+
+    public function test_APIPostViewCounter_WithValidInput_ReturnsSuccess()
+    {
+        $event = $this->createEvent();
+        $response = $this->post('api/view-counter', ['event_id' => $event->id]);
+        $response->assertJson(['payload' => ['success' => true]]);
+    }
 }
