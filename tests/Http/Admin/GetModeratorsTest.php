@@ -15,4 +15,16 @@ final class GetModeratorsTest extends BaseTestCase
         $response->assertStatus(200);
         $response->assertSee('Add moderator');
     }
+
+    public function test_APIGetModerators_ShowsModerators()
+    {
+        $admin = Admin::query()->first();
+
+        $response = $this->actingAs($admin, 'api_admin')
+            ->get('api/admin/moderators');
+        $response->assertStatus(200);
+        $response->assertJsonStructure(['payload' => [
+            'moderators'
+        ]]);
+    }
 }

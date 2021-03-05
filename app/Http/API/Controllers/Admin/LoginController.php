@@ -18,7 +18,7 @@ class LoginController extends Controller
     public function login(Request $request, LoginUseCase $uc): JsonResponse
     {
         try {
-            $token = $uc->login(new EmailBoundary($request->email), new PasswordBoundary($request->password), 'api.admin');
+            $token = $uc->login(new EmailBoundary($request->email), new PasswordBoundary($request->password), 'api_admin');
         } catch (ApplicationException $e) {
             return APIResponse::error($e->getMessage(), $e->getErrorData(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
@@ -28,7 +28,7 @@ class LoginController extends Controller
 
     public function logout(): JsonResponse
     {
-        Auth::guard('api.admin')->logout();
+        Auth::guard('api_admin')->logout();
 
         return APIResponse::ok([], Response::HTTP_OK);
     }

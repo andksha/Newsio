@@ -18,4 +18,20 @@ final class PostLoginTest extends BaseTestCase
         $response->assertStatus(200);
         $response->assertSee('Pending');
     }
+
+    public function test_APIPostLogin_WithValidInput_RedirectsToEvents()
+    {
+        $admin = Admin::query()->first();
+        $response = $this->followingRedirects()->post('api/admin/login', [
+            'email' => $admin->email,
+            'password' => 'test1234'
+        ]);
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure(['payload' => [
+            'token',
+            'type',
+            'expires_in'
+        ]]);
+    }
 }

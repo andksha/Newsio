@@ -1,9 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\API\Controllers\Admin;
 
+use App\Http\API\APIResponse;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Newsio\Boundary\IdBoundary;
 use Newsio\Boundary\StringBoundary;
 use Newsio\Contract\ApplicationException;
@@ -17,10 +19,10 @@ class WebsiteController extends Controller
         try {
             $website = $approveWebsiteUseCase->approve(new IdBoundary($request->website_id));
         } catch (ApplicationException $e) {
-            return response()->json(['error_message' => $e->getMessage()]);
+            return APIResponse::error($e->getMessage(), $e->getErrorData(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        return response()->json(['website' => $website]);
+        return APIResponse::ok(['website' => $website], Response::HTTP_OK);
     }
 
     public function reject(Request $request, RejectWebsiteUseCase $rejectWebsiteUseCase)
@@ -28,9 +30,9 @@ class WebsiteController extends Controller
         try {
             $website = $rejectWebsiteUseCase->reject(new IdBoundary($request->website_id), new StringBoundary($request->reason));
         } catch (ApplicationException $e) {
-            return response()->json(['error_message' => $e->getMessage()]);
+            return APIResponse::error($e->getMessage(), $e->getErrorData(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        return response()->json(['website' => $website]);
+        return APIResponse::ok(['website' => $website], Response::HTTP_OK);
     }
 }

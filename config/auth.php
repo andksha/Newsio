@@ -56,12 +56,12 @@ return [
             'provider' => 'users',
             'hash' => false,
         ],
-        'api.admin' => [
+        'api_admin' => [
             'driver' => 'jwt',
             'provider' => 'admins',
             'hash' => false,
         ],
-        'api.moderator' => [
+        'api_moderator' => [
             'driver' => 'jwt',
             'provider' => 'moderators',
             'hash' => false,
