@@ -29,7 +29,7 @@ class RemoveLinkUseCase
     public function remove(IdBoundary $id, StringBoundary $reason): Link
     {
         if (!$link = Link::query()->find($id->getValue())) {
-            throw new ModelNotFoundException('Event');
+            throw new ModelNotFoundException('Link');
         }
 
         $link->remove($reason->getValue());

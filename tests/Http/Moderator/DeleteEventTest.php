@@ -17,4 +17,19 @@ final class DeleteEventTest extends BaseTestCase
 
         $response->assertJsonStructure(['event' => []]);
     }
+
+    public function test_APIDeleteEvent_WithValidInput_ReturnsEvent()
+    {
+        $moderator = $this->createModerator();
+        $event = $this->createEvent();
+        $response = $this->actingAs($moderator, 'api_moderator')->delete('api/moderator/event', [
+            'event_id' => $event->id,
+            'reason' => 'test_reason'
+        ]);
+
+        $response->assertJsonStructure(['payload' => [
+                'event'
+            ]
+        ]);
+    }
 }

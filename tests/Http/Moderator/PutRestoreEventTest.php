@@ -18,4 +18,20 @@ final class PutRestoreEventTest extends BaseTestCase
 
         $response->assertJsonStructure(['event' => []]);
     }
+
+    public function test_APIPutRestoreEvent_WithValidInput_ReturnsEvent()
+    {
+        $moderator = $this->createModerator();
+        $event = $this->createEvent()->remove('test_reason');
+        $this->createLink($event->id);
+
+        $response = $this->actingAs($moderator, 'api_moderator')->put('api/moderator/event', [
+            'event_id' => $event->id,
+        ]);
+
+        $response->assertJsonStructure(['payload' => [
+                'event'
+            ]
+        ]);
+    }
 }

@@ -1,18 +1,18 @@
 <?php
 
+use App\Http\API\Controllers\Moderator\AuthController;
+use App\Http\API\Controllers\Moderator\EventController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('confirmation', 'AuthController@confirmModeratorForm')->name('confirm_moderator_form');
-Route::post('confirmation', 'AuthController@confirmModerator')->name('confirm_moderator');
+Route::post('confirmation', [AuthController::class, 'confirmModerator'])->name('confirm_moderator');
 
-Route::get('login', 'AuthController@loginForm')->name('moderator_login_form');
-Route::post('login', 'AuthController@login')->name('moderator_login');
+Route::post('login', [AuthController::class, 'login'])->name('moderator_login');
 
-Route::group(['middleware' => 'auth:moderator'], function () {
-    Route::delete('event', 'EventController@removeEvent')->name('remove_event');
-    Route::put('event', 'EventController@restoreEvent')->name('restore_event');
-    Route::delete('link', 'EventController@removeLink')->name('remove_link');
-    Route::put('link', 'EventController@restoreLink')->name('restore_link');
+Route::group(['middleware' => 'auth:api_moderator'], function () {
+    Route::delete('event', [EventController::class, 'removeEvent'])->name('remove_event');
+    Route::put('event', [EventController::class, 'restoreEvent'])->name('restore_event');
+    Route::delete('link', [EventController::class, 'removeLink'])->name('remove_link');
+    Route::put('link', [EventController::class, 'restoreLink'])->name('restore_link');
 
-    Route::get('logout', 'AuthController@logout')->name('moderator_logout');
+    Route::get('logout', [AuthController::class, 'logout'])->name('moderator_logout');
 });

@@ -18,7 +18,7 @@ final class UserSeeder extends Seeder
         $password = Hash::make('test1234');
 
         $users[] = [
-            'email' => 'test@test.test',
+            'email' => 'test-srthertherth@test.test',
             'password' => $password
         ];
 

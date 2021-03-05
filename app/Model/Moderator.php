@@ -5,6 +5,7 @@ namespace App\Model;
 use Carbon\Carbon;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Hash;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
 /**
  * App\Model\Moderator
@@ -25,7 +26,7 @@ use Illuminate\Support\Facades\Hash;
  * @method static \Illuminate\Database\Eloquent\Builder|Moderator wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Moderator whereUpdatedAt($value)
  */
-class Moderator extends Authenticatable
+class Moderator extends Authenticatable implements JWTSubject
 {
     protected $table = 'moderators';
 
@@ -45,5 +46,15 @@ class Moderator extends Authenticatable
         $this->password = Hash::make($password);
 
         return $this;
+    }
+
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims(): array
+    {
+        return [];
     }
 }
