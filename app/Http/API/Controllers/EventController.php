@@ -37,7 +37,7 @@ class EventController extends Controller
             $tags = $tagsUseCase->getPopularAndRareTags(new TagPeriodBoundary('week'));
             $events = $eventsUseCase->getEvents(new GetEventsBoundary(array_merge($request->all(), [
                     'removed' => $removed,
-                    'user_id' => auth()->id()
+                    'user_id' => auth('api')->id()
                 ])
             ));
         } catch (BoundaryException $e) {

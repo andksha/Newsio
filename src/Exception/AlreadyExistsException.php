@@ -19,6 +19,6 @@ class AlreadyExistsException extends Exception implements ApplicationException
 
     public function getErrorData()
     {
-        return $this->existingModel;
+        return [];
     }
 }

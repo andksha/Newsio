@@ -33,8 +33,13 @@ abstract class BaseUseCaseBoundary
         }
     }
 
-    protected function getString(string $key): string
+    protected function getString(string $key): ?string
     {
         return array_key_exists($key, $this->instances) ? $this->instances[$key]->getValue() : '';
+    }
+
+    protected function getInt(string $key): ?int
+    {
+        return array_key_exists($key, $this->instances) ? $this->instances[$key]->getValue() : 0;
     }
 }
