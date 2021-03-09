@@ -9,18 +9,22 @@ use Newsio\Exception\InvalidOperationException;
 use Newsio\Exception\ModelNotFoundException;
 use Newsio\Model\Event;
 use Newsio\Model\Link;
+use Newsio\Model\Operation;
 use Newsio\Repository\RemovedEventRepository;
 use Newsio\UseCase\Moderator\RestoreEventUseCase;
 use Tests\BaseTestCase;
+use Tests\Unit\OperationTest;
 
 class RestoreEventTest extends BaseTestCase
 {
     private RestoreEventUseCase $uc;
     private Event $event;
+    private OperationTest $ot;
 
     protected function setUp(): void
     {
         $this->uc = new RestoreEventUseCase(new RemovedEventRepository());
+        $this->ot = new OperationTest($this);
 
         parent::setUp();
     }
@@ -68,6 +72,7 @@ class RestoreEventTest extends BaseTestCase
         $event = $this->uc->restore(new IdBoundary($this->event->id));
 
         $this->assertTrue($event->deleted_at === null && $event->reason === '');
+        $this->ot->assertOperationsCount(Operation::OT_RESTORED, Operation::MT_EVENT, 1);
     }
 
     /**
@@ -77,6 +82,7 @@ class RestoreEventTest extends BaseTestCase
     {
         $this->expectException(ModelNotFoundException::class);
         $this->uc->restore(new IdBoundary(1000));
+        $this->ot->assertOperationsCount(Operation::OT_RESTORED, Operation::MT_EVENT, 0);
     }
 
     /**
@@ -88,5 +94,6 @@ class RestoreEventTest extends BaseTestCase
         $this->createLinks(false);
         $this->expectException(InvalidOperationException::class);
         $this->uc->restore(new IdBoundary($this->event->id));
+        $this->ot->assertOperationsCount(Operation::OT_RESTORED, Operation::MT_EVENT, 0);
     }
 }

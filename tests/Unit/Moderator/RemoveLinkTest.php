@@ -9,19 +9,24 @@ use Newsio\Contract\ApplicationException;
 use Newsio\Exception\ModelNotFoundException;
 use Newsio\Model\Event;
 use Newsio\Model\Link;
+use Newsio\Model\Operation;
 use Newsio\Repository\RemovedEventRepository;
 use Newsio\UseCase\Moderator\RemoveLinkUseCase;
 use Tests\BaseTestCase;
+use Tests\Unit\OperationTest;
 
 class RemoveLinkTest extends BaseTestCase
 {
     private RemoveLinkUseCase $uc;
     private Event $event;
     private Link $link;
+    private OperationTest $ot;
 
     protected function setUp(): void
     {
         $this->uc = new RemoveLinkUseCase(new RemovedEventRepository());
+        $this->ot = new OperationTest($this);
+
         parent::setUp();
     }
 
@@ -61,6 +66,8 @@ class RemoveLinkTest extends BaseTestCase
         $link = $this->uc->remove(new IdBoundary($this->link->id), new StringBoundary('test_reason'));
 
         $this->assertTrue($link->reason === 'test_reason' && $link->deleted_at !== null);
+        $this->ot->assertOperationsCount(Operation::OT_REMOVED, Operation::MT_EVENT, 1);
+
     }
 
     /**
@@ -76,6 +83,7 @@ class RemoveLinkTest extends BaseTestCase
             && $link->event->reason === 'test_reason'
             && $link->event->deleted_at !== null
         );
+        $this->ot->assertOperationsCount(Operation::OT_REMOVED, Operation::MT_EVENT, 1);
     }
 
     /**
@@ -85,5 +93,7 @@ class RemoveLinkTest extends BaseTestCase
     {
         $this->expectException(ModelNotFoundException::class);
         $this->uc->remove(new IdBoundary(1000), new StringBoundary('test_reason'));
+        $this->ot->assertOperationsCount(Operation::OT_REMOVED, Operation::MT_EVENT, 0);
+
     }
 }

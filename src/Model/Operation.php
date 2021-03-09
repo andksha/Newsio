@@ -38,8 +38,11 @@ final class Operation extends BaseModel
 
     // OT - operation type
     public const OT_CREATED = 0;
+    public const OT_REMOVED = 2;
+    public const OT_RESTORED = 3;
 
     // MT - model type
     public const MT_EVENT = 0;
+    public const MT_LINK = 1;
 
 }

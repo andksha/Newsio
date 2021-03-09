@@ -2,6 +2,7 @@
 
 namespace Newsio\UseCase\Moderator;
 
+use App\Event\LinkRestoredEvent;
 use Carbon\Carbon;
 use Newsio\Boundary\IdBoundary;
 use Newsio\Exception\ModelNotFoundException;
@@ -33,6 +34,7 @@ class RestoreLinkUseCase
 
         $link->restore();
         $link->event->updated_at = Carbon::now();
+        LinkRestoredEvent::dispatch($link->event);
 
         if ($link->event->trashed()) {
             $eventCache = new RemovedEventCache();

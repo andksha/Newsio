@@ -7,18 +7,22 @@ use Newsio\Boundary\IdBoundary;
 use Newsio\Contract\ApplicationException;
 use Newsio\Exception\ModelNotFoundException;
 use Newsio\Model\Link;
+use Newsio\Model\Operation;
 use Newsio\Repository\RemovedEventRepository;
 use Newsio\UseCase\Moderator\RestoreLinkUseCase;
 use Tests\BaseTestCase;
+use Tests\Unit\OperationTest;
 
 class RestoreLinkTest extends BaseTestCase
 {
     private RestoreLinkUseCase $uc;
     private Link $link;
+    private OperationTest $ot;
 
     protected function setUp(): void
     {
         $this->uc = new RestoreLinkUseCase(new RemovedEventRepository());
+        $this->ot = new OperationTest($this);
         parent::setUp();
     }
 
@@ -42,6 +46,7 @@ class RestoreLinkTest extends BaseTestCase
         $link = $this->uc->restore(new IdBoundary($this->link->id));
 
         $this->assertTrue($link->deleted_at === null && $link->reason === '');
+        $this->ot->assertOperationsCount(Operation::OT_RESTORED, Operation::MT_EVENT, 1);
     }
 
     /**

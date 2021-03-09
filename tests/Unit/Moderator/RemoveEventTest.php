@@ -9,18 +9,22 @@ use Newsio\Contract\ApplicationException;
 use Newsio\Exception\ModelNotFoundException;
 use Newsio\Model\Event;
 use Newsio\Model\Link;
+use Newsio\Model\Operation;
 use Newsio\Repository\PublishedEventRepository;
 use Newsio\UseCase\Moderator\RemoveEventUseCase;
 use Tests\BaseTestCase;
+use Tests\Unit\OperationTest;
 
 class RemoveEventTest extends BaseTestCase
 {
     private RemoveEventUseCase $uc;
     private Event $event;
+    private OperationTest $ot;
 
     protected function setUp(): void
     {
         $this->uc = new RemoveEventUseCase(new PublishedEventRepository());
+        $this->ot = new OperationTest($this);
 
         parent::setUp();
     }
@@ -68,6 +72,7 @@ class RemoveEventTest extends BaseTestCase
         }
 
         $this->assertTrue(true);
+        $this->ot->assertOperationsCount(Operation::OT_REMOVED, Operation::MT_EVENT, 1);
     }
 
     /**
@@ -77,5 +82,6 @@ class RemoveEventTest extends BaseTestCase
     {
         $this->expectException(ModelNotFoundException::class);
         $this->uc->remove(new IdBoundary(1000), new StringBoundary('test_reason'));
+        $this->ot->assertOperationsCount(Operation::OT_REMOVED, Operation::MT_EVENT, 0);
     }
 }

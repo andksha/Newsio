@@ -2,6 +2,7 @@
 
 namespace Newsio\UseCase;
 
+use App\Event\LinksAddedEvent;
 use Illuminate\Support\Collection;
 use Newsio\Boundary\IdBoundary;
 use Newsio\Boundary\LinksBoundary;
@@ -34,7 +35,6 @@ class AddLinksUseCase
 
         if (!$event = Event::query()->find($id->getValue())) {
             throw new ModelNotFoundException('Event');
-
         }
 
         $existingLinks = $event->links->pluck('content');
@@ -42,6 +42,7 @@ class AddLinksUseCase
 
         $event->refresh()->load(Event::DEFAULT_RELATIONS);
         $this->eventCache->addOrUpdateEvent($event);
+        LinksAddedEvent::dispatch($event);
 
         return $event->links->pluck('content')->diff($existingLinks);
     }

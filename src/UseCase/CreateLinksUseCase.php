@@ -67,6 +67,6 @@ class CreateLinksUseCase
 
         return $result
             ? Event::query()->where('id', $eventId->getValue())->update(['updated_at' => $date])
-            : $result;
+            : false;
     }
 }

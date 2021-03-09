@@ -2,6 +2,8 @@
 
 namespace Newsio\UseCase\Moderator;
 
+use App\Event\EventRemovedEvent;
+use App\Event\LinkRemovedEvent;
 use Newsio\Boundary\IdBoundary;
 use Newsio\Boundary\StringBoundary;
 use Newsio\Exception\ModelNotFoundException;
@@ -39,6 +41,7 @@ class RemoveLinkUseCase
         }
 
         $this->updateEvent($link);
+        LinkRemovedEvent::dispatch($link->event);
 
         return $link;
     }
@@ -47,6 +50,7 @@ class RemoveLinkUseCase
     {
         $link->event->remove($reason->getValue())->refresh()->load(Event::DEFAULT_RELATIONS);
         $this->removedEventRepository->removeEvent($link->event);
+        EventRemovedEvent::dispatch($link->event);
 
         return $link;
     }

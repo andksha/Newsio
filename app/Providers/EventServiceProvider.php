@@ -2,6 +2,11 @@
 
 namespace App\Providers;
 
+use App\Event\EventRemovedEvent;
+use App\Event\EventRestoredEvent;
+use App\Event\LinkRemovedEvent;
+use App\Event\LinkRestoredEvent;
+use App\Event\LinksAddedEvent;
 use App\Event\ModeratorCreatedEvent;
 use App\Event\EventCreatedEvent;
 use App\Event\RegisteredEvent;
@@ -26,7 +31,22 @@ class EventServiceProvider extends ServiceProvider
         ],
         EventCreatedEvent::class => [
             OperationListener::class
-        ]
+        ],
+        EventRemovedEvent::class => [
+            OperationListener::class
+        ],
+        EventRestoredEvent::class => [
+            OperationListener::class
+        ],
+        LinksAddedEvent::class => [
+            OperationListener::class
+        ],
+        LinkRemovedEvent::class => [
+            OperationListener::class
+        ],
+        LinkRestoredEvent::class => [
+            OperationListener::class
+        ],
     ];
 
     /**

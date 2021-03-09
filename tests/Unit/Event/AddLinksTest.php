@@ -10,17 +10,21 @@ use Newsio\Exception\InvalidWebsiteException;
 use Newsio\Exception\ModelNotFoundException;
 use Newsio\Model\Event;
 use Newsio\Model\Link;
+use Newsio\Model\Operation;
 use Newsio\UseCase\AddLinksUseCase;
 use Tests\BaseTestCase;
+use Tests\Unit\OperationTest;
 
 class AddLinksTest extends BaseTestCase
 {
     private AddLinksUseCase $uc;
+    private OperationTest $ot;
 
     protected function setUp(): void
     {
         parent::setUp();
         $this->uc = new AddLinksUseCase();
+        $this->ot = new OperationTest($this);
     }
 
     /**
@@ -35,6 +39,7 @@ class AddLinksTest extends BaseTestCase
         )->count();
 
         $this->assertEquals(2, $links);
+        $this->ot->assertOperationsCount(Operation::OT_CREATED, Operation::MT_EVENT, 1);
     }
 
     /**
@@ -44,6 +49,7 @@ class AddLinksTest extends BaseTestCase
     {
         $this->expectException(ModelNotFoundException::class);
         $this->uc->addLinks(new IdBoundary(1000), new LinksBoundary(['https://test.com/test', 'https://test2.com/test']));
+        $this->ot->assertOperationsCount(Operation::OT_CREATED, Operation::MT_EVENT, 0);
     }
 
     /**
@@ -54,6 +60,7 @@ class AddLinksTest extends BaseTestCase
         $event = Event::query()->first();
         $this->expectException(InvalidWebsiteException::class);
         $this->uc->addLinks(new IdBoundary($event->id), new LinksBoundary(['https://test.com/test', 'https://test2.com/test']));
+        $this->ot->assertOperationsCount(Operation::OT_CREATED, Operation::MT_EVENT, 0);
     }
 
     /**
@@ -69,6 +76,7 @@ class AddLinksTest extends BaseTestCase
             'https://test3.com',
             'https://test4.com'
         ]));
+        $this->ot->assertOperationsCount(Operation::OT_CREATED, Operation::MT_EVENT, 0);
     }
 
     /**
@@ -79,5 +87,6 @@ class AddLinksTest extends BaseTestCase
         $event = Event::query()->first();
         $this->expectException(BoundaryException::class);
         $this->uc->addLinks(new IdBoundary($event->id), new LinksBoundary(['https://www.radiosvoboda.org/', 'https://test2.com']));
+        $this->ot->assertOperationsCount(Operation::OT_CREATED, Operation::MT_EVENT, 0);
     }
 }

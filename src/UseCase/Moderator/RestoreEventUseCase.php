@@ -2,6 +2,7 @@
 
 namespace Newsio\UseCase\Moderator;
 
+use App\Event\EventRestoredEvent;
 use Newsio\Boundary\IdBoundary;
 use Newsio\Exception\ModelNotFoundException;
 use Newsio\Model\Event;
@@ -32,6 +33,7 @@ class RestoreEventUseCase
         $event->refresh()->load(Event::DEFAULT_RELATIONS);
 
         $this->removedEventRepository->removeEvent($event);
+        EventRestoredEvent::dispatch($event);
 
         return $event;
     }
