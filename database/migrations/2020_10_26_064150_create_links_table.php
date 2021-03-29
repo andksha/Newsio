@@ -16,7 +16,7 @@ class CreateLinksTable extends Migration
         Schema::create('links', function (Blueprint $table) {
             $table->id();
             $table->string('content');
-            $table->integer('event_id');
+            $table->bigInteger('event_id');
             $table->string('reason')->default('');
             $table->timestamps();
             $table->softDeletes();

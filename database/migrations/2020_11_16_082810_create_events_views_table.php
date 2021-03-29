@@ -15,7 +15,7 @@ class CreateEventsViewsTable extends Migration
     {
         Schema::create('events_views', function (Blueprint $table) {
             $table->id();
-            $table->integer('event_id');
+            $table->bigInteger('event_id');
             $table->string('user_identifier');
             $table->index(['event_id', 'user_identifier'], 'event_user_index');
         });

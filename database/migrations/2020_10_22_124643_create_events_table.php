@@ -16,10 +16,10 @@ class CreateEventsTable extends Migration
         Schema::create('events', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->integer('user_id');
-            $table->integer('category_id');
+            $table->bigInteger('user_id');
+            $table->bigInteger('category_id');
             $table->string('reason')->default('');
-            $table->integer('view_count')->default(0);
+            $table->bigInteger('view_count')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

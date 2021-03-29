@@ -15,8 +15,8 @@ class CreateEventsTagsTable extends Migration
     {
         Schema::create('events_tags', function (Blueprint $table) {
             $table->id();
-            $table->integer('event_id');
-            $table->integer('tag_id');
+            $table->bigInteger('event_id');
+            $table->bigInteger('tag_id');
             $table->timestamps();
         });
     }
