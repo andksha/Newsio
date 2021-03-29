@@ -15,11 +15,15 @@ class IdBoundary
      */
     public function __construct($value)
     {
-        if (!is_numeric($value) || !is_int((int) $value)) {
+        if (
+            !is_numeric($value)
+            || !is_int((int)$value)
+            || is_float($value)
+        ) {
             throw new BoundaryException('Invalid id');
         }
 
-        $this->value = $value;
+        $this->value = (int)$value;
     }
 
     public function getValue(): int

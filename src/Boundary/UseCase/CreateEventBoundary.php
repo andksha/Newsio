@@ -2,7 +2,6 @@
 
 namespace Newsio\Boundary\UseCase;
 
-use Newsio\Boundary\CategoryBoundary;
 use Newsio\Boundary\IdBoundary;
 use Newsio\Boundary\LinksBoundary;
 use Newsio\Boundary\TagsBoundary;
@@ -13,7 +12,7 @@ final class CreateEventBoundary
     private TitleBoundary $title;
     private TagsBoundary $tags;
     private LinksBoundary $links;
-    private CategoryBoundary $category;
+    private IdBoundary $category;
     private IdBoundary $userId;
 
     /**
@@ -30,7 +29,7 @@ final class CreateEventBoundary
         $this->title = new TitleBoundary($title);
         $this->tags = new TagsBoundary($tags);
         $this->links = new LinksBoundary($links);
-        $this->category = new CategoryBoundary($category);
+        $this->category = new IdBoundary($category);
         $this->userId = new IdBoundary($userId);
     }
 
