@@ -28,6 +28,8 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  */
 class Moderator extends Authenticatable implements JWTSubject
 {
+    protected $connection = 'pgsql2';
+
     protected $table = 'moderators';
 
     protected $fillable = [
