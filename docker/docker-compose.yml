@@ -17,8 +17,8 @@ services:
       - ../docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
     ports:
       - ${NGINX_PORT}:80
-    links:
-      - 'newsio_phpfpm'
+    depends_on:
+      - newsio_phpfpm
     networks:
       - newsio
 
@@ -32,6 +32,8 @@ services:
     volumes:
       - ../:/application
       - ../docker/php_fpm/php-ini-overrides.ini:/etc/php/7.4/fpm/conf.d/99-overrides.ini
+    depends_on:
+      - newsio_pgsql
     networks:
       - newsio
 
@@ -42,12 +44,41 @@ services:
       - POSTGRES_USER=${DB_USERNAME}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=${DB_DATABASE}
-#    volumes:
-#      - ../docker/postgresql/postgresql.conf:/var/lib/postgresql/data/postgresql.conf
+    volumes:
+      - ./postgresql/data:/var/lib/postgresql/data/
+      - ./postgresql/init:/usr/local/bin/init
     ports:
       - ${POSTGRES_PORT}:5432
     networks:
       - newsio
+
+#  newsio_pgsql_write:
+#    container_name: newsio_pgsql_write
+#    image: postgres:11.1-alpine
+#    environment:
+#      - POSTGRES_USER=${DB_USERNAME}
+#      - POSTGRES_PASSWORD=${DB_PASSWORD}
+#      - POSTGRES_DB=${DB_DATABASE}
+#    volumes:
+#      - ../docker/postgresql/postgresql_write.conf:/var/lib/postgresql/data/postgresql.conf
+#    ports:
+#      - ${POSTGRES_WRITE_PORT}:5433
+#    networks:
+#      - newsio
+
+#  newsio_pgsql_read:
+#    container_name: newsio_pgsql_read
+#    image: postgres:11.1-alpine
+#    environment:
+#      - POSTGRES_USER=${DB_USERNAME}
+#      - POSTGRES_PASSWORD=${DB_PASSWORD}
+#      - POSTGRES_DB=${DB_DATABASE}
+#    volumes:
+#      - ../docker/postgresql/postgresql_read.conf:/var/lib/postgresql/data/postgresql.conf
+#    ports:
+#      - ${POSTGRES_READ_PORT}:5434
+#    networks:
+#      - newsio
 
   newsio_redis:
     image: redis:alpine
@@ -58,31 +89,31 @@ services:
     networks:
       - newsio
 
-  newsio_cron:
-    container_name: newsio_cron
-    build:
-      context: ../
-      dockerfile: docker/php_cron/Dockerfile
-    working_dir: /application
-    restart: unless-stopped
-    volumes:
-      - ../:/application
-    networks:
-      - newsio
-
-  newsio_queue:
-    container_name: newsio_queue
-    build:
-      context: ../
-      dockerfile: docker/php_cli/Dockerfile
-    working_dir: /application
-    restart: unless-stopped
-    volumes:
-      - ../:/application
-      - ../docker/php_cli/laravel-worker.conf:/etc/supervisor/conf.d/laravel-worker.conf
-    command: ["php", "artisan", "queue:work"]
-    networks:
-      - newsio
+#  newsio_cron:
+#    container_name: newsio_cron
+#    build:
+#      context: ../
+#      dockerfile: docker/php_cron/Dockerfile
+#    working_dir: /application
+#    restart: unless-stopped
+#    volumes:
+#      - ../:/application
+#    networks:
+#      - newsio
+#
+#  newsio_queue:
+#    container_name: newsio_queue
+#    build:
+#      context: ../
+#      dockerfile: docker/php_cli/Dockerfile
+#    working_dir: /application
+#    restart: unless-stopped
+#    volumes:
+#      - ../:/application
+#      - ../docker/php_cli/laravel-worker.conf:/etc/supervisor/conf.d/laravel-worker.conf
+#    command: ["php", "artisan", "queue:work"]
+#    networks:
+#      - newsio
 
 #  mysql_newsio:
 #    container_name: mysql_newsio

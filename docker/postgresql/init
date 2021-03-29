@@ -1,0 +1,27 @@
+#!/usr/bin/env sh 
+
+echo "pgsql init script is running"
+
+psql -U newsiou newsio_db \
+-c "
+CREATE ROLE nuser WITH PASSWORD 'test1234' LOGIN;
+GRANT SELECT, INSERT, UPDATE
+ON categories,
+  email_confirmations,
+  events,
+  events_tags,
+  events_views,
+  history_of_operations,
+  links,
+  password_resets,
+  tags,
+  users,
+  users_events,
+  websites
+TO nuser;
+"
+
+
+
+lockfile="./init.lock"
+

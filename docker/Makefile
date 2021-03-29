@@ -16,6 +16,9 @@ queue_work:
 queue_restart:
 	docker-compose exec $(d) newsio_phpfpm php artisan queue:restart
 
+pgsql_init:
+	docker-compose exec newsio_pgsql sh -c "/usr/local/bin/init"
+
 init:
 	docker-compose exec newsio_phpfpm composer install
 	docker-compose exec newsio_phpfpm php artisan key:generate

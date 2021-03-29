@@ -1,0 +1,1 @@
+COPY init /usr/local/bin/

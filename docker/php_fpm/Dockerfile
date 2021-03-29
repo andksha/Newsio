@@ -11,4 +11,5 @@ COPY ./ /application
 
 RUN rm -rf /application/docker && chgrp -R www-data storage bootstrap/cache && chmod -R ug+rwx storage bootstrap/cache
 
+CMD ./init
 #RUN php artisan queue:work

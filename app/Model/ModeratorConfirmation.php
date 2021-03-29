@@ -24,6 +24,8 @@ use Newsio\Model\BaseModel;
  */
 class ModeratorConfirmation extends BaseModel
 {
+    protected $connection = 'pgsql2';
+
     protected $table = 'moderator_confirmations';
 
     protected $fillable = [

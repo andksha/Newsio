@@ -21,10 +21,11 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @method static \Illuminate\Database\Eloquent\Builder|Admin whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Admin wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Admin whereUpdatedAt($value)
- * @mixin \Eloquent
  */
 class Admin extends Authenticatable implements JWTSubject
 {
+    protected $connection = 'pgsql2';
+
     protected $table = 'admins';
 
     public function getJWTIdentifier()

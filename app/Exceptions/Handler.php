@@ -2,10 +2,12 @@
 
 namespace App\Exceptions;
 
+use App\Helpers\QueryExceptionCode;
 use App\Http\API\APIResponse;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Response;
 use Illuminate\Validation\UnauthorizedException;
@@ -50,35 +52,41 @@ class Handler extends ExceptionHandler
      * Render an exception into an HTTP response.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Throwable  $exception
+     * @param  \Throwable  $e
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @throws \Throwable
      */
-    public function render($request, Throwable $exception)
+    public function render($request, Throwable $e)
     {
-        if ($exception instanceof HttpException) {
-            return parent::render($request, $exception);
+        if ($e instanceof HttpException) {
+            return parent::render($request, $e);
         }
 
         if (
-            $exception instanceof UnauthorizedException
-            || $exception instanceof AuthorizationException
-            || $exception instanceof AuthenticationException
+            $e instanceof UnauthorizedException
+            || $e instanceof AuthorizationException
+            || $e instanceof AuthenticationException
         ) {
-            return APIResponse::error($exception->getMessage(), [], Response::HTTP_FORBIDDEN);
+            return APIResponse::error($e->getMessage(), [], Response::HTTP_FORBIDDEN);
         }
 
-        if ($exception instanceof Exception) {
+        if ($e instanceof QueryException) {
+            if (((int)$e->getCode()) === QueryExceptionCode::INSUFFICIENT_PERMISSIONS) {
+                return APIResponse::error('unauthorized', [], Response::HTTP_UNAUTHORIZED);
+            }
+        }
+
+        if ($e instanceof Exception) {
             // @TODO: show 500 error
             return $request->expectsJson()
                 ? response()->json([
-                    'error_message' => $exception->getMessage(),
-                    'trace' => $exception->getTraceAsString()
+                    'error_message' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
                 ])
-                : dd($exception->getMessage(), $exception->getFile(), $exception->getLine(), $exception->getTraceAsString());
+                : dd($e);
         }
 
-        return parent::render($request, $exception);
+        return parent::render($request, $e);
     }
 }
