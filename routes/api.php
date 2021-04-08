@@ -20,6 +20,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/categories', [\App\Http\API\Controllers\EAVController::class, 'categories']);
+Route::get('/categories/last-lvl', [\App\Http\API\Controllers\EAVController::class, 'lastLvlCategories']);
+Route::get('/categories/{id}', [\App\Http\API\Controllers\EAVController::class, 'category']);
+Route::post('/categories', [\App\Http\API\Controllers\EAVController::class, 'addCategory']);
+Route::put('/categories/{id}', [\App\Http\API\Controllers\EAVController::class, 'addAttributeToCategory']);
 
 Route::group(['namespace' => 'Auth'], function () {
     Route::post('register', [RegisterController::class, 'register'])->name('register');
@@ -34,13 +39,13 @@ Route::group(['namespace' => 'Auth'], function () {
     Route::post('password/reset', [ResetPasswordController::class, 'resetPassword'])->name('reset-password');
 });
 
-Route::group(['middleware' => ['auth:api', 'email.verified']], function () {
+//Route::group(['middleware' => ['auth:api', 'email.verified']], function () {
     Route::post('website', [WebsiteController::class,'apply'])->name('apply_website');
     Route::post('event', [EventController::class, 'create'])->name('create_event');
     Route::post('event/save', [EventController::class, 'saveEvent'])->name('save_event');
     Route::post('links', [EventController::class, 'addLinks'])->name('add_link');
     Route::get('profile/{saved?}', [ProfileController::class, 'profile'])->name('profile');
-});
+//});
 
 Route::get('events/{removed?}', [EventController::class, 'events'])->name('events');
 Route::get('tags', [EventController::class, 'getTags'])->name('get_tags');
