@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $slug
  * @property int $left
  * @property int $right
+ * @property int $depth
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @method static \Illuminate\Database\Eloquent\Builder|Category newModelQuery()
@@ -34,10 +35,10 @@ final class Category extends Model
         'right'
     ];
 
-    public function children(): HasMany
-    {
-        return $this->hasMany(Category::class, 'parent_id');
-    }
+//    public function children(): HasMany
+//    {
+//        return $this->hasMany(Category::class, 'parent_id');
+//    }
 
     public function products(): BelongsToMany
     {
