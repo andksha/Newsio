@@ -103,4 +103,31 @@ final class CategoryRepository
             "right" => $parent->right + 1,
         ]);
     }
+
+    public function delete(int $id): bool
+    {
+        // select $c - category to delete
+        $c = Category::query()->where('id', $id)->first();
+
+        // assign $c's parent id to it's children, decrement left and right by one, decrement depth
+        Category::query()->where('left', '>', $c->left)
+            ->where('right', '<', $c->right)
+            ->update([
+                'parent_id' => $c->parent_id,
+                'left' => DB::raw('"left" - 1'),
+                'right' => DB::raw('"right" - 1'),
+                'depth' => DB::raw('"depth" - 1'),
+            ]);
+
+        // decrement right by 2 where right > $c->right
+        Category::query()->where('right', '>', $c->right)->update([
+            'right' => DB::raw('"right" - 2'),
+        ]);
+        // decrement left by 2 where left > $c->right
+        Category::query()->where('left', '>', $c->right)->update([
+            'left' => DB::raw('"left" - 2'),
+        ]);
+
+        return $c->delete();
+    }
 }

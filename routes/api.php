@@ -23,8 +23,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/categories', [\App\Http\API\Controllers\EAVController::class, 'categories']);
 Route::get('/categories/last-lvl', [\App\Http\API\Controllers\EAVController::class, 'lastLvlCategories']);
 Route::get('/categories/{id}', [\App\Http\API\Controllers\EAVController::class, 'category']);
-Route::post('/categories', [\App\Http\API\Controllers\EAVController::class, 'addCategory']);
+Route::post('/categories', [\App\Http\API\Controllers\EAVController::class, 'add']);
 Route::put('/categories/{id}', [\App\Http\API\Controllers\EAVController::class, 'addAttributeToCategory']);
+Route::delete('/categories/{id}', [\App\Http\API\Controllers\EAVController::class, 'delete']);
 
 Route::group(['namespace' => 'Auth'], function () {
     Route::post('register', [RegisterController::class, 'register'])->name('register');

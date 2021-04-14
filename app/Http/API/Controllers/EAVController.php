@@ -26,13 +26,20 @@ final class EAVController extends Controller
         return response()->json($repository->getOne($id));
     }
 
-    public function addCategory(Request $request, CategoryRepository $repository): JsonResponse
+    public function add(Request $request, CategoryRepository $repository): JsonResponse
     {
         $parentID = $request->parent_id;
         $name = $request->name;
 
         $c = $repository->add($parentID, $name);
         return response()->json($c);
+    }
+
+    public function delete(int $id, CategoryRepository $repository): JsonResponse
+    {
+        $ok = $repository->delete($id);
+
+        return response()->json($ok);
     }
 
     public function addAttributeToCategory(int $id, Request $request): JsonResponse
