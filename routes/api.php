@@ -24,7 +24,8 @@ Route::get('/categories', [\App\Http\API\Controllers\EAVController::class, 'cate
 Route::get('/categories/last-lvl', [\App\Http\API\Controllers\EAVController::class, 'lastLvlCategories']);
 Route::get('/categories/{id}', [\App\Http\API\Controllers\EAVController::class, 'category']);
 Route::post('/categories', [\App\Http\API\Controllers\EAVController::class, 'add']);
-Route::put('/categories/{id}', [\App\Http\API\Controllers\EAVController::class, 'addAttributeToCategory']);
+Route::put('/categories/{id}/attribute', [\App\Http\API\Controllers\EAVController::class, 'addAttributeToCategory']);
+Route::put('/categories/{id}/{parentId?}', [\App\Http\API\Controllers\EAVController::class, 'move']);
 Route::delete('/categories/{id}', [\App\Http\API\Controllers\EAVController::class, 'delete']);
 
 Route::group(['namespace' => 'Auth'], function () {

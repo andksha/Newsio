@@ -42,6 +42,13 @@ final class EAVController extends Controller
         return response()->json($ok);
     }
 
+    public function move(int $id, ?int $parentId, CategoryRepository $repository): JsonResponse
+    {
+        $ok = $repository->move($id, $parentId);
+
+        return response()->json($ok);
+    }
+
     public function addAttributeToCategory(int $id, Request $request): JsonResponse
     {
         Attribute::query()->create([

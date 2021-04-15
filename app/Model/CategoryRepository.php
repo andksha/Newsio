@@ -130,4 +130,63 @@ final class CategoryRepository
 
         return $c->delete();
     }
+
+    public function move(int $id, ?int $parentId): bool
+    {
+        $c = Category::query()->where('id', $id)->first();
+        $max = Category::query()->max('right');
+
+        if (!$parentId) {
+            $c->update([
+                'depth' => 1,
+                'parent_id' => null,
+                'left' => $max + 1,
+                'right' => $max + 2
+            ]);
+        }
+
+        if (!$parent = Category::query()->where('id', $parentId)->first()) {
+            return false;
+        }
+
+        if ($parent->right > $c->right) {
+            Category::query()->where('left', '>', $c->left)
+                ->where('left', '<', $parent->right)
+                ->update([
+                    'left' => DB::raw('"left" - 2'),
+                ]);
+            Category::query()->where('right', '>', $c->left)
+                ->where('right', '<', $parent->right)
+                ->update([
+                    'right' => DB::raw('"right" - 2'),
+                ]);
+
+            $c->update([
+                'depth' => $parent->depth + 1,
+                'parent_id' => $parent->id,
+                'left' => $parent->right - 2,
+                'right' => $parent->right - 1,
+            ]);
+        } elseif ($parent->right < $c->right) {
+            Category::query()->where('left', '>', $parent->right)
+                ->where('left', '<', $c->right)
+                ->update([
+                    'left' => DB::raw('"left" + 2'),
+                ]);
+            Category::query()->where('right', '>=', $parent->right)
+                ->where('right', '<', $c->right)
+                ->update([
+                    'right' => DB::raw('"right" + 2'),
+                ]);
+
+            $c->update([
+                'depth' => $parent->depth + 1,
+                'parent_id' => $parent->id,
+                'left' => $parent->right,
+                'right' => $parent->right + 1,
+            ]);
+        }
+
+        return true;
+    }
 }
