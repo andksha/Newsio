@@ -17,7 +17,7 @@ class CreateHistoryOfOperationsTable extends Migration
             $table->id();
             $table->unsignedTinyInteger('operation_type');
             $table->unsignedTinyInteger('model_type');
-            $table->unsignedInteger('model_id');
+            $table->unsignedBigInteger('model_id');
             $table->jsonb('model');
             $table->timestamps();
         });
