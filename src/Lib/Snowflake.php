@@ -20,7 +20,6 @@ final class Snowflake
 
     public function __construct(int $datacenter = null, int $worker = null)
     {
-//        dd(log(41, 2));
         $maxDataCenter = -1 ^ (-1 << self::MAX_DATACENTER_LENGTH); // 31
         $maxWorker = -1 ^ (-1 << self::MAX_WORKER_LENGTH); // 31
 
