@@ -73,7 +73,10 @@ class Handler extends ExceptionHandler
 
         if ($e instanceof QueryException) {
             if (((int)$e->getCode()) === QueryExceptionCode::INSUFFICIENT_PERMISSIONS) {
-                return APIResponse::error('unauthorized', [], Response::HTTP_UNAUTHORIZED);
+                return APIResponse::error($e->getMessage(), [], Response::HTTP_UNAUTHORIZED);
+            }
+            if ((int) $e->getCode() === QueryExceptionCode::UNIQUE_VIOLATION) {
+                return APIResponse::error('internal server error, try again', [], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
         }
 
