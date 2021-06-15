@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 final class ClosureCategoryRepository
 {
+    //    TODO: change to closure version
     public function getMany(): array
     {
         $c = ClosureCategory::query()->orderBy('parent_id')->get();
@@ -64,6 +65,11 @@ final class ClosureCategoryRepository
         $category = new Category(['name' => $name]);
         $category->save();
 
+        return $this->addToTree($parentID, $category);
+    }
+
+    private function addToTree(?int $parentID, Category $category): Category
+    {
         ClosureCategory::query()->insert($this->getInsertArray(
             $category->id,
             $category->id,
@@ -134,64 +140,15 @@ final class ClosureCategoryRepository
             ->update(['immediate_parent_id' => $newImmediateParentId]);
     }
 
-    //    TODO: change to closure version
     public function move(int $id, ?int $parentId): bool
     {
-        $c = Category::query()->where('id', $id)->first();
-        $max = Category::query()->max('right');
-
-        if (!$parentId) {
-            $c->update([
-                'depth' => 1,
-                'parent_id' => null,
-                'left' => $max + 1,
-                'right' => $max + 2
-            ]);
-        }
-
-        if (!$parent = Category::query()->where('id', $parentId)->first()) {
+        /** @var Category $category */
+        $category = Category::query()->where('id', $id)->first();
+        if (!$category) {
             return false;
         }
 
-        if ($parent->right > $c->right) {
-            Category::query()->where('left', '>', $c->left)
-                ->where('left', '<', $parent->right)
-                ->update([
-                    'left' => DB::raw('"left" - 2'),
-                ]);
-            Category::query()->where('right', '>', $c->left)
-                ->where('right', '<', $parent->right)
-                ->update([
-                    'right' => DB::raw('"right" - 2'),
-                ]);
-
-            $c->update([
-                'depth' => $parent->depth + 1,
-                'parent_id' => $parent->id,
-                'left' => $parent->right - 2,
-                'right' => $parent->right - 1,
-            ]);
-        } elseif ($parent->right < $c->right) {
-            Category::query()->where('left', '>', $parent->right)
-                ->where('left', '<', $c->right)
-                ->update([
-                    'left' => DB::raw('"left" + 2'),
-                ]);
-            Category::query()->where('right', '>=', $parent->right)
-                ->where('right', '<', $c->right)
-                ->update([
-                    'right' => DB::raw('"right" + 2'),
-                ]);
-
-            $c->update([
-                'depth' => $parent->depth + 1,
-                'parent_id' => $parent->id,
-                'left' => $parent->right,
-                'right' => $parent->right + 1,
-            ]);
-        }
-
-        return true;
+        return $this->delete($id) && $this->addToTree($parentId, $category);
     }
 
     private function getInsertArray(int $parentId, int $childId, int $immediateParentId): array
