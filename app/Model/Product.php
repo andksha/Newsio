@@ -29,7 +29,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|Product newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Product newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Product query()
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Model\Category[] $categories
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Model\CategoryNestedSet[] $categories
  * @property-read int|null $categories_count
  */
 class Product extends Model
@@ -49,7 +49,7 @@ class Product extends Model
     public function categories(): BelongsToMany
     {
         return $this->belongsToMany(
-            Category::class,
+            CategoryNestedSet::class,
             'products_to_categories',
             'product_id',
             'category_id',

@@ -7,9 +7,9 @@ final class CategoryNode
     /** @var CategoryNode[] array  */
     private array $children = [];
 
-    private Category $category;
+    private CategoryNestedSet $category;
 
-    public function __construct(Category $category)
+    public function __construct(CategoryNestedSet $category)
     {
         $this->category = $category;
     }

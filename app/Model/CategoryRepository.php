@@ -10,26 +10,26 @@ final class CategoryRepository
 {
     public function getMany(): array
     {
-        $c = Category::query()->orderBy('left')->get();
+        $category = CategoryNestedSet::query()->orderBy('left')->get();
 
-        return $this->mapCategories($c);
+        return $this->mapCategories($category);
     }
 
     public function lastLvl(): array
     {
-        return Category::query()->whereRaw('"right" - "left" = 1')->get()->toArray();
+        return CategoryNestedSet::query()->whereRaw('"right" - "left" = 1')->get()->toArray();
     }
 
     public function getOne(int $id): array
     {
-        $c = Category::query()->where('id', $id)
+        $category = CategoryNestedSet::query()->where('id', $id)
             ->with(['attributes'])
             ->first();
 
-        $categories = Category::query()->where('left', '<', $c->left)
-            ->where('right', '>', $c->right)
+        $categories = CategoryNestedSet::query()->where('left', '<', $category->left)
+            ->where('right', '>', $category->right)
             ->get()
-            ->merge([$c])
+            ->merge([$category])
             ->sortBy('left');
 
         return $this->mapCategories($categories);
@@ -40,7 +40,7 @@ final class CategoryRepository
         $tree = new CategoryTree();
         $minDepth = $categories->min('depth');
 
-        /** @var Category $value */
+        /** @var CategoryNestedSet $value */
         foreach ($categories as $key => $value) {
             $node = new CategoryNode($value);
             $tree->setLastNodeOfLvl($node, $value->depth);
@@ -56,7 +56,7 @@ final class CategoryRepository
         return $tree->toArray();
     }
 
-    public function add(?int $parentID, string $name): Category
+    public function add(?int $parentID, string $name): CategoryNestedSet
     {
         if (!$parentID) {
             return $this->addRoot($name);
@@ -65,10 +65,10 @@ final class CategoryRepository
         return $this->addNode($parentID, $name);
     }
 
-    private function addRoot(string $name): Category
+    private function addRoot(string $name): CategoryNestedSet
     {
-        if (!$max = Category::query()->max('right')) {
-            return Category::query()->create([
+        if (!$max = CategoryNestedSet::query()->max('right')) {
+            return CategoryNestedSet::query()->create([
                 "parent_id" => null,
                 "depth" => 1,
                 "name" => $name,
@@ -78,7 +78,7 @@ final class CategoryRepository
             ]);
         }
 
-        return Category::query()->create([
+        return CategoryNestedSet::query()->create([
             "parent_id" => null,
             "depth" => 1,
             "name" => $name,
@@ -88,13 +88,13 @@ final class CategoryRepository
         ]);
     }
 
-    private function addNode(int $parentID, string $name): Category
+    private function addNode(int $parentID, string $name): CategoryNestedSet
     {
-        $parent = Category::query()->where('id', $parentID)->first();
-        Category::query()->where('left', '>=', $parent->right)->update(['left' => DB::raw('"left" + 2')]);
-        Category::query()->where('right', '>=', $parent->right)->update(['right' => DB::raw('"right" + 2')]);
+        $parent = CategoryNestedSet::query()->where('id', $parentID)->first();
+        CategoryNestedSet::query()->where('left', '>=', $parent->right)->update(['left' => DB::raw('"left" + 2')]);
+        CategoryNestedSet::query()->where('right', '>=', $parent->right)->update(['right' => DB::raw('"right" + 2')]);
 
-        return Category::query()->create([
+        return CategoryNestedSet::query()->create([
             "parent_id" => $parentID,
             "depth" => $parent->depth + 1,
             "name" => $name,
@@ -106,38 +106,37 @@ final class CategoryRepository
 
     public function delete(int $id): bool
     {
-        // select $c - category to delete
-        $c = Category::query()->where('id', $id)->first();
+        $category = CategoryNestedSet::query()->where('id', $id)->first();
 
-        // assign $c's parent id to it's children, decrement left and right by one, decrement depth
-        Category::query()->where('left', '>', $c->left)
-            ->where('right', '<', $c->right)
+        // assign $category's parent id to it's children, decrement left and right by one, decrement depth
+        CategoryNestedSet::query()->where('left', '>', $category->left)
+            ->where('right', '<', $category->right)
             ->update([
-                'parent_id' => $c->parent_id,
+                'parent_id' => $category->parent_id,
                 'left' => DB::raw('"left" - 1'),
                 'right' => DB::raw('"right" - 1'),
                 'depth' => DB::raw('"depth" - 1'),
             ]);
 
-        // decrement right by 2 where right > $c->right
-        Category::query()->where('right', '>', $c->right)->update([
+        // decrement right by 2 where right > $category->right
+        CategoryNestedSet::query()->where('right', '>', $category->right)->update([
             'right' => DB::raw('"right" - 2'),
         ]);
-        // decrement left by 2 where left > $c->right
-        Category::query()->where('left', '>', $c->right)->update([
+        // decrement left by 2 where left > $category->right
+        CategoryNestedSet::query()->where('left', '>', $category->right)->update([
             'left' => DB::raw('"left" - 2'),
         ]);
 
-        return $c->delete();
+        return $category->delete();
     }
 
     public function move(int $id, ?int $parentId): bool
     {
-        $c = Category::query()->where('id', $id)->first();
-        $max = Category::query()->max('right');
+        $category = CategoryNestedSet::query()->where('id', $id)->first();
+        $max = CategoryNestedSet::query()->max('right');
 
         if (!$parentId) {
-            $c->update([
+            $category->update([
                 'depth' => 1,
                 'parent_id' => null,
                 'left' => $max + 1,
@@ -145,41 +144,41 @@ final class CategoryRepository
             ]);
         }
 
-        if (!$parent = Category::query()->where('id', $parentId)->first()) {
+        if (!$parent = CategoryNestedSet::query()->where('id', $parentId)->first()) {
             return false;
         }
 
-        if ($parent->right > $c->right) {
-            Category::query()->where('left', '>', $c->left)
+        if ($parent->right > $category->right) {
+            CategoryNestedSet::query()->where('left', '>', $category->left)
                 ->where('left', '<', $parent->right)
                 ->update([
                     'left' => DB::raw('"left" - 2'),
                 ]);
-            Category::query()->where('right', '>', $c->left)
+            CategoryNestedSet::query()->where('right', '>', $category->left)
                 ->where('right', '<', $parent->right)
                 ->update([
                     'right' => DB::raw('"right" - 2'),
                 ]);
 
-            $c->update([
+            $category->update([
                 'depth' => $parent->depth + 1,
                 'parent_id' => $parent->id,
                 'left' => $parent->right - 2,
                 'right' => $parent->right - 1,
             ]);
-        } elseif ($parent->right < $c->right) {
-            Category::query()->where('left', '>', $parent->right)
-                ->where('left', '<', $c->right)
+        } elseif ($parent->right < $category->right) {
+            CategoryNestedSet::query()->where('left', '>', $parent->right)
+                ->where('left', '<', $category->right)
                 ->update([
                     'left' => DB::raw('"left" + 2'),
                 ]);
-            Category::query()->where('right', '>=', $parent->right)
-                ->where('right', '<', $c->right)
+            CategoryNestedSet::query()->where('right', '>=', $parent->right)
+                ->where('right', '<', $category->right)
                 ->update([
                     'right' => DB::raw('"right" + 2'),
                 ]);
 
-            $c->update([
+            $category->update([
                 'depth' => $parent->depth + 1,
                 'parent_id' => $parent->id,
                 'left' => $parent->right,
