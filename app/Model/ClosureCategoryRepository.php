@@ -15,10 +15,16 @@ final class ClosureCategoryRepository
         return $this->mapCategories($c);
     }
 
-    //    TODO: change to closure version
     public function lastLvl(): array
     {
-        return Category::query()->whereRaw('"right" - "left" = 1')->get()->toArray();
+        return ClosureCategory::query()->fromRaw('categories_closures cc1')
+            ->whereNotExists(function ($query) {
+                $query->fromRaw('categories_closures cc2')
+                    ->whereColumn('cc2.immediate_parent_id', 'cc1.parent_id');
+            })
+            ->orderBy('parent_id')
+            ->get()
+            ->toArray();
     }
 
     //    TODO: change to closure version
