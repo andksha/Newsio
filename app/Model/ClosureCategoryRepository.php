@@ -3,16 +3,18 @@
 namespace App\Model;
 
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\DB;
 
 final class ClosureCategoryRepository
 {
-    //    TODO: change to closure version
     public function getMany(): array
     {
-        $c = ClosureCategory::query()->orderBy('parent_id')->get();
+        $categories = ClosureCategory::query()->fromRaw('categories_closures cc')
+            ->whereRaw('cc.parent_id = cc.child_id')
+            ->get();
 
-        return $this->mapCategories($c);
+        return $this->mapCategories($categories);
     }
 
     public function lastLvl(): array
@@ -27,43 +29,46 @@ final class ClosureCategoryRepository
             ->toArray();
     }
 
-    //    TODO: change to closure version
     public function getOne(int $id): array
     {
-        $c = Category::query()->where('id', $id)
-            ->with(['attributes'])
-            ->first();
-
-        $categories = Category::query()->where('left', '<', $c->left)
-            ->where('right', '>', $c->right)
-            ->get()
-            ->merge([$c])
-            ->sortBy('left');
+        $categories = ClosureCategory::query()->selectRaw('cc1.*')
+            ->from(DB::raw('categories_closures cc1'))
+            ->join(DB::raw('categories_closures cc2'), function (JoinClause $join) use ($id) {
+                $join->on(function (JoinClause $join) use ($id) {
+                    $join->on('cc1.parent_id', '=', 'cc2.parent_id')
+                        ->where('cc2.child_id', '=', $id);
+                })->orOn(function (JoinClause $join) use ($id) {
+                    $join->on('cc1.child_id', '=', 'cc2.child_id')
+                        ->where('cc2.parent_id', '=', $id);
+                });
+            })
+            ->whereRaw('cc1.parent_id = cc1.child_id')
+            ->get();
 
         return $this->mapCategories($categories);
     }
 
-    //    TODO: change to closure version
-
     private function mapCategories(Collection $categories): array
     {
-        $tree = new CategoryTree();
-        $minDepth = $categories->min('depth');
+        $categoryTree = new ClosureCategoryTree();
 
-        /** @var Category $value */
-        foreach ($categories as $key => $value) {
-            $node = new CategoryNode($value);
-            $tree->setLastNodeOfLvl($node, $value->depth);
-
-            if ($key === 0 || $value->depth === $minDepth) {
-                $tree->addRoot($node);
+        /** @var ClosureCategory $category */
+        foreach ($categories as $category) {
+            if ($category->parent_id === $category->immediate_parent_id) {
+                $categoryTree->addRoot(new ClosureCategoryNode($category));
                 continue;
             }
 
-            $tree->getLastNodeOfLvl($value->depth - 1)->addChild($node);
+            if (!$categoryTree->getNode($category->immediate_parent_id)) {
+                $categories->push($category);
+            } else {
+                $node = new ClosureCategoryNode($category);
+                $categoryTree->addNode($node);
+                $categoryTree->getNode($category->immediate_parent_id)->addChild($node);
+            }
         }
 
-        return $tree->toArray();
+        return $categoryTree->toArray();
     }
 
     public function add(?int $parentID, string $name): Category
