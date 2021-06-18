@@ -26,6 +26,7 @@ Route::get('/categories/{id}', [\App\Http\API\Controllers\EAVController::class, 
 Route::post('/categories', [\App\Http\API\Controllers\EAVController::class, 'add']);
 Route::put('/categories/{id}/attribute', [\App\Http\API\Controllers\EAVController::class, 'addAttributeToCategory']);
 Route::put('/categories/{id}/{parentId?}', [\App\Http\API\Controllers\EAVController::class, 'move']);
+Route::put('/categories/move-branch/{id}/{parentId?}', [\App\Http\API\Controllers\EAVController::class, 'moveBranch']);
 Route::delete('/categories/{id}', [\App\Http\API\Controllers\EAVController::class, 'delete']);
 
 

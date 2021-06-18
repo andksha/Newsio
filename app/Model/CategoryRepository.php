@@ -130,12 +130,118 @@ final class CategoryRepository
         return $category->delete();
     }
 
-    public function move(int $id, ?int $parentId): bool
+    public function move(int $id, ?int $newParentId): bool
     {
         $category = CategoryNestedSet::query()->where('id', $id)->first();
-        $max = CategoryNestedSet::query()->max('right');
 
-        if (!$parentId) {
+        if (!$newParentId) {
+            CategoryNestedSet::query()->where('left', '>', $category->right)
+                ->update([
+                    'left' => DB::raw('"left" - 2'),
+                ]);
+            CategoryNestedSet::query()->where('right', '>', $category->right)
+                ->update([
+                    'right' => DB::raw('"right" - 2'),
+                ]);
+            CategoryNestedSet::query()->where('left', '>', $category->left)
+                ->where('right', '<', $category->right)
+                ->update([
+                    'left' => DB::raw('"left" - 1'),
+                    'right' => DB::raw('"right" - 1'),
+                    'parent_id' => $category->parent_id,
+                ]);
+
+            $max = CategoryNestedSet::query()->max('right');
+            $category->update([
+                'depth' => 1,
+                'parent_id' => null,
+                'left' => $max + 1,
+                'right' => $max + 2
+            ]);
+
+            return true;
+        }
+
+        if (!$newParent = CategoryNestedSet::query()->where('id', $newParentId)->first()) {
+            return false;
+        }
+
+        if ($newParent->right > $category->right) {
+            // add 2 to left and right of all categories between $category->right and $newParent->right
+            CategoryNestedSet::query()->where('left', '>', $category->right)
+                ->where('left', '<', $newParent->right)
+                ->update([
+                    'left' => DB::raw('"left" - 2'),
+                ]);
+            CategoryNestedSet::query()->where('right', '>', $category->right)
+                ->where('right', '<', $newParent->right)
+                ->update([
+                    'right' => DB::raw('"right" - 2'),
+                ]);
+
+            // add 1 to children of $category, update children's parent_id
+            CategoryNestedSet::query()->where('left', '>', $category->left)
+                ->where('right', '<', $category->right)
+                ->update([
+                    'left' => DB::raw('"left" - 1'),
+                    'right' => DB::raw('"right" - 1'),
+                    'parent_id' => $category->parent_id,
+                ]);
+
+            $category->update([
+                'depth' => $newParent->depth + 1,
+                'parent_id' => $newParent->id,
+                'left' => $newParent->right - 2,
+                'right' => $newParent->right - 1,
+            ]);
+        } elseif ($newParent->right < $category->right) {
+            // add 2 to left and right of all categories between $newParent->right and $category->left
+            CategoryNestedSet::query()->where('left', '>', $newParent->right)
+                ->where('left', '<', $category->left)
+                ->update([
+                    'left' => DB::raw('"left" + 2'),
+                ]);
+            CategoryNestedSet::query()->where('right', '>=', $newParent->right)
+                ->where('right', '<', $category->left)
+                ->update([
+                    'right' => DB::raw('"right" + 2'),
+                ]);
+
+            // add 1 to children of $category, update children's parent_id
+            CategoryNestedSet::query()->where('left', '>', $category->left)
+                ->where('right', '<', $category->right)
+                ->update([
+                    'left' => DB::raw('"left" + 1'),
+                    'right' => DB::raw('"right" + 1'),
+                    'parent_id' => $category->parent_id,
+                ]);
+
+            $category->update([
+                'depth' => $newParent->depth + 1,
+                'parent_id' => $newParent->id,
+                'left' => $newParent->right,
+                'right' => $newParent->right + 1,
+            ]);
+        }
+
+        return true;
+    }
+
+    public function moveBranch(int $id, ?int $newParentId): bool
+    {
+        $category = CategoryNestedSet::query()->where('id', $id)->first();
+
+        if (!$newParentId) {
+            CategoryNestedSet::query()->where('left', '>', $category->left)
+                ->update([
+                    'left' => DB::raw('"left" - 1'),
+                ]);
+            CategoryNestedSet::query()->where('right', '>', $category->left)
+                ->update([
+                    'right' => DB::raw('"right" - 1'),
+                ]);
+
+            $max = CategoryNestedSet::query()->max('right');
             $category->update([
                 'depth' => 1,
                 'parent_id' => null,
@@ -144,45 +250,48 @@ final class CategoryRepository
             ]);
         }
 
-        if (!$parent = CategoryNestedSet::query()->where('id', $parentId)->first()) {
+        if (!$newParent = CategoryNestedSet::query()->where('id', $newParentId)->first()) {
             return false;
         }
 
-        if ($parent->right > $category->right) {
-            CategoryNestedSet::query()->where('left', '>', $category->left)
-                ->where('left', '<', $parent->right)
+        if ($newParent->right > $category->right) {
+            // add 2 to left and right of all categories between $category->right and $newParent->right
+            CategoryNestedSet::query()->where('left', '>', $category->right)
+                ->where('left', '<', $newParent->right)
                 ->update([
                     'left' => DB::raw('"left" - 2'),
                 ]);
-            CategoryNestedSet::query()->where('right', '>', $category->left)
-                ->where('right', '<', $parent->right)
+            CategoryNestedSet::query()->where('right', '>', $category->right)
+                ->where('right', '<', $newParent->right)
                 ->update([
                     'right' => DB::raw('"right" - 2'),
                 ]);
 
+
             $category->update([
-                'depth' => $parent->depth + 1,
-                'parent_id' => $parent->id,
-                'left' => $parent->right - 2,
-                'right' => $parent->right - 1,
+                'depth' => $newParent->depth + 1,
+                'parent_id' => $newParent->id,
+                'left' => $newParent->right - 2,
+                'right' => $newParent->right - 1,
             ]);
-        } elseif ($parent->right < $category->right) {
-            CategoryNestedSet::query()->where('left', '>', $parent->right)
-                ->where('left', '<', $category->right)
+        } elseif ($newParent->right < $category->right) {
+            // add 2 to left and right of all categories between $newParent->right and $category->left
+            CategoryNestedSet::query()->where('left', '>', $newParent->right)
+                ->where('left', '<', $category->left)
                 ->update([
                     'left' => DB::raw('"left" + 2'),
                 ]);
-            CategoryNestedSet::query()->where('right', '>=', $parent->right)
-                ->where('right', '<', $category->right)
+            CategoryNestedSet::query()->where('right', '>=', $newParent->right)
+                ->where('right', '<', $category->left)
                 ->update([
                     'right' => DB::raw('"right" + 2'),
                 ]);
 
             $category->update([
-                'depth' => $parent->depth + 1,
-                'parent_id' => $parent->id,
-                'left' => $parent->right,
-                'right' => $parent->right + 1,
+                'depth' => $newParent->depth + 1,
+                'parent_id' => $newParent->id,
+                'left' => $newParent->right,
+                'right' => $newParent->right + 1,
             ]);
         }
 
