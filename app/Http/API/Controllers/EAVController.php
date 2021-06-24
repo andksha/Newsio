@@ -49,12 +49,12 @@ final class EAVController extends Controller
         return response()->json($ok);
     }
 
-//    public function moveBranch(int $id, ?int $parentId, CategoryRepository $repository)
-//    {
-//        $ok = $repository->moveBranch($id, $parentId);
-//
-//        return response()->json($ok);
-//    }
+    public function moveBranch(int $id, CategoryRepository $repository, ?int $parentId = null): JsonResponse
+    {
+        $ok = $repository->moveBranch($id, $parentId);
+
+        return response()->json($ok);
+    }
 
     public function addAttributeToCategory(int $id, Request $request): JsonResponse
     {
