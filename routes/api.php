@@ -25,8 +25,19 @@ Route::get('/categories/last-lvl', [\App\Http\API\Controllers\EAVController::cla
 Route::get('/categories/{id}', [\App\Http\API\Controllers\EAVController::class, 'category']);
 Route::post('/categories', [\App\Http\API\Controllers\EAVController::class, 'add']);
 Route::put('/categories/{id}/attribute', [\App\Http\API\Controllers\EAVController::class, 'addAttributeToCategory']);
-Route::put('/categories/{id}/{parentId?}', [\App\Http\API\Controllers\EAVController::class, 'move']);
+Route::put('/categories/{id}/{parentId?}', [\App\Http\API\Controllers\EAVController::class, 'move'])->where('id', '[0-9]+');
+Route::put('/categories/move-branch/{id}/{parentId?}', [\App\Http\API\Controllers\EAVController::class, 'moveBranch'])->where('id', '[0-9]+');
 Route::delete('/categories/{id}', [\App\Http\API\Controllers\EAVController::class, 'delete']);
+
+
+Route::get('/closure/categories', [\App\Http\API\Controllers\ClosureTableController::class, 'categories']);
+Route::get('/closure/categories/last-lvl', [\App\Http\API\Controllers\ClosureTableController::class, 'lastLvlCategories']);
+Route::get('/closure/categories/{id}', [\App\Http\API\Controllers\ClosureTableController::class, 'category']);
+Route::post('/closure/categories', [\App\Http\API\Controllers\ClosureTableController::class, 'add']);
+Route::put('/closure/categories/{id}/attribute', [\App\Http\API\Controllers\ClosureTableController::class, 'addAttributeToCategory']);
+Route::put('/closure/categories/{id}/{parentId?}', [\App\Http\API\Controllers\ClosureTableController::class, 'move']);
+Route::delete('/closure/categories/{id}', [\App\Http\API\Controllers\ClosureTableController::class, 'delete']);
+
 
 Route::group(['namespace' => 'Auth'], function () {
     Route::post('register', [RegisterController::class, 'register'])->name('register');

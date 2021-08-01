@@ -2,19 +2,23 @@
 
 namespace App\Model;
 
-final class CategoryNode
+final class ClosureCategoryNode
 {
-    /** @var CategoryNode[] array  */
     private array $children = [];
 
-    private CategoryNestedSet $category;
+    private ClosureCategory $category;
 
-    public function __construct(CategoryNestedSet $category)
+    public function __construct(ClosureCategory $category)
     {
         $this->category = $category;
     }
 
-    public function addChild(CategoryNode $child): CategoryNode
+    public function getCategory(): ClosureCategory
+    {
+        return $this->category;
+    }
+
+    public function addChild(ClosureCategoryNode $child): ClosureCategoryNode
     {
         $this->children[] = $child;
         return $this;
@@ -23,6 +27,7 @@ final class CategoryNode
     public function toArray(): array
     {
         $children = [];
+
         foreach ($this->children as $child) {
             $children[] = $child->toArray();
         }
