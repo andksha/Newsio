@@ -11,6 +11,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Response;
 use Illuminate\Validation\UnauthorizedException;
+use Newsio\Lib\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
 
@@ -63,6 +64,10 @@ class Handler extends ExceptionHandler
             return parent::render($request, $e);
         }
 
+        if ($e instanceof ValidationException) {
+            return APIResponse::error($e->getMessage(), $e->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
         if (
             $e instanceof UnauthorizedException
             || $e instanceof AuthorizationException
@@ -82,6 +87,7 @@ class Handler extends ExceptionHandler
 
         if ($e instanceof Exception) {
             // @TODO: show 500 error
+
             return $request->expectsJson()
                 ? response()->json([
                     'error_message' => $e->getMessage(),

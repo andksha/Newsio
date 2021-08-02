@@ -1,0 +1,33 @@
+extend type Mutation {
+    createEvent(dto: EventInput!): Event @field(resolver: "Event\\CreateEvent@resolve") @guard
+}
+
+type Event {
+    id: String!
+    title: String!
+    tags: [String!]!
+    links: [String!]!
+    deleted_at: DateTime
+}
+
+input EventInput {
+    title: String!
+    tags: [String!]!
+    links: [String!]!
+    category: Int!
+}
+
+#mutation {
+#    createEvent(dto: {
+#        title: "test12234123f4sadf4fwec233f",
+#        tags: ["test"],
+#        links: ["https://www.rbc.ua/ascddfcasacasdfwevfwe"],
+#        category: 44
+#    }) {
+#        id,
+#        title,
+#        tags,
+#        links,
+#        deleted_at
+#    }
+#}

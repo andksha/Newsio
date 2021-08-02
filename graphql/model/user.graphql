@@ -1,0 +1,43 @@
+extend type Query {
+    user(id: ID @eq): User @find(model: "App\\Model\\User")
+}
+
+type Mutation {
+    loginUser(dto: LoginUser!): Token @field(resolver: "User\\LoginUser@resolve")
+}
+
+# Write your query or mutation here
+#mutation {
+#    loginUser(dto: {
+#        email: "test-srthertherth@test.test",
+#        password: "test1234"
+#    }) {
+#        token,
+#        expires_in
+#    }
+#}
+
+type User {
+    id: ID!
+    name: String!
+    email: String!
+    password: String!
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+type Token {
+    token: String!
+    type: String!
+    expires_in: String!
+}
+
+input LoginUser {
+    email: String!
+    password: String!
+}
+
+input LogginInUser {
+    email: String!
+    password: String!
+}
