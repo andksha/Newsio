@@ -10,6 +10,7 @@ use Illuminate\Http\Response;
 use Newsio\Boundary\Auth\EmailBoundary;
 use Newsio\Boundary\Auth\PasswordBoundary;
 use Newsio\Contract\ApplicationException;
+use Newsio\DTO\TokenDTO;
 use Newsio\UseCase\Auth\LoginUseCase;
 
 class LoginController extends Controller
@@ -22,7 +23,7 @@ class LoginController extends Controller
             return APIResponse::error($e->getMessage(), $e->getErrorData(), Response::HTTP_UNAUTHORIZED);
         }
 
-        return APIResponse::ok($this->token($token), Response::HTTP_OK);
+        return APIResponse::ok($token->jsonSerialize(), Response::HTTP_OK);
     }
 
     public function logout(): JsonResponse
@@ -34,6 +35,8 @@ class LoginController extends Controller
 
     public function refresh(): JsonResponse
     {
-        return APIResponse::ok($this->token(auth('api')->refresh()), Response::HTTP_CREATED);
+        $token = new TokenDTO(auth('api')->refresh(), TokenDTO::TYPE_BEARER, config('jwt.ttl'));
+
+        return APIResponse::ok($token->jsonSerialize(), Response::HTTP_CREATED);
     }
 }
