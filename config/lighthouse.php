@@ -17,7 +17,7 @@ return [
         /*
          * The URI the endpoint responds to, e.g. mydomain.com/graphql.
          */
-        'uri' => '/gql',
+        'uri' => '/graphql',
 
         /*
          * Lighthouse creates a named route for convenient URL generation and redirects.
@@ -228,7 +228,7 @@ return [
     */
 
     'error_handlers' => [
-        \App\GraphQL\ErrorHandler\NewsioGraphqlErrorHandler::class,
+        \App\GraphQL\Error\NewsioGraphqlErrorHandler::class,
         \Nuwave\Lighthouse\Execution\ExtensionErrorHandler::class,
         \Nuwave\Lighthouse\Execution\ReportingErrorHandler::class,
     ],
