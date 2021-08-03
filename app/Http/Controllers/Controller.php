@@ -49,13 +49,4 @@ class Controller extends BaseController
             'error_data' => $e->getErrorData()
         ], $responseCode);
     }
-
-    protected function token(string $token): array
-    {
-        return [
-            'token'      => $token,
-            'type'       => 'bearer',
-            'expires_in' => config('jwt.ttl')
-        ];
-    }
 }

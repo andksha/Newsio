@@ -23,7 +23,7 @@ class LoginController extends Controller
             return APIResponse::error($e->getMessage(), $e->getErrorData(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        return APIResponse::ok($this->token($token), Response::HTTP_OK);
+        return APIResponse::ok($token->jsonSerialize(), Response::HTTP_OK);
     }
 
     public function logout(): JsonResponse
